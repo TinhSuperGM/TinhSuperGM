@@ -12476,14 +12476,14 @@ L_1_[93]["SeaEvent"]:AddButton({
 })
 L_1_[93]["SeaEvent"]:AddSection({
 	L_1_[2]({
-		"Frozen Dimension Eve";
-		"nt"
+		"Sự Kiện Đảo Leviath";
+		"an"
 	})
 })
 L_1_[93]["SeaEvent"]:AddParagraph({
 	["Title"] = L_1_[2]({
-		" FlozenDimension Sta";
-		"tus "
+		" Trạng Thái Đảo Levia";
+		"than "
 	});
 	["Content"] = ""
 })
@@ -12492,20 +12492,20 @@ spawn(function()
 		while wait(.2) do
 			if workspace["_WorldOrigin"]["Locations"]:FindFirstChild("Frozen Dimension") then
 				FloD:SetDesc(L_1_[2]({
-					" Flozen Dimension : ",
-					"True"
+					" Đảo Leviathan : ",
+					"Có"
 				}))
 			else
 				FloD:SetDesc(L_1_[2]({
-					" Flozen Dimension : ";
-					"False"
+					" Đảo Leviathan : ";
+					"Không"
 				}))
 			end
 		end
 	end)
 end)
 L_1_[93]["SeaEvent"]:AddParagraph({
-	["Title"] = " Spy Status ";
+	["Title"] = " Trạng Thái Giáng Điệp ";
 	["Content"] = ""
 })
 spawn(function()
@@ -12514,11 +12514,11 @@ spawn(function()
 			local L_1313_ = {}
 			L_1313_[1] = string["match"](L_1_[18]["Remotes"]["CommF_"]:InvokeServer("InfoLeviathan", "1"), "%d+")
 			if L_1313_[1] then
-				SPYING:SetDesc(" Spy Leviathan  : " .. tostring(L_1313_[1]))
+				SPYING:SetDesc(" Gián Điệp Leviathan  : " .. tostring(L_1313_[1]))
 				if tostring(L_1313_[1]) == 5 then
 					SPYING:SetDesc(L_1_[2]({
-						" Spy Leviathan : Alr",
-						"eady Done!!"
+						" Gián Điệp Leviathan : Đã ",
+						"Sẵng Sàng!!"
 					}))
 				end
 			end
@@ -12526,15 +12526,15 @@ spawn(function()
 	end
 end)
 L_1_[93]["SeaEvent"]:AddButton({
-	["Name"] = "Buy Spy",
+	["Name"] = "Mua Giáng Điệp",
 	["Callback"] = function()
 		(game:GetService("ReplicatedStorage"))["Remotes"]["CommF_"]:InvokeServer("InfoLeviathan", "2")
 	end
 })
 L_1_[93]["SeaEvent"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Auto Teleport Frozen";
-		" Dimension"
+		"Tự Động Dịch Chuyển Đến Đả";
+		"o Leviathan"
 	}),
 	["Description"] = "",
 	["Default"] = false;
@@ -12558,8 +12558,8 @@ spawn(function()
 end)
 L_1_[93]["SeaEvent"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Auto Drive To Hydra ",
-		"Island"
+		"Tự Động Lái Thuyền V",
+		"ề Hydra"
 	}),
 	["Description"] = "",
 	["Default"] = false;
@@ -12605,8 +12605,8 @@ spawn(function()
 end)
 L_1_[93]["SeaEvent"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Auto Attack Leviatha";
-		"n"
+		"Tự Động Đánh Le";
+		"viathan"
 	}),
 	["Description"] = "",
 	["Default"] = false,
