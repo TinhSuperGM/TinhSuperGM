@@ -10449,12 +10449,12 @@ spawn(function()
 	end
 end)
 L_1_[93]["Prehistoric"]:AddSection({
-	"Dojo Quest"
+	" Nhiệm Vụ Võ Đường"
 })
 L_1_[93]["Prehistoric"]:AddButton({
 	["Title"] = L_1_[2]({
-		"Teleport To Dragon D";
-		"ojo"
+		Dịch Chuyển Đến Võ Đường R";
+		"ồng"
 	});
 	["Callback"] = function()
 		(game:GetService("ReplicatedStorage"))["Remotes"]["CommF_"]:InvokeServer("requestEntrance", Vector3["new"](5661.5322265625, 1013.0907592773, -334.96499633789))
@@ -10462,7 +10462,7 @@ L_1_[93]["Prehistoric"]:AddButton({
 	end
 })
 DojoQ = L_1_[93]["Prehistoric"]:AddToggle({
-	["Name"] = "Auto Dojo Trainer";
+	["Name"] = "Tự Động Cày Đai";
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1091_arg0)
@@ -10589,7 +10589,7 @@ spawn(function()
 	end
 end)
 BlazeEM = L_1_[93]["Prehistoric"]:AddToggle({
-	["Name"] = "Auto Dragon Hunter",
+	["Name"] = "Tự Động Làm Nhiệm Vụ Thợ Săn Rồng",
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1098_arg0)
@@ -10743,7 +10743,7 @@ spawn(function()
 	end
 end)
 L_1_[93]["Prehistoric"]:AddSection({
-	"Drago Trial"
+	"Up Tộc Rồng V4"
 })
 GetQuestDracoLevel = function()
 	local L_1118_ = {}
@@ -10760,10 +10760,10 @@ GetQuestDracoLevel = function()
 end
 Toggle = L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Tween To Upgrade Dro",
-		"co Trial"
+		"Dịch Chuyển Đến Chỗ Trial Tộ",
+		"c Rồng"
 	}),
-	["Description"] = "";
+	["Description"] = "Có Đảo Núi Lửa";
 	["Default"] = false;
 	["Callback"] = function(L_1119_arg0)
 		local L_1120_ = {}
@@ -10800,7 +10800,7 @@ spawn(function()
 	end
 end)
 Toggle = L_1_[93]["Prehistoric"]:AddToggle({
-	["Name"] = "Auto Drago (V1)";
+	["Name"] = "Tự Động Lấy Tộc Draco";
 	["Description"] = "";
 	["Default"] = false;
 	["Callback"] = function(L_1122_arg0)
@@ -10829,7 +10829,7 @@ spawn(function()
 	end
 end)
 fireflower = L_1_[93]["Prehistoric"]:AddToggle({
-	["Name"] = "Auto Drago (V2)";
+	["Name"] = "Tự Động Nâng Draco V2";
 	["Description"] = "";
 	["Default"] = false;
 	["Callback"] = function(L_1124_arg0)
@@ -10875,7 +10875,7 @@ spawn(function()
 	end
 end)
 Toggle = L_1_[93]["Prehistoric"]:AddToggle({
-	["Name"] = "Auto Drago (V3)";
+	["Name"] = "Tự Động Nâng Draco V3";
 	["Description"] = "",
 	["Default"] = false;
 	["Callback"] = function(L_1131_arg0)
@@ -10903,8 +10903,8 @@ spawn(function()
 end)
 Toggle = L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Auto Relic Drago Tri";
-		"al [Beta]"
+		"Tự Động Up Tộc Draco V4";
+		" [Thử Nghiệm]"
 	});
 	["Description"] = "";
 	["Default"] = false;
@@ -10959,7 +10959,7 @@ spawn(function()
 	end
 end)
 Toggle = L_1_[93]["Prehistoric"]:AddToggle({
-	["Name"] = "Auto Train Drago v4";
+	["Name"] = "Tự Động Cày Mua Gear Draco";
 	["Description"] = "";
 	["Default"] = false,
 	["Callback"] = function(L_1136_arg0)
@@ -11001,8 +11001,8 @@ spawn(function()
 end)
 dragoTpVolcano = L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Tween to Drago Trial",
-		"s"
+		"Dịch Chuyển Đến Nơi Up Tộc",
+		"Draco V4"
 	}),
 	["Description"] = "";
 	["Default"] = false,
@@ -11024,7 +11024,7 @@ spawn(function()
 	end
 end)
 bdrago = L_1_[93]["Prehistoric"]:AddToggle({
-	["Name"] = "Swap Drago Race";
+	["Name"] = "Mua Gear Draco";
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1144_arg0)
@@ -11059,8 +11059,8 @@ spawn(function()
 end)
 UpTalon = L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Upgrade Dragon Talon";
-		" With Uzoth"
+		"Nâng Cấp DragonTalon";
+		" Với Uzoth"
 	});
 	["Description"] = "",
 	["Default"] = false;
