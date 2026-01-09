@@ -11565,8 +11565,8 @@ spawn(function()
 end)
 L_1_[93]["SeaEvent"]:AddSection({
 	L_1_[2]({
-		"Sea Event / Setting ",
-		"Sail"
+		"Sự Kiện Biển / Cầu Hình ",
+		"Thuyền"
 	})
 })
 L_1_[130] = {
@@ -11590,15 +11590,15 @@ L_1_[89] = {
 }
 L_1_[93]["SeaEvent"]:AddButton({
 	["Name"] = L_1_[2]({
-		"Remove Lighting Effe",
-		"ct"
+		"Loại Bỏ Hiệu Ứng Ánh Sá",
+		"ng"
 	}),
 	["Callback"] = function()
 		(game:GetService("Lighting"))["BaseAtmosphere"]:Destroy()
 	end
 })
 L_1_[93]["SeaEvent"]:AddToggle({
-	["Name"] = "Ship Speed Modifier";
+	["Name"] = "Điều Chỉnh Tốc Độ Thuyền";
 	["Default"] = false;
 	["Callback"] = function(L_1207_arg0)
 		local L_1208_ = {}
@@ -11625,7 +11625,7 @@ L_1_[93]["SeaEvent"]:AddToggle({
 	end
 end)
 L_1_[93]["SeaEvent"]:AddSlider({
-	["Name"] = "Ship Speed",
+	["Name"] = "Chọn Tốc Độ Thuyền",
 	["Min"] = 0,
 	["Max"] = 1000;
 	["Increment"] = 1;
@@ -11637,7 +11637,7 @@ L_1_[93]["SeaEvent"]:AddSlider({
 	end
 })
 L_1_[93]["SeaEvent"]:AddToggle({
-	["Name"] = "Auto Press W",
+	["Name"] = "Tự Động Di Chuyển đến Trước",
 	["Default"] = false;
 	["Callback"] = function(L_1215_arg0)
 		local L_1216_ = {}
@@ -11659,7 +11659,7 @@ spawn(function()
 	end
 end)
 L_1_[93]["SeaEvent"]:AddToggle({
-	["Name"] = "No Clip Ship",
+	["Name"] = "Thuyền Đi Xuyên Tường",
 	["Default"] = false;
 	["Callback"] = function(L_1218_arg0)
 		local L_1219_ = {}
@@ -11689,10 +11689,10 @@ spawn(function()
 	end
 end)
 L_1_[93]["SeaEvent"]:AddSection({
-	"Crafting Items"
+	"Chế Tạo Vật Phẩm"
 })
 L_1_[93]["SeaEvent"]:AddButton({
-	["Name"] = "Craft SharkTooth";
+	["Name"] = "Chế Tạo Vòng Cổ Răng Cá Mập";
 	["Description"] = "";
 	["Callback"] = function()
 		local L_1226_ = {}
@@ -11705,7 +11705,7 @@ L_1_[93]["SeaEvent"]:AddButton({
 	end
 })
 L_1_[93]["SeaEvent"]:AddButton({
-	["Name"] = "Craft TerrorJaw";
+	["Name"] = "Chế tạo Hàm Răng Tận thế";
 	["Description"] = "",
 	["Callback"] = function()
 		local L_1227_ = {}
@@ -11718,7 +11718,7 @@ L_1_[93]["SeaEvent"]:AddButton({
 	end
 })
 L_1_[93]["SeaEvent"]:AddButton({
-	["Name"] = "Craft SharkAnchor";
+	["Name"] = "Chế Tạo Mõ Neo Cá Mập";
 	["Description"] = "";
 	["Callback"] = function()
 		local L_1228_ = {}
@@ -11731,7 +11731,7 @@ L_1_[93]["SeaEvent"]:AddButton({
 	end
 })
 L_1_[93]["SeaEvent"]:AddButton({
-	["Name"] = "Craft LeviathanCrown",
+	["Name"] = "Chế Tạo Vương Miệng Leviathan",
 	["Description"] = "",
 	["Callback"] = function()
 		local L_1229_ = {}
@@ -11745,8 +11745,8 @@ L_1_[93]["SeaEvent"]:AddButton({
 })
 L_1_[93]["SeaEvent"]:AddButton({
 	["Name"] = L_1_[2]({
-		"Craft LeviathanShiel";
-		"d"
+		"Chế tạo Khiên Leviatha";
+		"n"
 	}),
 	["Description"] = "";
 	["Callback"] = function()
@@ -11760,7 +11760,7 @@ L_1_[93]["SeaEvent"]:AddButton({
 	end
 })
 L_1_[93]["SeaEvent"]:AddButton({
-	["Name"] = "Craft LeviathanBoat";
+	["Name"] = "Chế Tạo Thuyền Leviathan";
 	["Description"] = "";
 	["Callback"] = function()
 		local L_1231_ = {}
@@ -11774,8 +11774,8 @@ L_1_[93]["SeaEvent"]:AddButton({
 })
 L_1_[93]["SeaEvent"]:AddButton({
 	["Name"] = L_1_[2]({
-		"Craft LegendaryScrol";
-		"l"
+		"Chế Tạo Cuộn Ma Thuật Huyền Th";
+		"oại"
 	}),
 	["Description"] = "",
 	["Callback"] = function()
@@ -11789,7 +11789,7 @@ L_1_[93]["SeaEvent"]:AddButton({
 	end
 })
 L_1_[93]["SeaEvent"]:AddButton({
-	["Name"] = "Craft MythicalScroll";
+	["Name"] = "Chế tạo Cuộn Ma Thuật Truyền Thuyết";
 	["Description"] = "";
 	["Callback"] = function()
 		local L_1233_ = {}
@@ -11802,10 +11802,10 @@ L_1_[93]["SeaEvent"]:AddButton({
 	end
 })
 L_1_[93]["SeaEvent"]:AddSection({
-	"Choose Sea Event"
+	"Chọn Cho Sự Kiện Biển"
 })
 Q = L_1_[93]["SeaEvent"]:AddDropdown({
-	["Name"] = "Select Boats",
+	["Name"] = "Chọn Thuyền",
 	["Options"] = L_1_[130],
 	["Default"] = false;
 	["Callback"] = function(L_1234_arg0)
@@ -11815,14 +11815,14 @@ Q = L_1_[93]["SeaEvent"]:AddDropdown({
 	end
 })
 L_1_[93]["SeaEvent"]:AddButton({
-	["Name"] = "Buy Boats";
+	["Name"] = "Mua Thuyền";
 	["Description"] = "",
 	["Callback"] = function()
 		L_1_[18]["Remotes"]["CommF_"]:InvokeServer("BuyBoat", _G["SelectedBoat"])
 	end
 })
 Q = L_1_[93]["SeaEvent"]:AddDropdown({
-	["Name"] = "Select Sea Level";
+	["Name"] = "Chọn Vùng Biển";
 	["Options"] = L_1_[89],
 	["Default"] = false;
 	["Callback"] = function(L_1236_arg0)
@@ -11832,7 +11832,7 @@ Q = L_1_[93]["SeaEvent"]:AddDropdown({
 	end
 })
 Q = L_1_[93]["SeaEvent"]:AddToggle({
-	["Name"] = "Auto Sail Boat",
+	["Name"] = "Tự Động Lái Thuyền",
 	["Description"] = "",
 	["Default"] = false;
 	["Callback"] = function(L_1238_arg0)
@@ -11912,10 +11912,10 @@ spawn(function()
 	end
 end)
 L_1_[93]["SeaEvent"]:AddSection({
-	"Entity Sea Event"
+	"Toàn Bộ Sự Kiện Biển"
 })
 L_1_[93]["SeaEvent"]:AddToggle({
-	["Name"] = "Auto Shark";
+	["Name"] = "Tự Động Đánh Cá Mập";
 	["Description"] = "";
 	["Default"] = false,
 	["Callback"] = function(L_1249_arg0)
@@ -11925,7 +11925,7 @@ L_1_[93]["SeaEvent"]:AddToggle({
 	end
 })
 L_1_[93]["SeaEvent"]:AddToggle({
-	["Name"] = "Auto Piranha",
+	["Name"] = "Tự Động Đánh Cá Điện",
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1251_arg0)
@@ -11935,7 +11935,7 @@ L_1_[93]["SeaEvent"]:AddToggle({
 	end
 })
 L_1_[93]["SeaEvent"]:AddToggle({
-	["Name"] = "Auto Terror Shark";
+	["Name"] = "Tự Động Đánh Cá Mập Tận Thế";
 	["Description"] = "";
 	["Default"] = false;
 	["Callback"] = function(L_1253_arg0)
@@ -11946,8 +11946,8 @@ L_1_[93]["SeaEvent"]:AddToggle({
 })
 L_1_[93]["SeaEvent"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Auto Fish Crew Membe";
-		"r"
+		"Tự Động Đánh Thủy Thủ Đoàn C";
+		"á"
 	}),
 	["Description"] = "";
 	["Default"] = false;
@@ -11959,8 +11959,8 @@ L_1_[93]["SeaEvent"]:AddToggle({
 })
 L_1_[93]["SeaEvent"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Auto Haunted Crew Me",
-		"mber"
+		"Tự Động Đánh Thủy Thủ Đoàn C",
+		"á Bị Ma Ám"
 	});
 	["Description"] = "",
 	["Default"] = false,
@@ -11972,8 +11972,8 @@ L_1_[93]["SeaEvent"]:AddToggle({
 })
 L_1_[93]["SeaEvent"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Auto Attack PirateGr";
-		"andBrigade"
+		"Tự Động Đánh Tàu Cướp Bi";
+		"ển Và Lữ Đoàn"
 	}),
 	["Description"] = "";
 	["Default"] = false;
@@ -11985,8 +11985,8 @@ L_1_[93]["SeaEvent"]:AddToggle({
 })
 L_1_[93]["SeaEvent"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Auto Attack Fish Boa",
-		"t"
+		"Tự Động Đánh Thuyề",
+		"n"
 	});
 	["Description"] = "",
 	["Default"] = false;
@@ -11998,8 +11998,8 @@ L_1_[93]["SeaEvent"]:AddToggle({
 })
 L_1_[93]["SeaEvent"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Auto Attack Sea Beas";
-		"t"
+		"Tự Động Đánh Thủy Quá";
+		"i"
 	});
 	["Description"] = "",
 	["Default"] = false;
@@ -12282,14 +12282,14 @@ spawn(function()
 end)
 L_1_[93]["SeaEvent"]:AddSection({
 	L_1_[2]({
-		"Kitsune Island / Eve";
-		"nt"
+		"Sự Kiện Đảo Cáo Q";
+		"ủy"
 	})
 })
 Check_Kitsu = L_1_[93]["SeaEvent"]:AddParagraph({
 	["Title"] = L_1_[2]({
-		" Kitsune Island Stat",
-		"us "
+		" Trạng Thái Đảo Cáo Q",
+		"ủy "
 	}),
 	["Content"] = ""
 })
@@ -12297,21 +12297,21 @@ spawn(function()
 	while wait(.2) do
 		if workspace["Map"]:FindFirstChild("KitsuneIsland") or workspace["_WorldOrigin"]["Locations"]:FindFirstChild("Kitsune Island") then
 			Check_Kitsu:SetDesc(L_1_[2]({
-				" Kitsune Island : Tr";
-				"ue"
+				" Đảo Cáo Quỷ : C";
+				"ó"
 			}))
 		else
 			Check_Kitsu:SetDesc(L_1_[2]({
-				" Kitsune Island : Fa",
-				"lse"
+				" Đảo Cáo Quỷ : khô",
+				"ng"
 			}))
 		end
 	end
 end)
 L_1_[93]["SeaEvent"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Auto Find Kitsune Is",
-		"land"
+		"Tự Động Tìm Đảo Cáo",
+		" Quỷ"
 	}),
 	["Description"] = "";
 	["Default"] = false;
