@@ -12363,8 +12363,8 @@ spawn(function()
 end)
 L_1_[93]["SeaEvent"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Auto Teleport to Shr",
-		"ine Actived"
+		"Tự Động Dịch Chuyển Đến Đảo Cá",
+		"o Quỷ"
 	}),
 	["Description"] = "",
 	["Default"] = false,
@@ -12405,7 +12405,7 @@ spawn(function()
 end)
 L_1_[93]["SeaEvent"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Auto Collect Azure E";
+		"Tự Động Nhặt Lửa Azure E";
 		"mber"
 	});
 	["Description"] = "";
@@ -12432,7 +12432,7 @@ spawn(function()
 end)
 L_1_[93]["SeaEvent"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Auto Trade Azure Emb",
+		"Tự Động Đổi Lửa Azure Emb",
 		"er"
 	}),
 	["Description"] = "";
@@ -12455,7 +12455,7 @@ spawn(function()
 	end
 end)
 L_1_[93]["SeaEvent"]:AddButton({
-	["Name"] = "Trade Items Azure";
+	["Name"] = "Đổi Vật Phẩm Azure";
 	["Description"] = "",
 	["Callback"] = function()
 		(L_1_[18]["Modules"]["Net"]:FindFirstChild("RF/KitsuneStatuePray")):InvokeServer()
@@ -12463,8 +12463,8 @@ L_1_[93]["SeaEvent"]:AddButton({
 })
 L_1_[93]["SeaEvent"]:AddButton({
 	["Name"] = L_1_[2]({
-		"Talk with kitsune st",
-		"atue"
+		"Nói Chuyện Với Tượng Đá ",
+		"Kitsune"
 	}),
 	["Description"] = "";
 	["Callback"] = function()
