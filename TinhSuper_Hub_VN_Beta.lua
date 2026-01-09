@@ -10449,7 +10449,7 @@ spawn(function()
 	end
 end)
 L_1_[93]["Prehistoric"]:AddSection({
-	" Nhiệm Vụ Võ Đường "
+	" Nhiệm Vụ Võ Đường"
 })
 L_1_[93]["Prehistoric"]:AddButton({
 	["Title"] = L_1_[2]({
@@ -11091,10 +11091,10 @@ spawn(function()
 	end
 end)
 L_1_[93]["Prehistoric"]:AddSection({
-	"Volcanic Crafting"
+	"Chế Tạo Vật Phẩm Đảo Núi Lửa"
 })
 L_1_[93]["Prehistoric"]:AddButton({
-	["Name"] = "Craft Dragonheart";
+	["Name"] = "Chế Tạo Thương Rồng (Dragonheart)";
 	["Description"] = "";
 	["Callback"] = function()
 		local L_1151_ = {}
@@ -11107,7 +11107,7 @@ L_1_[93]["Prehistoric"]:AddButton({
 	end
 })
 L_1_[93]["Prehistoric"]:AddButton({
-	["Name"] = "Craft Dragonstorm";
+	["Name"] = "Chế Tạo Súng Rồng (Dragonstorm)";
 	["Description"] = "";
 	["Callback"] = function()
 		local L_1152_ = {}
@@ -11120,7 +11120,7 @@ L_1_[93]["Prehistoric"]:AddButton({
 	end
 })
 L_1_[93]["Prehistoric"]:AddButton({
-	["Name"] = "Craft Dino Hood",
+	["Name"] = "Chế Tạo Mũ Khủng Long (Dino Hood)",
 	["Callback"] = function()
 		local L_1153_ = {}
 		L_1153_[2] = {
@@ -11132,7 +11132,7 @@ L_1_[93]["Prehistoric"]:AddButton({
 	end
 })
 L_1_[93]["Prehistoric"]:AddButton({
-	["Name"] = "Craft T-Rex Skull",
+	["Name"] = "Chế Tạo Mũ Hộp Sọ T-Rex (T-Rex Skull)",
 	["Callback"] = function()
 		local L_1154_ = {}
 		L_1154_[2] = {
@@ -11143,66 +11143,6 @@ L_1_[93]["Prehistoric"]:AddButton({
 		(game:GetService("ReplicatedStorage"))["Remotes"]["CommF_"]:InvokeServer(unpack(L_1154_[2]))
 	end
 })
-L_1_[93]["Prehistoric"]:AddSection({
-	"Prehistoric Island"
-})
-Check_Volcano = L_1_[93]["Prehistoric"]:AddParagraph({
-	["Title"] = L_1_[2]({
-		" Prehistoric Island ",
-		"Status "
-	}),
-	["Content"] = ""
-})
-spawn(function()
-	while wait(.2) do
-		if workspace["Map"]:FindFirstChild("PrehistoricIsland") or workspace["_WorldOrigin"]["Locations"]:FindFirstChild("Prehistoric Island") then
-			Check_Volcano:SetDesc(L_1_[2]({
-				" Prehistoric Island ",
-				": True"
-			}))
-		else
-			Check_Volcano:SetDesc(L_1_[2]({
-				" Prehistoric Island ";
-				": False"
-			}))
-		end
-	end
-end)
-L_1_[93]["Prehistoric"]:AddButton({
-	["Name"] = L_1_[2]({
-		"Craft Volcanic Magne",
-		"t"
-	});
-	["Callback"] = function()
-		local L_1155_ = {}
-		L_1155_[1] = (game:GetService("ReplicatedStorage"))["Modules"]["Net"]["RF/Craft"]
-		L_1155_[1]:InvokeServer("PossibleHardcode", "Volcanic Magnet")
-	end
-})
-L_1_[93]["Prehistoric"]:AddToggle({
-	["Name"] = L_1_[2]({
-		"Craft Volcanic Magne",
-		"t"
-	});
-	["Default"] = false;
-	["Callback"] = function(L_1156_arg0)
-		local L_1157_ = {}
-		L_1157_[1] = L_1156_arg0;
-		(getgenv())["AutoCraftVolcanic"] = L_1157_[1]
-	end
-})
-task["spawn"](function()
-	local L_1158_ = {}
-	L_1158_[2] = (game:GetService("ReplicatedStorage"))["Modules"]["Net"]["RF/Craft"]
-	while task["wait"](.3) do
-		if (getgenv())["AutoCraftVolcanic"] then
-			pcall(function()
-				L_1158_[2]:InvokeServer("PossibleHardcode", "Volcanic Magnet")
-			end);
-			(getgenv())["AutoCraftVolcanic"] = false
-		end
-	end
-end)
 L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
 		"Auto Find Prehistori",
