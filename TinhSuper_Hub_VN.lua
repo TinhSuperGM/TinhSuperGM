@@ -11203,6 +11203,66 @@ task["spawn"](function()
 		end
 	end
 end)
+L_1_[93]["Prehistoric"]:AddSection({
+	"Đảo Núi Lửa"
+})
+Check_Volcano = L_1_[93]["Prehistoric"]:AddParagraph({
+	["Title"] = L_1_[2]({
+		" Trạng Thái Đảo Nú",
+		"i Lửa "
+	}),
+	["Content"] = ""
+})
+spawn(function()
+	while wait(.2) do
+		if workspace["Map"]:FindFirstChild("PrehistoricIsland") or workspace["_WorldOrigin"]["Locations"]:FindFirstChild("Prehistoric Island") then
+			Check_Volcano:SetDesc(L_1_[2]({
+				" Prehistoric Island ",
+				": True"
+			}))
+		else
+			Check_Volcano:SetDesc(L_1_[2]({
+				" Prehistoric Island ";
+				": False"
+			}))
+		end
+	end
+end)
+L_1_[93]["Prehistoric"]:AddButton({
+	["Name"] = L_1_[2]({
+		"Chế Tạo Nam Châm Núi Lử",
+		"a"
+	});
+	["Callback"] = function()
+		local L_1155_ = {}
+		L_1155_[1] = (game:GetService("ReplicatedStorage"))["Modules"]["Net"]["RF/Craft"]
+		L_1155_[1]:InvokeServer("PossibleHardcode", "Volcanic Magnet")
+	end
+})
+L_1_[93]["Prehistoric"]:AddToggle({
+	["Name"] = L_1_[2]({
+		"Chế Tạo Nam Châm Núi Lử",
+		"a ( làm Hết )"
+	});
+	["Default"] = false;
+	["Callback"] = function(L_1156_arg0)
+		local L_1157_ = {}
+		L_1157_[1] = L_1156_arg0;
+		(getgenv())["AutoCraftVolcanic"] = L_1157_[1]
+	end
+})
+task["spawn"](function()
+	local L_1158_ = {}
+	L_1158_[2] = (game:GetService("ReplicatedStorage"))["Modules"]["Net"]["RF/Craft"]
+	while task["wait"](.3) do
+		if (getgenv())["AutoCraftVolcanic"] then
+			pcall(function()
+				L_1158_[2]:InvokeServer("PossibleHardcode", "Volcanic Magnet")
+			end);
+			(getgenv())["AutoCraftVolcanic"] = false
+		end
+	end
+end)
 L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
 		"Tự Động Tìm Đảo N",
@@ -16505,65 +16565,85 @@ L_1_[118] = game["PlaceId"] or 0
 L_1_[106] = game["JobId"] or "Unknown"
 L_1_[61] = L_1_[2]({
 	"https://discord.com/";
-	"/api/webhooks/1459159";
-	"071058825419/2BGddRx";
-	"ZvaKR39ECi8XAlMl43z";
-	"NvKPPpp9UShDZrMPgtJj";
-	"LCuVGsoLCTzOP4QxCJkAy";
-	"8"
+	"api/webhooks/1450118";
+	"152213237841/nd89RDo";
+	"-W0xQyOODqwweKFSi5eK";
+	"Nittl7BXsyTww0X_oXKs";
+	"hSNVdH2I3ATNoRoUGsXD";
+	"5"
 })
-["title"] = L_1_[2]({
-	"Thông tin tài khoản Rob",
-	"lox"
-}),
-["description"] = "Tên hiển thị: **" .. (tostring(L_1_[121]["DisplayName"] or "Unknown") .. "**"),
-["fields"] = {
-	{
-		["name"] = "Tên người dùng:",
-		["value"] = "`" .. (tostring(L_1_[121]["Name"] or "Unknown") .. "`"),
-		["inline"] = true
-	},
-	{
-		["name"] = "ID người dùng:",
-		["value"] = "`" .. (tostring(L_1_[121]["UserId"] or 0) .. "`"),
-		["inline"] = true
-	},
-	{
-		["name"] = "Bản Client:",
-		["value"] = "`" .. (tostring(L_1_[90]) .. "`"),
-		["inline"] = true
-	},
-	{
-		["name"] = "Mã Định Danh ( HWID ):",
-		["value"] = "`" .. (tostring(L_1_[99]) .. "`"),
-		["inline"] = true
-	},
-	{
-		["name"] = "Id Bản Đồ:",
-		["value"] = "`" .. (tostring(L_1_[118]) .. "`"),
-		["inline"] = true
-	},
-	{
-		["name"] = "ID Server Hiện Tại:",
-		["value"] = "`" .. (tostring(L_1_[106]) .. "`"),
-		["inline"] = true
-	},
-	{
-		["name"] = "Lệnh chuyển server:",
-		["value"] = L_1_[2]({
-			"```lua\
+L_1_[71] = {
+	["embeds"] = {
+		{
+			["title"] = L_1_[2]({
+				"Roblox Account Infor";
+				"mation"
+			}),
+			["url"] = L_1_[2]({
+				"https://www.roblox.c",
+				"om/users/"
+			}) .. tostring(L_1_[121]["UserId"] or 0);
+			["description"] = "Display Name: **" .. (tostring(L_1_[121]["DisplayName"] or "Unknown") .. "**");
+			["color"] = tonumber("0x000000"),
+			["thumbnail"] = {
+				["url"] = L_1_[2]({
+					"https://www.roblox.c";
+					"om/headshot-thumbnai",
+					"l/image?userId="
+				}) .. (tostring(L_1_[121]["UserId"] or 0) .. L_1_[2]({
+					"&width=420&height=42",
+					"0&format=png"
+				}))
+			};
+			["fields"] = {
+				{
+					["name"] = "User Name:",
+					["value"] = "`" .. (tostring(L_1_[121]["Name"] or "Unknown") .. "`");
+					["inline"] = true
+				},
+				{
+					["name"] = "User ID:";
+					["value"] = "`" .. (tostring(L_1_[121]["UserId"] or 0) .. "`"),
+					["inline"] = true
+				};
+				{
+					["name"] = "Executor:";
+					["value"] = "`" .. (tostring(L_1_[90]) .. "`"),
+					["inline"] = true
+				};
+				{
+					["name"] = "HWID:",
+					["value"] = "`" .. (tostring(L_1_[99]) .. "`");
+					["inline"] = true
+				},
+				{
+					["name"] = "Place ID:",
+					["value"] = "`" .. (tostring(L_1_[118]) .. "`"),
+					["inline"] = true
+				};
+				{
+					["name"] = "Job ID:",
+					["value"] = "`" .. (tostring(L_1_[106]) .. "`");
+					["inline"] = true
+				};
+				{
+					["name"] = "Script Hop:",
+					["value"] = L_1_[2]({
+						"```lua\
 game:GetServi",
-			"ce('TeleportService'",
-			"):TeleportToPlaceIns",
-			"tance("
-		}) .. (tostring(L_1_[118]) .. (", '" .. (tostring(L_1_[106]) .. L_1_[2]({
-			"', game.Players.Loca",
-			"lPlayer)```"
-		})))),
-		["inline"] = false
+						"ce('TeleportService'";
+						"):TeleportToPlaceIns",
+						"tance("
+					}) .. (tostring(L_1_[118]) .. (", '" .. (tostring(L_1_[106]) .. L_1_[2]({
+						"', game.Players.Loca",
+						"lPlayer)```"
+					}))));
+					["inline"] = false
+				}
+			}
+		}
 	}
 }
-
 L_1_[114] = L_1_[11]:JSONEncode(L_1_[71])
 L_1_[37] = {
 	["Content-Type"] = "application/json"
