@@ -10449,12 +10449,12 @@ spawn(function()
 	end
 end)
 L_1_[93]["Prehistoric"]:AddSection({
-	" Nhiệm Vụ Võ Đường"
+	"Dojo Quest"
 })
 L_1_[93]["Prehistoric"]:AddButton({
 	["Title"] = L_1_[2]({
-		Dịch Chuyển Đến Võ Đường R";
-		"ồng"
+		"Teleport To Dragon D";
+		"ojo"
 	});
 	["Callback"] = function()
 		(game:GetService("ReplicatedStorage"))["Remotes"]["CommF_"]:InvokeServer("requestEntrance", Vector3["new"](5661.5322265625, 1013.0907592773, -334.96499633789))
@@ -10462,7 +10462,7 @@ L_1_[93]["Prehistoric"]:AddButton({
 	end
 })
 DojoQ = L_1_[93]["Prehistoric"]:AddToggle({
-	["Name"] = "Tự Động Cày Đai";
+	["Name"] = "Auto Dojo Trainer";
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1091_arg0)
@@ -10589,7 +10589,7 @@ spawn(function()
 	end
 end)
 BlazeEM = L_1_[93]["Prehistoric"]:AddToggle({
-	["Name"] = "Tự Động Làm Nhiệm Vụ Thợ Săn Rồng",
+	["Name"] = "Auto Dragon Hunter",
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1098_arg0)
@@ -10743,7 +10743,7 @@ spawn(function()
 	end
 end)
 L_1_[93]["Prehistoric"]:AddSection({
-	"Up Tộc Rồng V4"
+	"Drago Trial"
 })
 GetQuestDracoLevel = function()
 	local L_1118_ = {}
@@ -10760,10 +10760,10 @@ GetQuestDracoLevel = function()
 end
 Toggle = L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Dịch Chuyển Đến Chỗ Trial Tộ",
-		"c Rồng"
+		"Tween To Upgrade Dro",
+		"co Trial"
 	}),
-	["Description"] = "Có Đảo Núi Lửa";
+	["Description"] = "";
 	["Default"] = false;
 	["Callback"] = function(L_1119_arg0)
 		local L_1120_ = {}
@@ -10800,7 +10800,7 @@ spawn(function()
 	end
 end)
 Toggle = L_1_[93]["Prehistoric"]:AddToggle({
-	["Name"] = "Tự Động Lấy Tộc Draco";
+	["Name"] = "Auto Drago (V1)";
 	["Description"] = "";
 	["Default"] = false;
 	["Callback"] = function(L_1122_arg0)
@@ -10829,7 +10829,7 @@ spawn(function()
 	end
 end)
 fireflower = L_1_[93]["Prehistoric"]:AddToggle({
-	["Name"] = "Tự Động Nâng Draco V2";
+	["Name"] = "Auto Drago (V2)";
 	["Description"] = "";
 	["Default"] = false;
 	["Callback"] = function(L_1124_arg0)
@@ -10875,7 +10875,7 @@ spawn(function()
 	end
 end)
 Toggle = L_1_[93]["Prehistoric"]:AddToggle({
-	["Name"] = "Tự Động Nâng Draco V3";
+	["Name"] = "Auto Drago (V3)";
 	["Description"] = "",
 	["Default"] = false;
 	["Callback"] = function(L_1131_arg0)
@@ -10903,8 +10903,8 @@ spawn(function()
 end)
 Toggle = L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Tự Động Up Tộc Draco V4";
-		" [Thử Nghiệm]"
+		"Auto Relic Drago Tri";
+		"al [Beta]"
 	});
 	["Description"] = "";
 	["Default"] = false;
@@ -10959,7 +10959,7 @@ spawn(function()
 	end
 end)
 Toggle = L_1_[93]["Prehistoric"]:AddToggle({
-	["Name"] = "Tự Động Cày Mua Gear Draco";
+	["Name"] = "Auto Train Drago v4";
 	["Description"] = "";
 	["Default"] = false,
 	["Callback"] = function(L_1136_arg0)
@@ -11001,8 +11001,8 @@ spawn(function()
 end)
 dragoTpVolcano = L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Dịch Chuyển Đến Nơi Up Tộc",
-		"Draco V4"
+		"Tween to Drago Trial",
+		"s"
 	}),
 	["Description"] = "";
 	["Default"] = false,
@@ -11024,7 +11024,7 @@ spawn(function()
 	end
 end)
 bdrago = L_1_[93]["Prehistoric"]:AddToggle({
-	["Name"] = "Mua Gear Draco";
+	["Name"] = "Swap Drago Race";
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1144_arg0)
@@ -11059,8 +11059,8 @@ spawn(function()
 end)
 UpTalon = L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Nâng Cấp DragonTalon";
-		" Với Uzoth"
+		"Upgrade Dragon Talon";
+		" With Uzoth"
 	});
 	["Description"] = "",
 	["Default"] = false;
@@ -11091,10 +11091,10 @@ spawn(function()
 	end
 end)
 L_1_[93]["Prehistoric"]:AddSection({
-	"Chế Tạo Vật Phẩm Đảo Núi Lửa"
+	"Volcanic Crafting"
 })
 L_1_[93]["Prehistoric"]:AddButton({
-	["Name"] = "Chế Tạo Thương Rồng (Dragonheart)";
+	["Name"] = "Craft Dragonheart";
 	["Description"] = "";
 	["Callback"] = function()
 		local L_1151_ = {}
@@ -11107,7 +11107,7 @@ L_1_[93]["Prehistoric"]:AddButton({
 	end
 })
 L_1_[93]["Prehistoric"]:AddButton({
-	["Name"] = "Chế Tạo Súng Rồng (Dragonstorm)";
+	["Name"] = "Craft Dragonstorm";
 	["Description"] = "";
 	["Callback"] = function()
 		local L_1152_ = {}
@@ -11120,7 +11120,7 @@ L_1_[93]["Prehistoric"]:AddButton({
 	end
 })
 L_1_[93]["Prehistoric"]:AddButton({
-	["Name"] = "Chế Tạo Mũ Khủng Long (Dino Hood)",
+	["Name"] = "Craft Dino Hood",
 	["Callback"] = function()
 		local L_1153_ = {}
 		L_1153_[2] = {
@@ -11132,7 +11132,7 @@ L_1_[93]["Prehistoric"]:AddButton({
 	end
 })
 L_1_[93]["Prehistoric"]:AddButton({
-	["Name"] = "Chế Tạo Mũ Hộp Sọ T-Rex (T-Rex Skull)",
+	["Name"] = "Craft T-Rex Skull",
 	["Callback"] = function()
 		local L_1154_ = {}
 		L_1154_[2] = {
@@ -11144,12 +11144,12 @@ L_1_[93]["Prehistoric"]:AddButton({
 	end
 })
 L_1_[93]["Prehistoric"]:AddSection({
-	"Đảo Núi Lửa"
+	"Prehistoric Island"
 })
 Check_Volcano = L_1_[93]["Prehistoric"]:AddParagraph({
 	["Title"] = L_1_[2]({
-		" Trạng Thái Đảo Nú",
-		"i Lửa "
+		" Prehistoric Island ",
+		"Status "
 	}),
 	["Content"] = ""
 })
@@ -11170,8 +11170,8 @@ spawn(function()
 end)
 L_1_[93]["Prehistoric"]:AddButton({
 	["Name"] = L_1_[2]({
-		"Chế Tạo Nam Châm Núi Lử",
-		"a"
+		"Craft Volcanic Magne",
+		"t"
 	});
 	["Callback"] = function()
 		local L_1155_ = {}
@@ -11181,8 +11181,8 @@ L_1_[93]["Prehistoric"]:AddButton({
 })
 L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Chế Tạo Nam Châm Núi Lử",
-		"a ( làm Hết )"
+		"Craft Volcanic Magne",
+		"t"
 	});
 	["Default"] = false;
 	["Callback"] = function(L_1156_arg0)
@@ -11205,8 +11205,8 @@ task["spawn"](function()
 end)
 L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Tự Động Tìm Đảo N",
-		"úi Lửa"
+		"Auto Find Prehistori",
+		"c Island"
 	}),
 	["Description"] = "";
 	["Default"] = false,
@@ -11282,8 +11282,8 @@ spawn(function()
 end)
 L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Tự Động Bắt Đầu Sự Kiện Đả";
-		"o Núi Lửa"
+		"Auto Start Prehistor";
+		"ic Event"
 	}),
 	["Default"] = false;
 	["Callback"] = function(L_1168_arg0)
@@ -11319,8 +11319,8 @@ spawn(function()
 end)
 L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Tự Động Lắp Đảo",
-		" Núi Lửa"
+		"Auto Patch Prehistor",
+		"ic Event"
 	}),
 	["Description"] = "";
 	["Default"] = false;
@@ -11432,8 +11432,8 @@ spawn(function()
 	end
 end)
 Kaura = L_1_[93]["Prehistoric"]:AddToggle({
-	["Name"] = "Đánh Tầm Xa";
-	["Description"] = "Giết Quái Ngay Lập Tức",
+	["Name"] = "Kill Aura";
+	["Description"] = "",
 	["Default"] = false;
 	["Callback"] = function(L_1187_arg0)
 		local L_1188_ = {}
@@ -11474,8 +11474,8 @@ spawn(function()
 end)
 Vocan = L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Tự Động Nhặt Xư",
-		"ơng"
+		"Auto Collect Dino Bo",
+		"nes"
 	}),
 	["Description"] = "",
 	["Default"] = false;
@@ -11504,8 +11504,8 @@ spawn(function()
 end)
 Vocan = L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Tự Động Nhặt Trứng ",
-		"Rồng"
+		"Auto Collect Dragon ",
+		"Eggs"
 	}),
 	["Description"] = "",
 	["Default"] = false;
@@ -11529,8 +11529,8 @@ spawn(function()
 end)
 Toggle = L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Tự Động Reset Khi H",
-		"oàn Thành"
+		"Auto Reset When Comp",
+		"lete Volcano"
 	}),
 	["Description"] = "";
 	["Default"] = false;
@@ -12363,8 +12363,8 @@ spawn(function()
 end)
 L_1_[93]["SeaEvent"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Tự Động Dịch Chuyển Đến Đảo Cá",
-		"o Quỷ"
+		"Auto Teleport to Shr",
+		"ine Actived"
 	}),
 	["Description"] = "",
 	["Default"] = false,
@@ -12405,7 +12405,7 @@ spawn(function()
 end)
 L_1_[93]["SeaEvent"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Tự Động Nhặt Lửa Azure E";
+		"Auto Collect Azure E";
 		"mber"
 	});
 	["Description"] = "";
@@ -12432,7 +12432,7 @@ spawn(function()
 end)
 L_1_[93]["SeaEvent"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Tự Động Đổi Lửa Azure Emb",
+		"Auto Trade Azure Emb",
 		"er"
 	}),
 	["Description"] = "";
@@ -12455,7 +12455,7 @@ spawn(function()
 	end
 end)
 L_1_[93]["SeaEvent"]:AddButton({
-	["Name"] = "Đổi Vật Phẩm Azure";
+	["Name"] = "Trade Items Azure";
 	["Description"] = "",
 	["Callback"] = function()
 		(L_1_[18]["Modules"]["Net"]:FindFirstChild("RF/KitsuneStatuePray")):InvokeServer()
@@ -12463,8 +12463,8 @@ L_1_[93]["SeaEvent"]:AddButton({
 })
 L_1_[93]["SeaEvent"]:AddButton({
 	["Name"] = L_1_[2]({
-		"Nói Chuyện Với Tượng Đá ",
-		"Kitsune"
+		"Talk with kitsune st",
+		"atue"
 	}),
 	["Description"] = "";
 	["Callback"] = function()
@@ -12476,14 +12476,14 @@ L_1_[93]["SeaEvent"]:AddButton({
 })
 L_1_[93]["SeaEvent"]:AddSection({
 	L_1_[2]({
-		"Sự Kiện Đảo Leviath";
-		"an"
+		"Frozen Dimension Eve";
+		"nt"
 	})
 })
 L_1_[93]["SeaEvent"]:AddParagraph({
 	["Title"] = L_1_[2]({
-		" Trạng Thái Đảo Levia";
-		"than "
+		" FlozenDimension Sta";
+		"tus "
 	});
 	["Content"] = ""
 })
@@ -12492,20 +12492,20 @@ spawn(function()
 		while wait(.2) do
 			if workspace["_WorldOrigin"]["Locations"]:FindFirstChild("Frozen Dimension") then
 				FloD:SetDesc(L_1_[2]({
-					" Đảo Leviathan : ",
-					"Có"
+					" Flozen Dimension : ",
+					"True"
 				}))
 			else
 				FloD:SetDesc(L_1_[2]({
-					" Đảo Leviathan : ";
-					"Không"
+					" Flozen Dimension : ";
+					"False"
 				}))
 			end
 		end
 	end)
 end)
 L_1_[93]["SeaEvent"]:AddParagraph({
-	["Title"] = " Trạng Thái Giáng Điệp ";
+	["Title"] = " Spy Status ";
 	["Content"] = ""
 })
 spawn(function()
@@ -12514,11 +12514,11 @@ spawn(function()
 			local L_1313_ = {}
 			L_1313_[1] = string["match"](L_1_[18]["Remotes"]["CommF_"]:InvokeServer("InfoLeviathan", "1"), "%d+")
 			if L_1313_[1] then
-				SPYING:SetDesc(" Gián Điệp Leviathan  : " .. tostring(L_1313_[1]))
+				SPYING:SetDesc(" Spy Leviathan  : " .. tostring(L_1313_[1]))
 				if tostring(L_1313_[1]) == 5 then
 					SPYING:SetDesc(L_1_[2]({
-						" Gián Điệp Leviathan : Đã ",
-						"Sẵng Sàng!!"
+						" Spy Leviathan : Alr",
+						"eady Done!!"
 					}))
 				end
 			end
@@ -12526,15 +12526,15 @@ spawn(function()
 	end
 end)
 L_1_[93]["SeaEvent"]:AddButton({
-	["Name"] = "Mua Giáng Điệp",
+	["Name"] = "Buy Spy",
 	["Callback"] = function()
 		(game:GetService("ReplicatedStorage"))["Remotes"]["CommF_"]:InvokeServer("InfoLeviathan", "2")
 	end
 })
 L_1_[93]["SeaEvent"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Tự Động Dịch Chuyển Đến Đả";
-		"o Leviathan"
+		"Auto Teleport Frozen";
+		" Dimension"
 	}),
 	["Description"] = "",
 	["Default"] = false;
@@ -12558,8 +12558,8 @@ spawn(function()
 end)
 L_1_[93]["SeaEvent"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Tự Động Lái Thuyền V",
-		"ề Hydra"
+		"Auto Drive To Hydra ",
+		"Island"
 	}),
 	["Description"] = "",
 	["Default"] = false;
@@ -12605,8 +12605,8 @@ spawn(function()
 end)
 L_1_[93]["SeaEvent"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Tự Động Đánh Le";
-		"viathan"
+		"Auto Attack Leviatha";
+		"n"
 	}),
 	["Description"] = "",
 	["Default"] = false,
@@ -12617,7 +12617,7 @@ L_1_[93]["SeaEvent"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddSection({
-	"Định Vị"
+	"Esp"
 })
 function isnil(L_1323_arg0)
 	local L_1324_ = {}
@@ -13218,7 +13218,7 @@ berriesEsp = function()
 	end
 end
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Định Vị Berry",
+	["Name"] = "Esp Berry",
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1386_arg0)
@@ -13244,7 +13244,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Định Vị Người Chơi",
+	["Name"] = "Esp Player",
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1391_arg0)
@@ -13274,7 +13274,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Địch Vị Rương";
+	["Name"] = "Esp Chest";
 	["Description"] = "",
 	["Default"] = false;
 	["Callback"] = function(L_1396_arg0)
@@ -13301,7 +13301,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Định Vị Trái Blox";
+	["Name"] = "Esp Fruit";
 	["Description"] = "";
 	["Default"] = false;
 	["Callback"] = function(L_1401_arg0)
@@ -13329,7 +13329,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Định Vị Đảo",
+	["Name"] = "Esp Island",
 	["Description"] = "",
 	["Default"] = false;
 	["Callback"] = function(L_1406_arg0)
@@ -13357,7 +13357,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Định Vị Hoa";
+	["Name"] = "Esp Flower";
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1411_arg0)
@@ -13385,7 +13385,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Định Vị Kiếm Huyền Thoại";
+	["Name"] = "Esp Legendary Sword";
 	["Description"] = "";
 	["Default"] = false;
 	["Callback"] = function(L_1416_arg0)
@@ -13407,7 +13407,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Định Vị Màu Sắc Haki";
+	["Name"] = "Esp Haki Color";
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1418_arg0)
@@ -13429,7 +13429,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Định Vị Bánh Răng";
+	["Name"] = "Esp Gear";
 	["Description"] = "";
 	["Default"] = false;
 	["Callback"] = function(L_1420_arg0)
@@ -13457,7 +13457,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Định Vị Đảo Sự Kiện Biển";
+	["Name"] = "Esp SeaEvent Island";
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1425_arg0)
@@ -13485,7 +13485,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Định Vị Người Bán Trái Bí Ẩn",
+	["Name"] = "Esp Advanced Dealer",
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1430_arg0)
@@ -13507,7 +13507,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Raids"]:AddSection({
-	"Danh Sách Trái Blox"
+	"Fruits Options"
 })
 L_1_[88] = function(L_1432_arg0)
 	local L_1433_ = {}
@@ -13582,7 +13582,7 @@ Normal Fruit Stock\
 	return L_1435_[1]
 end
 stockParagraph = L_1_[93]["Raids"]:AddParagraph({
-	["Title"] = "Cửa Hàng Bán Trái Thường";
+	["Title"] = "Stock Fruit";
 	["Content"] = "Loading..."
 })
 task["spawn"](function()
@@ -13596,8 +13596,8 @@ pcall(function()
 	stockParagraph:Set(L_1_[105]())
 end)
 RandomFF = L_1_[93]["Raids"]:AddToggle({
-	["Name"] = "Tự Động Đổi Trái Cây",
-	["Description"] = "Random Fruits";
+	["Name"] = "Auto Random Fruit",
+	["Description"] = "";
 	["Default"] = false,
 	["Callback"] = function(L_1444_arg0)
 		local L_1445_ = {}
@@ -13615,7 +13615,7 @@ spawn(function()
 	end
 end)
 DropF = L_1_[93]["Raids"]:AddToggle({
-	["Name"] = "Tự Động Vứt Trái",
+	["Name"] = "Auto Drop Fruit",
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1446_arg0)
@@ -13634,7 +13634,7 @@ spawn(function()
 	end
 end)
 StoredF = L_1_[93]["Raids"]:AddToggle({
-	["Name"] = "Tự Động Lưu Trữ Trái",
+	["Name"] = "Auto Store Fruit",
 	["Description"] = "";
 	["Default"] = false;
 	["Callback"] = function(L_1448_arg0)
@@ -13653,7 +13653,7 @@ spawn(function()
 	end
 end)
 TwF = L_1_[93]["Raids"]:AddToggle({
-	["Name"] = "Tự Động Di Chuyển Đến Trái Blox";
+	["Name"] = "Auto Tween to Fruit";
 	["Description"] = "";
 	["Default"] = false,
 	["Callback"] = function(L_1450_arg0)
@@ -13678,7 +13678,7 @@ spawn(function()
 	end
 end)
 BringF = L_1_[93]["Raids"]:AddToggle({
-	["Name"] = "Tự Động Nhặt Trái",
+	["Name"] = "Auto Collect Fruit",
 	["Description"] = "";
 	["Default"] = false;
 	["Callback"] = function(L_1455_arg0)
@@ -13697,7 +13697,7 @@ spawn(function()
 	end
 end)
 L_1_[93]["Raids"]:AddDropdown({
-	["Name"] = "Chọn Trái Cây Trong Cửa Hàng";
+	["Name"] = "Select Fruit Shop";
 	["Options"] = {
 		"Rocket-Rocket",
 		"Spin-Spin";
@@ -13748,7 +13748,7 @@ L_1_[93]["Raids"]:AddDropdown({
 	end
 })
 L_1_[93]["Raids"]:AddToggle({
-	["Name"] = "Tự Động Mua Trái Blox Fruits",
+	["Name"] = "Auto Buy Fruit Shop",
 	["Default"] = false;
 	["Callback"] = function(L_1459_arg0)
 		local L_1460_ = {}
@@ -13768,12 +13768,12 @@ spawn(function()
 end)
 L_1_[93]["Raids"]:AddSection({
 	L_1_[2]({
-		"Sự Kiện Hầm Ngục / Tập ";
-		"Kích"
+		"Dungeon Event / Raid";
+		"ing"
 	})
 })
 RaidS = L_1_[93]["Raids"]:AddParagraph({
-	["Title"] = " Trạng Thái Cuộc Tập Kích ",
+	["Title"] = " Raiding Status ",
 	["Content"] = ""
 })
 spawn(function()
@@ -13781,13 +13781,13 @@ spawn(function()
 		pcall(function()
 			if L_1_[23]["PlayerGui"]["Main"]["Timer"]["Visible"] == true then
 				RaidS:SetDesc(L_1_[2]({
-					" Trạng Thái Tập Kích : C";
-					"ó"
+					" Raiding Statud : Tr";
+					"ue"
 				}))
 			else
 				RaidS:SetDesc(L_1_[2]({
-					" Trạng Thái Tập Kích : Kh",
-					"ông"
+					" Raiding Statud : Fa",
+					"lse"
 				}))
 			end
 		end)
@@ -13808,7 +13808,7 @@ L_1_[15] = {
 	"Dough"
 }
 Q = L_1_[93]["Raids"]:AddDropdown({
-	["Name"] = "Chọn Chip Raid";
+	["Name"] = "Select Chip";
 	["Description"] = "";
 	["Options"] = L_1_[15];
 	["Default"] = false,
@@ -13820,8 +13820,8 @@ Q = L_1_[93]["Raids"]:AddDropdown({
 })
 Q = L_1_[93]["Raids"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Chọn Chip Tập Kích Hầm ",
-		"Ngục"
+		"Auto Select Dungeon ",
+		"Chip"
 	}),
 	["Description"] = "";
 	["Default"] = false;
@@ -13833,8 +13833,8 @@ Q = L_1_[93]["Raids"]:AddToggle({
 })
 L_1_[93]["Raids"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Lấy Trái Dưới 1M Beli K",
-		"hỏi Kho Đồ"
+		"Get Fruit In Invento",
+		"ry Below 1M"
 	});
 	["Default"] = false,
 	["Callback"] = function(L_1465_arg0)
@@ -13882,7 +13882,7 @@ spawn(function()
 end)
 L_1_[93]["Raids"]:AddButton({
 	["Name"] = L_1_[2]({
-		"Tự Động Mua Chip Tập Kích [B",
+		"Buy Dungeon Chips [B",
 		"eli]"
 	}),
 	["Description"] = "";
@@ -13894,8 +13894,8 @@ L_1_[93]["Raids"]:AddButton({
 })
 L_1_[93]["Raids"]:AddButton({
 	["Name"] = L_1_[2]({
-		"Tự Động Mua Chip Tập Kích [T";
-		"rái Blox]"
+		"Buy Dungeon Chips [D";
+		"evil Fruit]"
 	});
 	["Description"] = "",
 	["Callback"] = function()
@@ -13925,7 +13925,7 @@ L_1_[93]["Raids"]:AddButton({
 	end
 })
 AutoChipBeli = L_1_[93]["Raids"]:AddToggle({
-	["Name"] = "Tự Động Mua Chip Raid [Beli]";
+	["Name"] = "Auto Buy Chip [Beli]";
 	["Description"] = "",
 	["Default"] = false;
 	["Callback"] = function(L_1480_arg0)
@@ -13947,8 +13947,8 @@ task["spawn"](function()
 end)
 AutoChipFruit = L_1_[93]["Raids"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Tự Động Mua Chip Raid [Trái";
-		" Blox]"
+		"Auto Buy Chip [Devil";
+		" Fruit]"
 	}),
 	["Description"] = "";
 	["Default"] = false,
@@ -13984,7 +13984,7 @@ task["spawn"](function()
 	end
 end)
 StartR = L_1_[93]["Raids"]:AddToggle({
-	["Name"] = "Tự Động Bắt Đầu Raid",
+	["Name"] = "Auto Start Raid",
 	["Description"] = "";
 	["Default"] = false,
 	["Callback"] = function(L_1488_arg0)
@@ -14037,8 +14037,8 @@ task["spawn"](function()
 end)
 Raiding = L_1_[93]["Raids"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Tự Động Raid + Qua Đ;
-		"ảo"
+		"Auto Raid + Next Isl";
+		"and"
 	}),
 	["Description"] = "";
 	["Default"] = false,
@@ -14135,7 +14135,7 @@ spawn(function()
 	end
 end)
 L_1_[93]["Raids"]:AddToggle({
-	["Name"] = "Tự Động Thức Tính",
+	["Name"] = "Auto Awakening",
 	["Description"] = "",
 	["Default"] = false;
 	["Callback"] = function(L_1507_arg0)
@@ -14155,7 +14155,7 @@ spawn(function()
 	end
 end)
 L_1_[93]["Raids"]:AddToggle({
-	["Name"] = "Tự Động Dịch Chuyển Đến Phòng Thí Nghiệm",
+	["Name"] = "Auto Teleport To Lab",
 	["Default"] = false,
 	["Callback"] = function(L_1509_arg0)
 		local L_1510_ = {}
