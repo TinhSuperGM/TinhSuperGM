@@ -13218,7 +13218,7 @@ berriesEsp = function()
 	end
 end
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Esp Berry",
+	["Name"] = "Định Vị Berry",
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1386_arg0)
@@ -13244,7 +13244,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Esp Player",
+	["Name"] = "Định Vị Người Chơi",
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1391_arg0)
@@ -13274,7 +13274,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Esp Chest";
+	["Name"] = "Địch Vị Rương";
 	["Description"] = "",
 	["Default"] = false;
 	["Callback"] = function(L_1396_arg0)
@@ -13301,7 +13301,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Esp Fruit";
+	["Name"] = "Định Vị Trái Blox";
 	["Description"] = "";
 	["Default"] = false;
 	["Callback"] = function(L_1401_arg0)
@@ -13329,7 +13329,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Esp Island",
+	["Name"] = "Định Vị Đảo",
 	["Description"] = "",
 	["Default"] = false;
 	["Callback"] = function(L_1406_arg0)
@@ -13357,7 +13357,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Esp Flower";
+	["Name"] = "Định Vị Hoa";
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1411_arg0)
@@ -13385,7 +13385,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Esp Legendary Sword";
+	["Name"] = "Định Vị Kiếm Huyền Thoại";
 	["Description"] = "";
 	["Default"] = false;
 	["Callback"] = function(L_1416_arg0)
@@ -13407,7 +13407,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Esp Haki Color";
+	["Name"] = "Định Vị Màu Sắc Haki";
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1418_arg0)
@@ -13429,7 +13429,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Esp Gear";
+	["Name"] = "Định Vị Bánh Răng";
 	["Description"] = "";
 	["Default"] = false;
 	["Callback"] = function(L_1420_arg0)
@@ -13457,7 +13457,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Esp SeaEvent Island";
+	["Name"] = "Định Vị Đảo Sự Kiện Biển";
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1425_arg0)
@@ -13485,7 +13485,7 @@ L_1_[93]["Esp"]:AddToggle({
 	end
 })
 L_1_[93]["Esp"]:AddToggle({
-	["Name"] = "Esp Advanced Dealer",
+	["Name"] = "Định Vị Người Bán Trái Bí Ẩn",
 	["Description"] = "",
 	["Default"] = false,
 	["Callback"] = function(L_1430_arg0)
