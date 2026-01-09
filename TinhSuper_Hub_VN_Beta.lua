@@ -10449,11 +10449,11 @@ spawn(function()
 	end
 end)
 L_1_[93]["Prehistoric"]:AddSection({
-	" Nhiệm Vụ Võ Đường"
+	" Nhiệm Vụ Võ Đường "
 })
 L_1_[93]["Prehistoric"]:AddButton({
 	["Title"] = L_1_[2]({
-		Dịch Chuyển Đến Võ Đường R";
+		"Dịch Chuyển Đến Võ Đường R";
 		"ồng"
 	});
 	["Callback"] = function()
