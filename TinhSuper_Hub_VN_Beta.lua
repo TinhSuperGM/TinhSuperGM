@@ -13582,7 +13582,7 @@ Normal Fruit Stock\
 	return L_1435_[1]
 end
 stockParagraph = L_1_[93]["Raids"]:AddParagraph({
-	["Title"] = "Cửa Hàng Bán Trái Thường";
+	["Title"] = "Cửa Hàng Bán Trái";
 	["Content"] = "Loading..."
 })
 task["spawn"](function()
@@ -13697,7 +13697,7 @@ spawn(function()
 	end
 end)
 L_1_[93]["Raids"]:AddDropdown({
-	["Name"] = "Select Fruit Shop";
+	["Name"] = "Chọn Trái Cây Trong Cửa Hàng";
 	["Options"] = {
 		"Rocket-Rocket",
 		"Spin-Spin";
@@ -13748,7 +13748,7 @@ L_1_[93]["Raids"]:AddDropdown({
 	end
 })
 L_1_[93]["Raids"]:AddToggle({
-	["Name"] = "Auto Buy Fruit Shop",
+	["Name"] = "Tự Động Mua Trái Blox Fruits",
 	["Default"] = false;
 	["Callback"] = function(L_1459_arg0)
 		local L_1460_ = {}
