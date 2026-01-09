@@ -10453,7 +10453,7 @@ L_1_[93]["Prehistoric"]:AddSection({
 })
 L_1_[93]["Prehistoric"]:AddButton({
 	["Title"] = L_1_[2]({
-		Dịch Chuyển Đến Võ Đường R";
+		"Dịch Chuyển Đến Võ Đường R";
 		"ồng"
 	});
 	["Callback"] = function()
