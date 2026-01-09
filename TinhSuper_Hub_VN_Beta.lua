@@ -11205,8 +11205,8 @@ task["spawn"](function()
 end)
 L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Auto Find Prehistori",
-		"c Island"
+		"Tự Động Tìm Đảo N",
+		"úi Lửa"
 	}),
 	["Description"] = "";
 	["Default"] = false,
@@ -11282,8 +11282,8 @@ spawn(function()
 end)
 L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Auto Start Prehistor";
-		"ic Event"
+		"Tự Động Bắt Đầu Sự Kiện Đả";
+		"o Núi Lửa"
 	}),
 	["Default"] = false;
 	["Callback"] = function(L_1168_arg0)
@@ -11319,8 +11319,8 @@ spawn(function()
 end)
 L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Auto Patch Prehistor",
-		"ic Event"
+		"Tự Động Lắp Đảo",
+		" Núi Lửa"
 	}),
 	["Description"] = "";
 	["Default"] = false;
@@ -11432,8 +11432,8 @@ spawn(function()
 	end
 end)
 Kaura = L_1_[93]["Prehistoric"]:AddToggle({
-	["Name"] = "Kill Aura";
-	["Description"] = "",
+	["Name"] = "Đánh Tầm Xa";
+	["Description"] = "Giết Quái Ngay Lập Tức",
 	["Default"] = false;
 	["Callback"] = function(L_1187_arg0)
 		local L_1188_ = {}
@@ -11474,8 +11474,8 @@ spawn(function()
 end)
 Vocan = L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Auto Collect Dino Bo",
-		"nes"
+		"Tự Động Nhặt Xư",
+		"ơng"
 	}),
 	["Description"] = "",
 	["Default"] = false;
@@ -11504,8 +11504,8 @@ spawn(function()
 end)
 Vocan = L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Auto Collect Dragon ",
-		"Eggs"
+		"Tự Động Nhặt Trứng ",
+		"Rồng"
 	}),
 	["Description"] = "",
 	["Default"] = false;
@@ -11529,8 +11529,8 @@ spawn(function()
 end)
 Toggle = L_1_[93]["Prehistoric"]:AddToggle({
 	["Name"] = L_1_[2]({
-		"Auto Reset When Comp",
-		"lete Volcano"
+		"Tự Động Reset Khi H",
+		"oàn Thành"
 	}),
 	["Description"] = "";
 	["Default"] = false;
