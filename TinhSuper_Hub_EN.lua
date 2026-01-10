@@ -2388,7 +2388,7 @@ L_1_[93]["Info"]:AddSection("Information")
 L_1_[93]["Info"]:AddDiscordInvite({
 	["Name"] = "TinhSuper Hub",
 	["Description"] = L_1_[2]({
-		"Release Date [5/1/";
+		"Release Date [10/1/";
 		"2026]"
 	}),
 	["Logo"] = L_1_[2]({
@@ -2396,8 +2396,8 @@ L_1_[93]["Info"]:AddDiscordInvite({
 		"3568989"
 	}),
 	["Invite"] = L_1_[2]({
-		"https://discord.gg/B",
-		"VqEj7vw3H"
+		"https://discord.gg/n",
+		"TTR5ubc7Q"
 	})
 })
 L_1_[93]["Info"]:AddSection("Status Server")
