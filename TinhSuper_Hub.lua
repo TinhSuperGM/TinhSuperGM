@@ -101,7 +101,7 @@ local LanguageScripts = {
 	["English"] = function()
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/TinhSuperGM/TinhSuperGM/refs/heads/main/TinhSuper_Hub_EN.lua"))()
 	end,
-	["Vietnam"] = function()
+	["Việt Nam"] = function()
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/TinhSuperGM/TinhSuperGM/refs/heads/main/TinhSuper_Hub_VN.lua"))()
 	end
 }
@@ -153,4 +153,5 @@ end)
 
 --========================================================
 -- END
+
 --========================================================
