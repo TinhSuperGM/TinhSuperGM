@@ -6,8 +6,8 @@
 ]]
 
 -- ================== CONFIG ==================
-local API_URL = "https://tinh-api.onrender.com/jobid" -- API của bạn
-local CHECK_DELAY = 2 -- giây giữa mỗi lần check API
+local API_URL = "https://hello-api-h2rj.onrender.com/jobid" -- API của bạn
+local CHECK_DELAY = 0.3 -- giây giữa mỗi lần check API
 
 -- ================== SERVICES ==================
 local Players = game:GetService("Players")
