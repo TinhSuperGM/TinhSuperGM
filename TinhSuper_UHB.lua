@@ -135,7 +135,7 @@ local plr = game:GetService("Players").LocalPlayer
 local Notification = require(game:GetService("ReplicatedStorage").Notification)
 
 -- Thông báo chào mừng
-Notification.new("<Color=Yellow>Nak Hub <Color=/>"):Display()
+Notification.new("<Color=Yellow> Welcome to TinhSuper Hub <Color=/>"):Display()
 task.wait(1)
 
 -- LocalScript (đặt trong StarterPlayerScripts)
@@ -3385,7 +3385,7 @@ ImageButton.BorderSizePixel = 0
 ImageButton.Position = UDim2.new(0.120833337 - 0.10, 0, 0.0952890813 + 0.01, 0)
 ImageButton.Size = UDim2.new(0, 50, 0, 50)
 ImageButton.Draggable = true
-ImageButton.Image = "rbxassetid://100306458933414"
+ImageButton.Image = "rbxassetid://91978763568989"
 
 UICorner.CornerRadius = UDim.new(1, 0)
 UICorner.Parent = ImageButton
@@ -3441,7 +3441,7 @@ function CircleClick(Button, X, Y)
 				Circle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 				Circle.BackgroundTransparency = 1.000
 				Circle.ZIndex = 10
-				Circle.Image = "rbxassetid://100306458933414"
+				Circle.Image = "rbxassetid://91978763568989"
 				Circle.ImageColor3 = Color3.fromRGB(255, 255, 255)
 				Circle.ImageTransparency = 0.7
 				local NewX = X - Circle.AbsolutePosition.X
