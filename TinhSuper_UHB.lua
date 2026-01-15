@@ -5256,29 +5256,18 @@ _G.SelectWeapon = "Melee"
              end
           end)
           
--- AutoFarm:Seperator("Auto Farm Mastery")
-
--- Tạo danh sách mặc định (World 1 & 2)
-local FarmList = {
-    "Farm Level Mastery",
-    "Farm Level Mastery No Quest"
-}
-
--- Chỉ thêm option World 3 (GIỮ LOGIC CŨ)
-if World3 == true then
-    FarmList[#FarmList + 1] = "Farm Bone Mastery"
-    FarmList[#FarmList + 1] = "Farm Cake Mastery"
-end
-
--- Tạo Dropdown DUY NHẤT → không crash UI
-AutoFarm:Dropdown(
-    "Select Regime Farm",
-    FarmList,
-    {"Farm Level Mastery No Quest"},
-    function(Value)
-        _G.selectFruitFarm = Value
+AutoFarm:Seperator("Auto Farm Mastery")       
+     
+     if World1 or World2 then
+     AutoFarm:Dropdown("Select Regime Farm",{"Farm Level Mastery", "Farm Level Mastery No Quest"},{"Farm Level Mastery No Quest"},function(Value)
+       _G.selectFruitFarm = Value
+      end)
+    end      
+      if World3 then
+    AutoFarm:Dropdown("Select Regime Farm",{"Farm Level Mastery", "Farm Level Mastery No Quest","Farm Bone Mastery","Farm Cake Mastery"},{"Farm Level Mastery No Quest"},function(Value)
+       _G.selectFruitFarm = Value
+      end)
     end
-)
 end    
       AutoFarm:Toggle("Auto Farm Mastery Fruit", false,function(value)
          _G.AutoFarmFruits = value 
@@ -11950,4 +11939,5 @@ end
 
 -- Nghe khi có skill mới
 workspace.DescendantAdded:Connect(rainbowSkill)
+
 
