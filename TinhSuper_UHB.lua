@@ -5254,34 +5254,24 @@ _G.SelectWeapon = "Melee"
                   end)
                 end
              end
-          end)-- ===== AUTO FARM MASTERY (SAFE UI) =====
+          end)
 
--- KHÔNG dùng Seperator (dễ chết UI)
 AutoFarm:Label("Auto Farm Mastery")
 
--- Build list theo World (LOGIC GIỮ NGUYÊN)
-local RegimeFarmList = {
-    "Farm Level Mastery",
-    "Farm Level Mastery No Quest"
-}
-
--- Chỉ World 3 mới có thêm
-if World3 == true then
-    RegimeFarmList[#RegimeFarmList + 1] = "Farm Bone Mastery"
-    RegimeFarmList[#RegimeFarmList + 1] = "Farm Cake Mastery"
-end
-
--- Dropdown CHỈ TẠO 1 LẦN
 AutoFarm:Dropdown(
     "Select Regime Farm",
-    RegimeFarmList,
+    {
+        "Farm Level Mastery",
+        "Farm Level Mastery No Quest",
+        "Farm Bone Mastery",
+        "Farm Cake Mastery"
+    },
     {"Farm Level Mastery No Quest"},
     function(Value)
         _G.selectFruitFarm = Value
     end
 )
 
--- Toggle (luôn hiện, không phụ thuộc World)
 AutoFarm:Toggle(
     "Auto Farm Mastery Fruit",
     false,
@@ -5291,134 +5281,179 @@ AutoFarm:Toggle(
     end
 )
 spawn(function()
-    while task.wait() do
-        if _G.UseSkill then
-            pcall(function()
-                for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                 if v.Name == MonFarm 
-                 and v:FindFirstChild("Humanoid") 
-                 and v:FindFirstChild("HumanoidRootPart") 
-                 and v.Humanoid.Health <= v.Humanoid.MaxHealth * KillPercent / 100 then
-                 repeat
-                 game:GetService("RunService").Heartbeat:Wait()
-                 EquipWeapon(game.Players.LocalPlayer.Data.DevilFruit.Value)
-                 topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
-                 PositionSkillMasteryDevilFruit = v.HumanoidRootPart.Position
-                 local char = game.Players.LocalPlayer.Character
-                 local fruitName = game.Players.LocalPlayer.Data.DevilFruit.Value
-                 local fruit = char:FindFirstChild(fruitName)
-                 if fruit then
-                 fruit.MousePos.Value = PositionSkillMasteryDevilFruit
-                 local DevilFruitMastery = fruit.Level.Value
-                 if SkillZ and DevilFruitMastery >= 1 then
-                 game:service("VirtualInputManager"):SendKeyEvent(true, "Z", false, game)
-                 wait()
-                 game:service("VirtualInputManager"):SendKeyEvent(false, "Z", false, game)
-                 end
-                 if SkillX and DevilFruitMastery >= 1 then
-                 game:service("VirtualInputManager"):SendKeyEvent(true, "X", false, game)
-                 wait()
-                 game:service("VirtualInputManager"):SendKeyEvent(false, "X", false, game)
-                 end
-                 if SkillC and DevilFruitMastery >= 1 then
-                 game:service("VirtualInputManager"):SendKeyEvent(true, "C", false, game)
-                 wait()
-                 game:service("VirtualInputManager"):SendKeyEvent(false, "C", false, game)
-                 end
-                 if SkillV and DevilFruitMastery >= 1 then
-                 game:service("VirtualInputManager"):SendKeyEvent(true, "V", false, game)
-                 wait()
-                 game:service("VirtualInputManager"):SendKeyEvent(false, "V", false, game)
-                 end
-                 if SkillF and DevilFruitMastery >= 1 then
-                 game:service("VirtualInputManager"):SendKeyEvent(true, "F", false, game)
-                 wait()
-                game:service("VirtualInputManager"):SendKeyEvent(false, "F", false, game)
-                end
-               end
-             until not _G.AutoFarmFruits or not _G.UseSkill or v.Humanoid.Health == 0
-             end
-            end
-           end)
-          end
-         end
-       end)
+    local Players = game:GetService("Players")
+    local RunService = game:GetService("RunService")
+    local VIM = game:GetService("VirtualInputManager")
 
+    while task.wait() do
+        if not (_G.AutoFarmFruits and _G.UseSkill and MonFarm) then
+            continue
+        end
+
+        local char = Players.LocalPlayer.Character
+        if not char then continue end
+
+        local fruitName = Players.LocalPlayer.Data.DevilFruit.Value
+        local fruit = char:FindFirstChild(fruitName)
+        if not fruit then continue end
+
+        local enemy = game.Workspace.Enemies:FindFirstChild(MonFarm)
+        if not enemy
+        or not enemy:FindFirstChild("Humanoid")
+        or not enemy:FindFirstChild("HumanoidRootPart") then
+            _G.UseSkill = false
+            continue
+        end
+
+        if enemy.Humanoid.Health > enemy.Humanoid.MaxHealth * KillPercent / 100 then
+            _G.UseSkill = false
+            continue
+        end
+
+        -- giữ vị trí, KHÔNG topos
+        fruit.MousePos.Value = enemy.HumanoidRootPart.Position
+
+        local mastery = fruit.Level.Value
+        RunService.Heartbeat:Wait()
+
+        if SkillZ and mastery >= 1 then
+            VIM:SendKeyEvent(true, "Z", false, game)
+            task.wait()
+            VIM:SendKeyEvent(false, "Z", false, game)
+        end
+
+        if SkillX and mastery >= 1 then
+            VIM:SendKeyEvent(true, "X", false, game)
+            task.wait()
+            VIM:SendKeyEvent(false, "X", false, game)
+        end
+
+        if SkillC and mastery >= 1 then
+            VIM:SendKeyEvent(true, "C", false, game)
+            task.wait()
+            VIM:SendKeyEvent(false, "C", false, game)
+        end
+
+        if SkillV and mastery >= 1 then
+            VIM:SendKeyEvent(true, "V", false, game)
+            task.wait()
+            VIM:SendKeyEvent(false, "V", false, game)
+        end
+
+        if SkillF and mastery >= 1 then
+            VIM:SendKeyEvent(true, "F", false, game)
+            task.wait()
+            VIM:SendKeyEvent(false, "F", false, game)
+        end
+    end
+end)
 spawn(function()
-    while wait() do
-        if _G.AutoFarmFruits and _G.selectFruitFarm == 'Farm Level Mastery No Quest' then
-            pcall(function()
-                CheckQuest()
-                TP1(CFrameQuest)
-            end)
-            for i, v in pairs(game.Workspace.Enemies:GetChildren()) do
-                if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") then
-                    if v.Name == Mon then
-                        repeat wait(_G.Fast_Delay)
-                            if v.Humanoid.Health <= v.Humanoid.MaxHealth * KillPercent / 100 then
-                                _G.UseSkill = true
-                            else
-                                _G.UseSkill = false
-                                bringmob = true
-                                AutoHaki()
-                                EquipWeapon(_G.SelectWeapon)
-                                topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
-                                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-                                v.HumanoidRootPart.Transparency = 1
-                                v.Humanoid.WalkSpeed = 0
-                                v.HumanoidRootPart.CanCollide = false
-                                FarmPos = v.HumanoidRootPart.CFrame
-                                MonFarm = v.Name
-                            end
-                        until not _G.AutoFarmFruits or not MasteryType == 'Farm Level Mastery No Quest' or not v.Parent or v.Humanoid.Health == 0 or not _G.selectFruitFarm == 'Farm Level Mastery No Quest'
-                         bringmob = false
-                        _G.UseSkill = false
-                    end
+    while task.wait() do
+        if _G.AutoFarmFruits and _G.selectFruitFarm == "Farm Level Mastery No Quest" then
+
+            for _, v in pairs(game.Workspace.Enemies:GetChildren()) do
+                if not _G.AutoFarmFruits then break end
+                if not v.Parent then continue end
+
+                if v:FindFirstChild("Humanoid")
+                and v:FindFirstChild("HumanoidRootPart")
+                and v.Name == Mon then
+
+                    MonFarm = v.Name
+
+                    repeat task.wait(_G.Fast_Delay)
+
+                        if not v.Parent or v.Humanoid.Health <= 0 then break end
+
+                        if v.Humanoid.Health <= v.Humanoid.MaxHealth * KillPercent / 100 then
+                            -- ĐÁNH SKILL
+                            _G.UseSkill = true
+                        else
+                            -- KÉO + ĐÁNH THƯỜNG
+                            _G.UseSkill = false
+                            bringmob = true
+
+                            AutoHaki()
+                            EquipWeapon(_G.SelectWeapon)
+                            topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+
+                            v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+                            v.HumanoidRootPart.Transparency = 1
+                            v.Humanoid.WalkSpeed = 0
+                            v.HumanoidRootPart.CanCollide = false
+
+                            FarmPos = v.HumanoidRootPart.CFrame
+                        end
+
+                    until not _G.AutoFarmFruits
+                    or _G.selectFruitFarm ~= "Farm Level Mastery No Quest"
+
+                    bringmob = false
+                    _G.UseSkill = false
+                    break -- ❗ xử lý xong 1 mob thì thoát for
                 end
             end
         end
     end
 end)
-
 spawn(function()
     while wait() do
         if _G.AutoFarmFruits and _G.selectFruitFarm == 'Farm Level Mastery' then
             pcall(function()
                 CheckQuest()
-                if not string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameMon) or game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false then
-                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
+
+                local QuestGui = game.Players.LocalPlayer.PlayerGui.Main.Quest
+                if not string.find(QuestGui.Container.QuestTitle.Title.Text, NameMon)
+                or QuestGui.Visible == false then
+                    game.ReplicatedStorage.Remotes.CommF_:InvokeServer("AbandonQuest")
                     TP1(CFrameQuest)
                 end
-                if (CFrameQuest.Position - game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 5 then
-                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest", NameQuest, LevelQuest)
+
+                if (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 5 then
+                    game.ReplicatedStorage.Remotes.CommF_:InvokeServer("StartQuest", NameQuest, LevelQuest)
                 end
             end)
-            if string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameMon) or game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true then
-                if game:GetService("Workspace").Enemies:FindFirstChild(Mon) then
-                    for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                        if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") then
-                            if v.Name == Mon then
-                                repeat wait(_G.Fast_Delay)
-                                    if v.Humanoid.Health <= v.Humanoid.MaxHealth * KillPercent / 100 then
-                                        _G.UseSkill = true
-                                    else
-                                        _G.UseSkill = false
-                                        bringmob = true
-                                        AutoHaki()
-                                        EquipWeapon(_G.SelectWeapon)
-                                        topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
-                                        v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-                                        v.HumanoidRootPart.Transparency = 1
-                                        v.Humanoid.WalkSpeed = 0
-                                        v.HumanoidRootPart.CanCollide = false
-                                        FarmPos = v.HumanoidRootPart.CFrame
-                                        MonFarm = v.Name
-                                    end
-                                until not _G.AutoFarmFruits or not MasteryType == 'Farm Level Mastery' or not v.Parent or v.Humanoid.Health == 0 or not _G.selectFruitFarm == 'Farm Level Mastery'
+
+            if game.Workspace.Enemies:FindFirstChild(Mon) then
+                for _, v in pairs(game.Workspace.Enemies:GetChildren()) do
+                    if v.Name == Mon
+                    and v:FindFirstChild("Humanoid")
+                    and v:FindFirstChild("HumanoidRootPart") then
+
+                        repeat task.wait(_G.Fast_Delay)
+
+                            -- LUÔN SET TARGET
+                            MonFarm = v.Name
+
+                            if v.Humanoid.Health <= v.Humanoid.MaxHealth * KillPercent / 100 then
+                                -- CHỈ BẬT SKILL
+                                _G.UseSkill = true
                                 bringmob = false
+                            else
+                                -- FARM + KÉO MOB
                                 _G.UseSkill = false
+                                bringmob = true
+
+                                AutoHaki()
+                                EquipWeapon(_G.SelectWeapon)
+                                topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+
+                                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+                                v.HumanoidRootPart.Transparency = 1
+                                v.Humanoid.WalkSpeed = 0
+                                v.HumanoidRootPart.CanCollide = false
+
+                                FarmPos = v.HumanoidRootPart.CFrame
                             end
-                        end
+
+                        until not _G.AutoFarmFruits
+                        or _G.selectFruitFarm ~= 'Farm Level Mastery'
+                        or not v.Parent
+                        or v.Humanoid.Health <= 0
+
+                        -- CLEAN UP
+                        bringmob = false
+                        _G.UseSkill = false
                     end
                 end
             end
@@ -5432,41 +5467,62 @@ spawn(function()
                 local boneframe = CFrame.new(-9508.5673828125, 142.1398468017578, 5737.3603515625)
                 TP1(boneframe)
             end)
-            for i, v in pairs(game.Workspace.Enemies:GetChildren()) do
-                if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") then
-                    if v.Name == "Reborn Skeleton" or v.Name == "Living Zombie" or v.Name == "Demonic Soul" or v.Name == "Posessed Mummy" then
-                        repeat wait(_G.Fast_Delay)
-                            if v.Humanoid.Health <= v.Humanoid.MaxHealth * KillPercent / 100 then
-                                _G.UseSkill = true
 
-                            else
-                                _G.UseSkill = false
-                                bringmob = true                                
-                                AutoHaki()
-                                EquipWeapon(_G.SelectWeapon)
-                                topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
-                                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-                                v.HumanoidRootPart.Transparency = 1
-                                v.Humanoid.WalkSpeed = 0
-                                v.HumanoidRootPart.CanCollide = false
-                                FarmPos = v.HumanoidRootPart.CFrame
-                                MonFarm = v.Name
-                            end
-                        until not _G.AutoFarmFruits or not MasteryType == 'Farm Bone Mastery' or not v.Parent or v.Humanoid.Health == 0 or not _G.selectFruitFarm == 'Farm Bone Mastery'
-                        bringmob = false
-                        _G.UseSkill = false
-                    end
+            for _, v in pairs(game.Workspace.Enemies:GetChildren()) do
+                if v:FindFirstChild("Humanoid")
+                and v:FindFirstChild("HumanoidRootPart")
+                and (
+                    v.Name == "Reborn Skeleton"
+                    or v.Name == "Living Zombie"
+                    or v.Name == "Demonic Soul"
+                    or v.Name == "Posessed Mummy"
+                ) then
+
+                    repeat task.wait(_G.Fast_Delay)
+
+                        -- LUÔN SET TARGET
+                        MonFarm = v.Name
+
+                        if v.Humanoid.Health <= v.Humanoid.MaxHealth * KillPercent / 100 then
+                            -- CHỈ ĐÁNH SKILL
+                            _G.UseSkill = true
+                            bringmob = false
+                        else
+                            -- KÉO + DI CHUYỂN
+                            _G.UseSkill = false
+                            bringmob = true
+
+                            AutoHaki()
+                            EquipWeapon(_G.SelectWeapon)
+                            topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+
+                            v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+                            v.HumanoidRootPart.Transparency = 1
+                            v.Humanoid.WalkSpeed = 0
+                            v.HumanoidRootPart.CanCollide = false
+
+                            FarmPos = v.HumanoidRootPart.CFrame
+                        end
+
+                    until not _G.AutoFarmFruits
+                    or _G.selectFruitFarm ~= 'Farm Bone Mastery'
+                    or not v.Parent
+                    or v.Humanoid.Health <= 0
+
+                    bringmob = false
+                    _G.UseSkill = false
                 end
             end
-            for i, v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do
-                if v.Name == "Reborn Skeleton" then
-               topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
-               elseif v.Name == "Living Zombie" then
-               topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
-               elseif v.Name == "Demonic Soul" then
-               topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
-                elseif v.Name == "Posessed Mummy" then
-               topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+
+            -- OPTIONAL: kéo mob từ ReplicatedStorage (spawn mới)
+            for _, v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do
+                if v:FindFirstChild("HumanoidRootPart") then
+                    if v.Name == "Reborn Skeleton"
+                    or v.Name == "Living Zombie"
+                    or v.Name == "Demonic Soul"
+                    or v.Name == "Posessed Mummy" then
+                        topos(v.HumanoidRootPart.CFrame * CFrame.new(2, 20, 2))
+                    end
                 end
             end
         end
@@ -5479,41 +5535,63 @@ spawn(function()
                 local cakepos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375)
                 TP1(cakepos)
             end)
-            for i, v in pairs(game.Workspace.Enemies:GetChildren()) do
-                if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") then
-                    if v.Name == "Cookie Crafter" or v.Name == "Cake Guard" or v.Name == "Baking Staff" or v.Name == "Head Baker" then
-                        repeat wait(_G.Fast_Delay)
-                            if v.Humanoid.Health <= v.Humanoid.MaxHealth * KillPercent / 100 then
-                                _G.UseSkill = true
-                            else
-                                _G.UseSkill = false
-                                bringmob = true                                
-                                AutoHaki()
-                                StartBring = false
-                                EquipWeapon(_G.SelectWeapon)
-                                topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
-                                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-                                v.HumanoidRootPart.Transparency = 1
-                                v.Humanoid.WalkSpeed = 0
-                                v.HumanoidRootPart.CanCollide = false
-                                FarmPos = v.HumanoidRootPart.CFrame
-                                MonFarm = v.Name
-                            end
-                        until not _G.AutoFarmFruits or not MasteryType == 'Farm Cake Mastery' or not v.Parent or v.Humanoid.Health == 0 or not _G.selectFruitFarm == 'Farm Cake Mastery'
-                        bringmob = false
-                        _G.UseSkill = false
-                    end
+
+            for _, v in pairs(game.Workspace.Enemies:GetChildren()) do
+                if v:FindFirstChild("Humanoid")
+                and v:FindFirstChild("HumanoidRootPart")
+                and (
+                    v.Name == "Cookie Crafter"
+                    or v.Name == "Cake Guard"
+                    or v.Name == "Baking Staff"
+                    or v.Name == "Head Baker"
+                ) then
+
+                    repeat task.wait(_G.Fast_Delay)
+
+                        -- LUÔN SET TARGET
+                        MonFarm = v.Name
+
+                        if v.Humanoid.Health <= v.Humanoid.MaxHealth * KillPercent / 100 then
+                            -- CHỈ ĐÁNH SKILL
+                            _G.UseSkill = true
+                            bringmob = false
+                        else
+                            -- KÉO + DI CHUYỂN
+                            _G.UseSkill = false
+                            bringmob = true
+
+                            AutoHaki()
+                            StartBring = false
+                            EquipWeapon(_G.SelectWeapon)
+                            topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+
+                            v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+                            v.HumanoidRootPart.Transparency = 1
+                            v.Humanoid.WalkSpeed = 0
+                            v.HumanoidRootPart.CanCollide = false
+
+                            FarmPos = v.HumanoidRootPart.CFrame
+                        end
+
+                    until not _G.AutoFarmFruits
+                    or _G.selectFruitFarm ~= 'Farm Cake Mastery'
+                    or not v.Parent
+                    or v.Humanoid.Health <= 0
+
+                    bringmob = false
+                    _G.UseSkill = false
                 end
             end
-            for i, v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do
-                if v.Name == "Cookie Crafter" then
-                    topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
-                elseif v.Name == "Cake Guard" then
-                    topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
-                elseif v.Name == "Baking Staff" then
-                    topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
-                elseif v.Name == "Head Baker" then
-                    topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+
+            -- OPTIONAL: kéo mob spawn mới
+            for _, v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do
+                if v:FindFirstChild("HumanoidRootPart") then
+                    if v.Name == "Cookie Crafter"
+                    or v.Name == "Cake Guard"
+                    or v.Name == "Baking Staff"
+                    or v.Name == "Head Baker" then
+                        topos(v.HumanoidRootPart.CFrame * CFrame.new(2, 20, 2))
+                    end
                 end
             end
         end
