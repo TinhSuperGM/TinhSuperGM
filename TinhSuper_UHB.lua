@@ -5114,166 +5114,24 @@ _G.SelectWeapon = "Melee"
      		end)
      	end
     end)
-
-   AutoFarm:Toggle("Auto Farm Level",false,function(value)
-    _G.AutoFarm = value
-      StopTween(_G.AutoFarm)		
-       end)
-        
-        spawn(function()
-        while wait() do
-            if _G.AutoFarm then
-                pcall(function()
-                    local QuestTitle = game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text
-                    CheckQuest()
-                    if not string.find(QuestTitle, NameMon) then
-                        StartBring = false
-                        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
-                    end
-                    if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false then
-                        StartBring = false
-                        if BypassTP then
-                        if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CFrameQuest.Position).Magnitude > 1500 then
-						TP1(CFrameQuest)
-						elseif (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CFrameQuest.Position).Magnitude < 1500 then
-						TP1(CFrameQuest)
-						end
-					else
-						TP1(CFrameQuest)
-					end
-					if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - CFrameQuest.Position).Magnitude <= 20 then
-						game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest",NameQuest,LevelQuest)
-                    end
-                    elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true then
-                        if string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, "kissed") then
-                            for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                                if string.find(v.Name,"kissed Warrior") then
-                                    if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                                        if string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameMon) then
-                                            repeat task.wait()
-                                                EquipWeapon(_G.SelectWeapon)
-                                                
-                                                PosMon = v.HumanoidRootPart.CFrame
-                                                topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
-                                                v.HumanoidRootPart.CanCollide = false
-                                                v.Humanoid.WalkSpeed = 0
-                                                v.Head.CanCollide = false
-                                                MonFarm = v.Name          
-                                                v.HumanoidRootPart.Size = Vector3.new(70,70,70)
-                                                StartBring = true
-                                                game:GetService'VirtualUser':CaptureController()
-                                                game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
-                                            until not _G.AutoFarm or v.Humanoid.Health <= 0 or not v.Parent or game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false
-                                        else
-                                            StartBring = false
-                                            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
-                                        end
-                                    end
-                                elseif string.find(v.Name,"kissed Warrior") == nil then
-                                    TP1(CFrameMon)
-                                    StartBring = false
-                                    if game:GetService("ReplicatedStorage"):FindFirstChild(Mon) then
-                                        TP1(game:GetService("ReplicatedStorage"):FindFirstChild(Mon).HumanoidRootPart.CFrame * CFrame.new(0,20,0))
-                                    end
-                                end
-                            end
-                        else
-                            if game:GetService("Workspace").Enemies:FindFirstChild(Mon) then
-                                for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                                    if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-                                        if v.Name == Mon then
-                                            if string.find(game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Container.QuestTitle.Title.Text, NameMon) then
-                                                repeat task.wait()
-                                                    EquipWeapon(_G.SelectWeapon)
-                                                     AutoHaki()                                            
-                                                    PosMon = v.HumanoidRootPart.CFrame
-                                                    topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
-                                                    v.HumanoidRootPart.CanCollide = false
-                                                    v.Humanoid.WalkSpeed = 0
-                                                    v.Head.CanCollide = false
-                                                    v.HumanoidRootPart.Size = Vector3.new(70,70,70)
-                                                    StartBring = true
-                                                    MonFarm = v.Name          
-                                                    game:GetService'VirtualUser':CaptureController()
-                                                    game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
-                                                until not _G.AutoFarm or v.Humanoid.Health <= 0 or not v.Parent or game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false
-                                            else
-                                                StartBring = false
-                                                game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
-                                            end
-                                        end
-                                    end
-                                end
-                            else
-                                TP1(CFrameMon)
-                                StartBring = false
-                                if game:GetService("ReplicatedStorage"):FindFirstChild(Mon) then
-                                    TP1(game:GetService("ReplicatedStorage"):FindFirstChild(Mon).HumanoidRootPart.CFrame * CFrame.new(0,20,0))
-                                end
-                            end
-                        end
-                    end
-                end)
-            end
-        end
-    end)
-  
-  AutoFarm:Toggle("Farm Nearest", false,function(value)
-         _G.AutoNear = value
-        StopTween(_G.AutoNear)
-    end)
-     
-     spawn(function()
-    while wait() do
-        if _G.AutoNear then
-            pcall(function()
-                for _, v in pairs(game.Workspace.Enemies:GetChildren()) do
-                    if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                        -- Check if within 5000 studs
-                        local distance = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                        if distance <= 5000 then
-                            repeat
-                                wait(_G.Fast_Delay)
-                                StartBring = true
-                                AutoHaki()
-                                EquipWeapon(_G.SelectWeapon)
-                                topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
-                                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-                                v.HumanoidRootPart.Transparency = 1
-                                v.Humanoid.JumpPower = 0
-                                v.Humanoid.WalkSpeed = 0
-                                v.HumanoidRootPart.CanCollide = false
-                                FarmPos = v.HumanoidRootPart.CFrame
-                                MonFarm = v.Name
-
-                            until not _G.AutoNear or not v.Parent or v.Humanoid.Health <= 0 or not game.Workspace.Enemies:FindFirstChild(v.Name)
-                            StartBring = false
-                           end
-                        end
-                     end
-                  end)
-                end
-             end
-          end)
-
 AutoFarm:Label("Auto Farm Mastery")
 
 AutoFarm:Dropdown(
     "Select Regime Farm",
     {
-        "Farm Level Mastery",
-        "Farm Level Mastery No Quest",
-        "Farm Bone Mastery",
-        "Farm Cake Mastery"
+        "Farm Level",
+        "Farm Nearest",
+        "Farm Bone",
+        "Farm Cake"
     },
-    {"Farm Level Mastery No Quest"},
+    {"Farm Nearest"},
     function(Value)
         _G.selectFruitFarm = Value
     end
 )
 
 AutoFarm:Toggle(
-    "Auto Farm Mastery Fruit",
+    "Start Farm",
     false,
     function(value)
         _G.AutoFarmFruits = value
@@ -5347,14 +5205,54 @@ spawn(function()
         end
     end
 end)
-spawn(function()
+task.spawn(function()
     while task.wait() do
-        if _G.AutoFarmFruits and _G.selectFruitFarm == "Farm Level Mastery No Quest" then
+        if _G.AutoFarmFruits and _G.selectFruitFarm == "Farm Nearest" then
 
             for _, v in pairs(game.Workspace.Enemies:GetChildren()) do
                 if not _G.AutoFarmFruits then break end
                 if not v.Parent then continue end
 
+                -- ===== AUTO NEAR (CHỈ KÉO MOB GẦN) =====
+                if _G.AutoNear
+                and v:FindFirstChild("Humanoid")
+                and v:FindFirstChild("HumanoidRootPart")
+                and v.Humanoid.Health > 0 then
+
+                    local char = game.Players.LocalPlayer.Character
+                    local hrp = char and char:FindFirstChild("HumanoidRootPart")
+                    if hrp then
+                        local distance = (hrp.Position - v.HumanoidRootPart.Position).Magnitude
+                        if distance <= 5000 then
+                            repeat task.wait(_G.Fast_Delay)
+
+                                if not _G.AutoNear or not v.Parent or v.Humanoid.Health <= 0 then break end
+
+                                StartBring = true
+                                MonFarm = v.Name
+
+                                AutoHaki()
+                                EquipWeapon(_G.SelectWeapon)
+                                topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+
+                                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+                                v.HumanoidRootPart.Transparency = 1
+                                v.Humanoid.JumpPower = 0
+                                v.Humanoid.WalkSpeed = 0
+                                v.HumanoidRootPart.CanCollide = false
+
+                                FarmPos = v.HumanoidRootPart.CFrame
+
+                            until not _G.AutoNear
+                            or not v.Parent
+                            or v.Humanoid.Health <= 0
+                        end
+                        StartBring = false
+                    end
+                end
+                -- ===== END AUTO NEAR =====
+
+                -- ===== LOGIC FARM NEAREST GỐC =====
                 if v:FindFirstChild("Humanoid")
                 and v:FindFirstChild("HumanoidRootPart")
                 and v.Name == Mon then
@@ -5386,34 +5284,58 @@ spawn(function()
                         end
 
                     until not _G.AutoFarmFruits
-                    or _G.selectFruitFarm ~= "Farm Level Mastery No Quest"
+                    or _G.selectFruitFarm ~= "Farm Nearest"
 
                     bringmob = false
                     _G.UseSkill = false
-                    break -- ❗ xử lý xong 1 mob thì thoát for
+                    break -- xử lý xong 1 mob thì thoát for
                 end
+                -- ===== END FARM NEAREST =====
             end
         end
     end
 end)
-spawn(function()
+task.spawn(function()
     while wait() do
-        if _G.AutoFarmFruits and _G.selectFruitFarm == 'Farm Level Mastery' then
+        if _G.AutoFarmFruits and _G.selectFruitFarm == 'Farm Level' then
+
+            -- ===== QUEST LOGIC (ADD TỪ BẢN CŨ) =====
             pcall(function()
                 CheckQuest()
 
-                local QuestGui = game.Players.LocalPlayer.PlayerGui.Main.Quest
-                if not string.find(QuestGui.Container.QuestTitle.Title.Text, NameMon)
-                or QuestGui.Visible == false then
+                local Player = game.Players.LocalPlayer
+                local QuestGui = Player.PlayerGui.Main.Quest
+                local HRP = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
+
+                if not HRP then return end
+
+                local QuestTitle = QuestGui.Container.QuestTitle.Title.Text
+
+                if not string.find(QuestTitle, NameMon) then
+                    StartBring = false
                     game.ReplicatedStorage.Remotes.CommF_:InvokeServer("AbandonQuest")
-                    TP1(CFrameQuest)
                 end
 
-                if (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 5 then
-                    game.ReplicatedStorage.Remotes.CommF_:InvokeServer("StartQuest", NameQuest, LevelQuest)
+                if QuestGui.Visible == false then
+                    StartBring = false
+                    if BypassTP then
+                        TP1(CFrameQuest)
+                    else
+                        TP1(CFrameQuest)
+                    end
+
+                    if (HRP.Position - CFrameQuest.Position).Magnitude <= 20 then
+                        game.ReplicatedStorage.Remotes.CommF_:InvokeServer(
+                            "StartQuest",
+                            NameQuest,
+                            LevelQuest
+                        )
+                    end
                 end
             end)
+            -- ===== END QUEST LOGIC =====
 
+            -- ===== FARM MOB LOGIC (GIỮ NGUYÊN) =====
             if game.Workspace.Enemies:FindFirstChild(Mon) then
                 for _, v in pairs(game.Workspace.Enemies:GetChildren()) do
                     if v.Name == Mon
@@ -5426,7 +5348,7 @@ spawn(function()
                             MonFarm = v.Name
 
                             if v.Humanoid.Health <= v.Humanoid.MaxHealth * KillPercent / 100 then
-                                -- CHỈ BẬT SKILL
+                                -- ĐÁNH SKILL
                                 _G.UseSkill = true
                                 bringmob = false
                             else
@@ -5447,7 +5369,7 @@ spawn(function()
                             end
 
                         until not _G.AutoFarmFruits
-                        or _G.selectFruitFarm ~= 'Farm Level Mastery'
+                        or _G.selectFruitFarm ~= 'Farm Level'
                         or not v.Parent
                         or v.Humanoid.Health <= 0
 
@@ -5456,13 +5378,21 @@ spawn(function()
                         _G.UseSkill = false
                     end
                 end
+            else
+                -- KHÔNG CÓ MOB → TP VỀ SPAWN
+                pcall(function()
+                    TP1(CFrameMon)
+                    StartBring = false
+                end)
             end
+            -- ===== END FARM MOB =====
+
         end
     end
 end)
 spawn(function()
     while wait() do
-        if _G.AutoFarmFruits and _G.selectFruitFarm == 'Farm Bone Mastery' then
+        if _G.AutoFarmFruits and _G.selectFruitFarm == 'Farm Bone' then
             pcall(function()
                 local boneframe = CFrame.new(-9508.5673828125, 142.1398468017578, 5737.3603515625)
                 TP1(boneframe)
@@ -5505,7 +5435,7 @@ spawn(function()
                         end
 
                     until not _G.AutoFarmFruits
-                    or _G.selectFruitFarm ~= 'Farm Bone Mastery'
+                    or _G.selectFruitFarm ~= 'Farm Bone'
                     or not v.Parent
                     or v.Humanoid.Health <= 0
 
@@ -5515,7 +5445,6 @@ spawn(function()
             end
 
             -- OPTIONAL: kéo mob từ ReplicatedStorage (spawn mới)
-            for _, v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do
                 if v:FindFirstChild("HumanoidRootPart") then
                     if v.Name == "Reborn Skeleton"
                     or v.Name == "Living Zombie"
@@ -5530,7 +5459,7 @@ spawn(function()
 end)
 spawn(function()
     while wait() do
-        if _G.AutoFarmFruits and _G.selectFruitFarm == 'Farm Cake Mastery' then
+        if _G.AutoFarmFruits and _G.selectFruitFarm == 'Farm Katakuri' then
             pcall(function()
                 local cakepos = CFrame.new(-2130.80712890625, 69.95634460449219, -12327.83984375)
                 TP1(cakepos)
@@ -5574,7 +5503,7 @@ spawn(function()
                         end
 
                     until not _G.AutoFarmFruits
-                    or _G.selectFruitFarm ~= 'Farm Cake Mastery'
+                    or _G.selectFruitFarm ~= 'Farm Katakuri'
                     or not v.Parent
                     or v.Humanoid.Health <= 0
 
@@ -5630,7 +5559,6 @@ end)
 		end
 	end
 end)
-   
       AutoFarm:Seperator("Auto Collect Berry")       
        
     AutoFarm:Toggle("Auto Farm Berries", false,function(value)
@@ -5689,235 +5617,51 @@ spawn(function()
         end
     end
 end)
-   if World3 then
-       AutoFarm:Seperator("Bone Farm")
-                
-    Boneyou = AutoFarm:Label("Check Bone")
-                
-    spawn(function()
-        while wait() do
-            pcall(function()
-                Boneyou:Set("Your Bone : "..(game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Bones","Check")))
-            end)
-        end
-    end)
-
-AutoFarm:Toggle("Auto Farm Bone", false, function(value)
-    _G.FarmBone = value
-
-    -- bảo hiểm: remote có thể lỗi -> pcall để không làm crash UI
-    pcall(function()
-        Replicated.Remotes.CommF_:InvokeServer("AbandonQuest")
-    end)
-
-    if not value then
-        StopTween()
-        StartBring = false
-        NeedAttacking = false
-        NoAttackAnimation = false
-    end
-end)
-
-task.spawn(function()
-    while task.wait() do
-        if _G.FarmBone and World3 then
-            pcall(function()
-                local boneframe = CFrame.new(
-                    -9508.5673828125,
-                    142.1398468017578,
-                    5737.3603515625
-                )
-
-                -- TP giống bản chạy được
-                pcall(TP1, boneframe)
-
-                for _, v in pairs(game.Workspace.Enemies:GetChildren()) do
-                    if v:FindFirstChild("Humanoid")
-                    and v:FindFirstChild("HumanoidRootPart")
-                    and (
-                        v.Name == "Reborn Skeleton"
-                        or v.Name == "Living Zombie"
-                        or v.Name == "Demonic Soul"
-                        or v.Name == "Posessed Mummy"
-                    ) then
-
-                        repeat task.wait(_G.Fast_Delay)
-
-                            -- LUÔN SET TARGET
-                            MonFarm = v.Name
-
-                            if v.Humanoid.Health <= v.Humanoid.MaxHealth * KillPercent / 100 then
-                                -- CHỈ ĐÁNH SKILL
-                                _G.UseSkill = true
-                                bringmob = false
-                            else
-                                -- KÉO + DI CHUYỂN
-                                _G.UseSkill = false
-                                bringmob = true
-
-                                AutoHaki()
-                                EquipWeapon(_G.SelectWeapon)
-                                topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
-
-                                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-                                v.HumanoidRootPart.Transparency = 1
-                                v.Humanoid.WalkSpeed = 0
-                                v.HumanoidRootPart.CanCollide = false
-
-                                FarmPos = v.HumanoidRootPart.CFrame
-                            end
-
-                        until not _G.FarmBone
-                        or not World3
-                        or not v.Parent
-                        or v.Humanoid.Health <= 0
-
-                        bringmob = false
-                        _G.UseSkill = false
-                    end
+AutoFarm:Seperator("Main Bones")
+      AutoFarm:Toggle("Auto Trade Bone", false,function(value)         
+     		_G.Rdbone = value 
+       end)
+       
+       spawn(function()
+            while wait(.1) do
+                if _G.Rdbone then    
+                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Bones","Buy",1,1)
                 end
-
-                -- KÉO MOB SPAWN MỚI (giữ nguyên)
-                for _, v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do
-                    if v:FindFirstChild("HumanoidRootPart") then
-                        if v.Name == "Reborn Skeleton"
-                        or v.Name == "Living Zombie"
-                        or v.Name == "Demonic Soul"
-                        or v.Name == "Posessed Mummy" then
-                            topos(v.HumanoidRootPart.CFrame * CFrame.new(2, 20, 2))
-                        end
-                    end
+            end
+         end)  
+         
+         AutoFarm:Toggle("Auto Pray", false,function(value)         
+     		_G.Pray = value 
+       end)
+       
+       spawn(function()
+        pcall(function()
+            while wait(.1) do
+                if _G.Pray then    
+                    TP1(CFrame.new(-8652.99707, 143.450119, 6170.50879, -0.983064115, -2.48005533e-10, 0.18326205, -1.78910387e-09, 1, -8.24392288e-09, -0.18326205, -8.43218029e-09, -0.983064115))
+                    wait()
+                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("gravestoneEvent",1)
                 end
-            end)
-        end
-    end
-end)
-        AutoFarm:Seperator("Hallow Event")
-
-AutoFarm:Toggle("Auto Hallow Scythe", false, function(value)
-    _G.Hallow = value
-
-    if not value then
-        StopTween()
-    end
-end)
-
-spawn(function()
-    while task.wait() do
-        if _G.Hallow then
-            pcall(function()
-                local Enemies = game:GetService("Workspace").Enemies
-                local Player = game.Players.LocalPlayer
-                local HRP = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
-                if not HRP then return end
-
-                -- Có Soul Reaper
-                if Enemies:FindFirstChild("Soul Reaper") then
-                    for _, v in pairs(Enemies:GetChildren()) do
-                        if v.Name == "Soul Reaper"
-                        and v:FindFirstChild("Humanoid")
-                        and v:FindFirstChild("HumanoidRootPart") then
-
-                            repeat task.wait()
-                                EquipWeapon(_G.SelectWeapon)
-                                AutoHaki()
-
-                                v.HumanoidRootPart.Size = Vector3.new(50,50,50)
-                                v.HumanoidRootPart.Transparency = 1
-
-                                topos(v.HumanoidRootPart.CFrame * CFrame.new(0,30,0))
-
-                                game:GetService("VirtualUser"):CaptureController()
-                                game:GetService("VirtualUser"):Button1Down(Vector2.new(1280,670))
-                            until not _G.Hallow or v.Humanoid.Health <= 0
-                        end
-                    end
-
-                -- Có Hallow Essence
-                elseif Player.Backpack:FindFirstChild("Hallow Essence")
-                or Player.Character:FindFirstChild("Hallow Essence") then
-
-                    local altar = CFrame.new(-8932.322265625, 146.83154296875, 6062.55078125)
-                    repeat
-                        TP1(altar)
-                        task.wait()
-                    until (altar.Position - HRP.Position).Magnitude <= 8 or not _G.Hallow
-
-                    EquipWeapon("Hallow Essence")
-
-                -- Chưa spawn → kéo từ ReplicatedStorage
-                else
-                    local RS = game:GetService("ReplicatedStorage")
-                    if RS:FindFirstChild("Soul Reaper")
-                    and RS.Soul_Reaper:FindFirstChild("HumanoidRootPart") then
-                        topos(RS.Soul_Reaper.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
-                    end
+            end
+        end)
+    end)		
+    
+        AutoFarm:Toggle("Auto Try Luck", false,function(value)         
+     		_G.Trylux = value 
+       end)
+           
+       spawn(function()
+        pcall(function()
+            while wait(.1) do
+                if _G.Trylux then    
+                    TP1(CFrame.new(-8652.99707, 143.450119, 6170.50879, -0.983064115, -2.48005533e-10, 0.18326205, -1.78910387e-09, 1, -8.24392288e-09, -0.18326205, -8.43218029e-09, -0.983064115))
+                    wait()
+                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("gravestoneEvent",2)
                 end
-            end)
-        end
-    end
-end)
-
--- ===================== BONE TRADE =====================
-
-AutoFarm:Toggle("Auto Trade Bone", false, function(value)
-    _G.Rdbone = value
-end)
-
-spawn(function()
-    while task.wait(0.2) do
-        if _G.Rdbone then
-            game:GetService("ReplicatedStorage")
-                .Remotes.CommF_:InvokeServer("Bones","Buy",1,1)
-        end
-    end
-end)
-
--- ===================== PRAY =====================
-
-AutoFarm:Toggle("Auto Pray", false, function(value)
-    _G.Pray = value
-end)
-
-spawn(function()
-    local prayCF = CFrame.new(
-        -8652.99707, 143.450119, 6170.50879,
-        -0.983064115, 0, 0.18326205,
-        0, 1, 0,
-        -0.18326205, 0, -0.983064115
-    )
-
-    while task.wait(0.3) do
-        if _G.Pray then
-            TP1(prayCF)
-            game:GetService("ReplicatedStorage")
-                .Remotes.CommF_:InvokeServer("gravestoneEvent",1)
-        end
-    end
-end)
-
--- ===================== TRY LUCK =====================
-
-AutoFarm:Toggle("Auto Try Luck", false, function(value)
-    _G.Trylux = value
-end)
-
-spawn(function()
-    local luckCF = CFrame.new(
-        -8652.99707, 143.450119, 6170.50879,
-        -0.983064115, 0, 0.18326205,
-        0, 1, 0,
-        -0.18326205, 0, -0.983064115
-    )
-
-    while task.wait(0.3) do
-        if _G.Trylux then
-            TP1(luckCF)
-            game:GetService("ReplicatedStorage")
-                .Remotes.CommF_:InvokeServer("gravestoneEvent",2)
-        end
-    end
-end)  
+            end
+        end)
+    end)      
+    
        AutoFarm:Seperator("Tyrant of the Skies Farm")
               
        AutoFarm:Toggle("Auto Farm Tyrant of the Skies", false,function(value)         
@@ -12074,7 +11818,7 @@ game:GetService("StarterGui"):SetCore(
     {
         Title = " TinhSuper Hub ",
         Text = "Đã Tải Xong",
-        Icon = "rbxassetid://91978763568989",
+        Icon = "rbxassetid://100306458933414",
         Duration = 5
     }
 )
