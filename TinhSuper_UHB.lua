@@ -135,7 +135,7 @@ local plr = game:GetService("Players").LocalPlayer
 local Notification = require(game:GetService("ReplicatedStorage").Notification)
 
 -- Thông báo chào mừng
-Notification.new("<Color=Yellow>Nak Hub <Color=/>"):Display()
+Notification.new("<Color=Yellow> Welcome to TinhSuper Hub <Color=/>"):Display()
 task.wait(1)
 
 -- LocalScript (đặt trong StarterPlayerScripts)
@@ -3591,7 +3591,7 @@ local UICorner = Instance.new("UICorner")
 local Disc_Logo = Instance.new("ImageLabel")
 local Disc_Title = Instance.new("TextLabel")
 
-Discord.Name = "Tik Tok"
+Discord.Name = "Youtube"
 Discord.Parent = Main
 Discord.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 Discord.BackgroundTransparency = 1 -- Làm cho nền trong suốt
@@ -3616,7 +3616,7 @@ Disc_Logo.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Disc_Logo.BorderSizePixel = 0
 Disc_Logo.Position = UDim2.new(0, 5, 0, 1)
 Disc_Logo.Size = UDim2.new(0, 23, 0, 23)
-Disc_Logo.Image = "http://www.roblox.com/asset/?id=100306458933414"
+Disc_Logo.Image = "http://www.roblox.com/asset/?id=91978763568989"
 
 Disc_Title.Name = "Disc_Title"
 Disc_Title.Parent = Discord
@@ -3784,7 +3784,7 @@ UICorner.Parent = ImageButton
 		ImageLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 		ImageLabel.Position = UDim2.new(0, 5, 0.2, 0)
 		ImageLabel.Size = UDim2.new(0, 20, 0, 20)
-		ImageLabel.Image = "http://www.roblox.com/asset/?id=100306458933414" .. icon
+		ImageLabel.Image = "http://www.roblox.com/asset/?id=91978763568989" .. icon
 		ImageLabel.ImageColor3 = Color3.fromRGB(255, 255, 255)
 		ImageLabel.ImageTransparency = 0.2
 		ImageLabel.BackgroundTransparency = 1
