@@ -5218,7 +5218,7 @@ _G.SelectWeapon = "Melee"
         end
     end)
   
-  AutoFarm:Toggle("Đánh quái ở gần", false,function(value)
+  AutoFarm:Toggle("Auto Farm Nearest", false,function(value)
          _G.AutoNear = value
         StopTween(_G.AutoNear)
     end)
@@ -5258,17 +5258,25 @@ _G.SelectWeapon = "Melee"
           
      AutoFarm:Seperator("Auto Farm Mastery")       
      
-     if World1 or World2 then
-     AutoFarm:Dropdown("Select Regime Farm",{"Farm Level Mastery", "Farm Level Mastery No Quest"},{"Farm Level Mastery No Quest"},function(Value)
-       _G.selectFruitFarm = Value
-      end)
-    end      
-      if World3 then
-    AutoFarm:Dropdown("Select Regime Farm",{"Farm Level Mastery", "Farm Level Mastery No Quest","Farm Bone Mastery","Farm Cake Mastery"},{"Farm Level Mastery No Quest"},function(Value)
-       _G.selectFruitFarm = Value
-      end)
-    end      
-
+if World == 1 or World == 2 then
+    AutoFarm:Dropdown(
+        "Select Regime Farm",
+        {"Farm Level Mastery", "Farm Level Mastery No Quest"},
+        {"Farm Level Mastery No Quest"},
+        function(Value)
+            _G.selectFruitFarm = Value
+        end
+    )
+elseif World == 3 then
+    AutoFarm:Dropdown(
+        "Select Regime Farm",
+        {"Farm Level Mastery", "Farm Level Mastery No Quest","Farm Bone Mastery","Farm Cake Mastery"},
+        {"Farm Level Mastery No Quest"},
+        function(Value)
+            _G.selectFruitFarm = Value
+        end
+    )
+end    
       AutoFarm:Toggle("Auto Farm Mastery Fruit", false,function(value)
          _G.AutoFarmFruits = value 
          StopTween(_G.AutoFarmFruits)
