@@ -5255,24 +5255,39 @@ _G.SelectWeapon = "Melee"
                 end
              end
           end)
-          
-     AutoFarm:Seperator("Auto Farm Mastery")       
-     
-     if World1 or World2 then
-     AutoFarm:Dropdown("Select Regime Farm",{"Farm Level Mastery", "Farm Level Mastery No Quest"},{"Farm Level Mastery No Quest"},function(Value)
-       _G.selectFruitFarm = Value
-      end)
-    end      
-      if World3 then
-    AutoFarm:Dropdown("Select Regime Farm",{"Farm Level Mastery", "Farm Level Mastery No Quest","Farm Bone Mastery","Farm Cake Mastery"},{"Farm Level Mastery No Quest"},function(Value)
-       _G.selectFruitFarm = Value
-      end)
-    end      
+          -- Separator (đã fix đúng hàm)
+AutoFarm:Separator("Auto Farm Mastery")
 
-      AutoFarm:Toggle("Auto Farm Mastery Fruit", false,function(value)
-         _G.AutoFarmFruits = value 
-         StopTween(_G.AutoFarmFruits)
-        end)  
+-- Build danh sách theo World (GIỮ LOGIC)
+local RegimeFarmList = {
+    "Farm Level Mastery",
+    "Farm Level Mastery No Quest"
+}
+
+if World3 then
+    table.insert(RegimeFarmList, "Farm Bone Mastery")
+    table.insert(RegimeFarmList, "Farm Cake Mastery")
+end
+
+-- Dropdown DUY NHẤT → không crash UI
+AutoFarm:Dropdown(
+    "Select Regime Farm",
+    RegimeFarmList,
+    {"Farm Level Mastery No Quest"},
+    function(Value)
+        _G.selectFruitFarm = Value
+    end
+)
+
+-- Toggle (không đụng logic)
+AutoFarm:Toggle(
+    "Auto Farm Mastery Fruit",
+    false,
+    function(value)
+        _G.AutoFarmFruits = value
+        StopTween(_G.AutoFarmFruits)
+    end
+)
                                           
 spawn(function()
     while task.wait() do
@@ -11914,8 +11929,7 @@ game:GetService("StarterGui"):SetCore(
     {
         Title = " TinhSuper Hub ",
         Text = "Đã Tải Xong",
-        Icon = "rbxassetid://91978763568989",
+        Icon = "rbxassetid://100306458933414",
         Duration = 5
     }
-
 )
