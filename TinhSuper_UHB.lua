@@ -3540,8 +3540,9 @@ if syn then
 end
 
 function library:Destroy()
-	library:Destroy()
-	game:GetService("CoreGui").ScreenGui:Destroy()
+	if UI then
+		UI:Destroy()
+	end
 end
 
 function library:NaJa()
