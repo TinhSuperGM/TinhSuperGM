@@ -5256,18 +5256,21 @@ _G.SelectWeapon = "Melee"
              end
           end)
           
-     AutoFarm:Seperator("Auto Farm Mastery")
+AutoFarm:Seperator("Auto Farm Mastery")
 
+-- Tạo danh sách mặc định (World 1 & 2)
 local FarmList = {
     "Farm Level Mastery",
     "Farm Level Mastery No Quest"
 }
 
-if World3 then
-    table.insert(FarmList, "Farm Bone Mastery")
-    table.insert(FarmList, "Farm Cake Mastery")
+-- Chỉ thêm option World 3 (GIỮ LOGIC CŨ)
+if World3 == true then
+    FarmList[#FarmList + 1] = "Farm Bone Mastery"
+    FarmList[#FarmList + 1] = "Farm Cake Mastery"
 end
 
+-- Tạo Dropdown DUY NHẤT → không crash UI
 AutoFarm:Dropdown(
     "Select Regime Farm",
     FarmList,
@@ -5275,7 +5278,7 @@ AutoFarm:Dropdown(
     function(Value)
         _G.selectFruitFarm = Value
     end
-    )
+)
 end    
       AutoFarm:Toggle("Auto Farm Mastery Fruit", false,function(value)
          _G.AutoFarmFruits = value 
