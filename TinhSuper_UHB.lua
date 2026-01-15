@@ -11914,7 +11914,8 @@ game:GetService("StarterGui"):SetCore(
     {
         Title = " TinhSuper Hub ",
         Text = "Đã Tải Xong",
-        Icon = "rbxassetid://100306458933414",
+        Icon = "rbxassetid://91978763568989",
         Duration = 5
     }
+
 )
