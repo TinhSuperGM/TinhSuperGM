@@ -5689,240 +5689,169 @@ spawn(function()
         end
     end
 end)
-   AutoFarm:Seperator("Bone Farm")
 
-Boneyou = AutoFarm:Label("Check Bone")
 
-spawn(function()
-    while task.wait(1) do
-        pcall(function()
-            if World3 then
-                Boneyou:Set("Your Bone : "..game:GetService("ReplicatedStorage")
-                    .Remotes.CommF_:InvokeServer("Bones","Check"))
-            end
-        end)
-    end
-end)
-
-AutoFarm:Toggle("Auto Farm Bone", false, function(value)
-    _G.FarmBone = value
-
-    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
-
-    if not value then
-        StopTween()
-        StartBring = false
-        NeedAttacking = false
-        NoAttackAnimation = false
-    end
-end)
-
-spawn(function()
-    while task.wait() do
-        if _G.FarmBone and World3 then
+   if World3 then
+       AutoFarm:Seperator("Bone Farm")
+                
+    Boneyou = AutoFarm:Label("Check Bone")
+                
+    spawn(function()
+        while wait() do
             pcall(function()
-                local boneframe = CFrame.new(-9508.5673828125, 142.1398468017578, 5737.3603515625)
-
-                -- TP xử lý giống cũ
-                if BypassTP then
-                    if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude > 2000 then
-                        TP1(boneframe)
-                        task.wait(.1)
-                        for i = 1, 8 do
-                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = boneframe
-                            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetSpawnPoint")
-                            task.wait(.1)
+                Boneyou:Set("Your Bone : "..(game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Bones","Check")))
+            end)
+        end
+    end)
+     
+     AutoFarm:Toggle("Auto Farm Bone", false,function(value)
+         game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
+     		_G.FarmBone = value 
+         StopTween(_G.FarmBone)
+    end)
+    
+    spawn(function()
+        while wait() do 
+            local boneframe = CFrame.new(-9508.5673828125, 142.1398468017578, 5737.3603515625)
+            if _G.FarmBone and World3 then
+            pcall(function()
+                    if BypassTP then
+                        if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude > 2000 then
+                            TP1(boneframe)
+                            wait(.1)
+                            for i = 1, 8 do
+                                game.Players.localPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(boneframe)
+			                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetSpawnPoint")	
+                                wait(.1)		
+                            end
+                        elseif (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - boneframe.Position).Magnitude < 2000 then
+                            TP1(boneframe)
                         end
                     else
                         TP1(boneframe)
                     end
-                else
-                    TP1(boneframe)
-                end
-
-                -- Có mob
-                if game:GetService("Workspace").Enemies:FindFirstChild("Reborn Skeleton")
-                or game:GetService("Workspace").Enemies:FindFirstChild("Living Zombie")
-                or game:GetService("Workspace").Enemies:FindFirstChild("Demonic Soul")
-                or game:GetService("Workspace").Enemies:FindFirstChild("Posessed Mummy") then
-
-                    for _, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                        if v:FindFirstChild("Humanoid")
-                        and v:FindFirstChild("HumanoidRootPart")
-                        and v.Humanoid.Health > 0
-                        and (
-                            v.Name == "Reborn Skeleton"
-                            or v.Name == "Living Zombie"
-                            or v.Name == "Demonic Soul"
-                            or v.Name == "Posessed Mummy"
-                        ) then
-
-                            repeat task.wait()
-                                AutoHaki()
-                                NoAttackAnimation = true
-                                NeedAttacking = true
-                                EquipWeapon(_G.SelectWeapon)
-
-                                v.HumanoidRootPart.CanCollide = false
-                                v.Humanoid.WalkSpeed = 0
-                                v.Head.CanCollide = false
-
-                                StartBring = true
-                                MonFarm = v.Name
-                                PosMon = v.HumanoidRootPart.CFrame
-
-                                topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
-                                sethiddenproperty(game.Players.LocalPlayer,"SimulationRadius",math.huge)
-                            until not _G.FarmBone or not v.Parent or v.Humanoid.Health <= 0
+                    if game:GetService("Workspace").Enemies:FindFirstChild("Reborn Skeleton") or game:GetService("Workspace").Enemies:FindFirstChild("Living Zombie") or game:GetService("Workspace").Enemies:FindFirstChild("Demonic Soul") or game:GetService("Workspace").Enemies:FindFirstChild("Posessed Mummy") then
+                        for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                            if v.Name == "Reborn Skeleton" or v.Name == "Living Zombie" or v.Name == "Demonic Soul" or v.Name == "Posessed Mummy" then
+                                if v:FindFirstChild("Humanoid") and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                                    repeat task.wait()
+                                        AutoHaki()
+                                        NoAttackAnimation = true
+                                        NeedAttacking = true
+                                        EquipWeapon(_G.SelectWeapon)
+                                        v.HumanoidRootPart.CanCollide = false
+                                        v.Humanoid.WalkSpeed = 0
+                                        v.Head.CanCollide = false 
+                                        StartBring = true
+                                        MonFarm = v.Name                
+                                        PosMon = v.HumanoidRootPart.CFrame
+                                        topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
+                                        sethiddenproperty(game.Players.LocalPlayer,"SimulationRadius",math.huge)
+                                    until not _G.FarmBone or not v.Parent or v.Humanoid.Health <= 0
+                                end
+                            end
                         end
-                    end
-
-                -- Không có mob → kéo spawn
-                else
-                    StartBring = false
-                    topos(CFrame.new(-9506.234375, 172.130615234375, 6117.0771484375))
-
-                    for _, v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do
-                        if v:FindFirstChild("HumanoidRootPart") then
-                            if v.Name == "Reborn Skeleton"
-                            or v.Name == "Living Zombie"
-                            or v.Name == "Demonic Soul"
-                            or v.Name == "Posessed Mummy" then
+                    else
+                        StartBring = false
+    					topos(CFrame.new(-9506.234375, 172.130615234375, 6117.0771484375))
+                        for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
+                            if v.Name == "Reborn Skeleton" then
+                                topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                            elseif v.Name == "Living Zombie" then
+                                topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                            elseif v.Name == "Demonic Soul" then
+                                topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                            elseif v.Name == "Posessed Mummy" then
                                 topos(v.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
                             end
                         end
                     end
-                end
-            end)
+                end)
+            end
         end
-    end
-end)
-        AutoFarm:Seperator("Hallow Event")
-
-AutoFarm:Toggle("Auto Hallow Scythe", false, function(value)
-    _G.Hallow = value
-
-    if not value then
-        StopTween()
-    end
-end)
-
-spawn(function()
-    while task.wait() do
+    end)     
+    
+        AutoFarm:Toggle("Seperator Hallow Scythe", false,function(value)         
+     	_G.Hallow = value 
+         StopTween(_G.Hallow)
+       end)
+       
+       spawn(function()
+    while wait() do
         if _G.Hallow then
             pcall(function()
-                local Enemies = game:GetService("Workspace").Enemies
-                local Player = game.Players.LocalPlayer
-                local HRP = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
-                if not HRP then return end
-
-                -- Có Soul Reaper
-                if Enemies:FindFirstChild("Soul Reaper") then
-                    for _, v in pairs(Enemies:GetChildren()) do
-                        if v.Name == "Soul Reaper"
-                        and v:FindFirstChild("Humanoid")
-                        and v:FindFirstChild("HumanoidRootPart") then
-
+                if game:GetService("Workspace").Enemies:FindFirstChild("Soul Reaper") then
+                    for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                        if string.find(v.Name , "Soul Reaper") then
                             repeat task.wait()
                                 EquipWeapon(_G.SelectWeapon)
                                 AutoHaki()
-
                                 v.HumanoidRootPart.Size = Vector3.new(50,50,50)
-                                v.HumanoidRootPart.Transparency = 1
-
-                                topos(v.HumanoidRootPart.CFrame * CFrame.new(0,30,0))
-
+                                topos(v.HumanoidRootPart.CFrame * CFrame.new(0, 30, 0))
                                 game:GetService("VirtualUser"):CaptureController()
-                                game:GetService("VirtualUser"):Button1Down(Vector2.new(1280,670))
-                            until not _G.Hallow or v.Humanoid.Health <= 0
+                                game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 670))
+                                v.HumanoidRootPart.Transparency = 1
+                            until v.Humanoid.Health <= 0 or _G.Hallow == false
                         end
                     end
-
-                -- Có Hallow Essence
-                elseif Player.Backpack:FindFirstChild("Hallow Essence")
-                or Player.Character:FindFirstChild("Hallow Essence") then
-
-                    local altar = CFrame.new(-8932.322265625, 146.83154296875, 6062.55078125)
-                    repeat
-                        TP1(altar)
-                        task.wait()
-                    until (altar.Position - HRP.Position).Magnitude <= 8 or not _G.Hallow
-
+                elseif game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Hallow Essence") or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Hallow Essence") then
+                    repeat TP1(CFrame.new(-8932.322265625, 146.83154296875, 6062.55078125)) wait() until (CFrame.new(-8932.322265625, 146.83154296875, 6062.55078125).Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude <= 8                        
                     EquipWeapon("Hallow Essence")
-
-                -- Chưa spawn → kéo từ ReplicatedStorage
                 else
-                    local RS = game:GetService("ReplicatedStorage")
-                    if RS:FindFirstChild("Soul Reaper")
-                    and RS.Soul_Reaper:FindFirstChild("HumanoidRootPart") then
-                        topos(RS.Soul_Reaper.HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                    if game:GetService("ReplicatedStorage"):FindFirstChild("Soul Reaper") then
+                        TP1(game:GetService("ReplicatedStorage"):FindFirstChild("Soul Reaper").HumanoidRootPart.CFrame * CFrame.new(2,20,2))
+                   
+                       end
                     end
+                end)
+             end
+         end
+     end)
+      
+      AutoFarm:Toggle("Auto Trade Bone", false,function(value)         
+     		_G.Rdbone = value 
+       end)
+       
+       spawn(function()
+            while wait(.1) do
+                if _G.Rdbone then    
+                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Bones","Buy",1,1)
                 end
-            end)
-        end
-    end
-end)
-
--- ===================== BONE TRADE =====================
-
-AutoFarm:Toggle("Auto Trade Bone", false, function(value)
-    _G.Rdbone = value
-end)
-
-spawn(function()
-    while task.wait(0.2) do
-        if _G.Rdbone then
-            game:GetService("ReplicatedStorage")
-                .Remotes.CommF_:InvokeServer("Bones","Buy",1,1)
-        end
-    end
-end)
-
--- ===================== PRAY =====================
-
-AutoFarm:Toggle("Auto Pray", false, function(value)
-    _G.Pray = value
-end)
-
-spawn(function()
-    local prayCF = CFrame.new(
-        -8652.99707, 143.450119, 6170.50879,
-        -0.983064115, 0, 0.18326205,
-        0, 1, 0,
-        -0.18326205, 0, -0.983064115
-    )
-
-    while task.wait(0.3) do
-        if _G.Pray then
-            TP1(prayCF)
-            game:GetService("ReplicatedStorage")
-                .Remotes.CommF_:InvokeServer("gravestoneEvent",1)
-        end
-    end
-end)
-
--- ===================== TRY LUCK =====================
-
-AutoFarm:Toggle("Auto Try Luck", false, function(value)
-    _G.Trylux = value
-end)
-
-spawn(function()
-    local luckCF = CFrame.new(
-        -8652.99707, 143.450119, 6170.50879,
-        -0.983064115, 0, 0.18326205,
-        0, 1, 0,
-        -0.18326205, 0, -0.983064115
-    )
-
-    while task.wait(0.3) do
-        if _G.Trylux then
-            TP1(luckCF)
-            game:GetService("ReplicatedStorage")
-                .Remotes.CommF_:InvokeServer("gravestoneEvent",2)
-        end
-    end
-end)  
+            end
+         end)  
+         
+         AutoFarm:Toggle("Auto Pray", false,function(value)         
+     		_G.Pray = value 
+       end)
+       
+       spawn(function()
+        pcall(function()
+            while wait(.1) do
+                if _G.Pray then    
+                    TP1(CFrame.new(-8652.99707, 143.450119, 6170.50879, -0.983064115, -2.48005533e-10, 0.18326205, -1.78910387e-09, 1, -8.24392288e-09, -0.18326205, -8.43218029e-09, -0.983064115))
+                    wait()
+                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("gravestoneEvent",1)
+                end
+            end
+        end)
+    end)		
+    
+        AutoFarm:Toggle("Auto Try Luck", false,function(value)         
+     		_G.Trylux = value 
+       end)
+           
+       spawn(function()
+        pcall(function()
+            while wait(.1) do
+                if _G.Trylux then    
+                    TP1(CFrame.new(-8652.99707, 143.450119, 6170.50879, -0.983064115, -2.48005533e-10, 0.18326205, -1.78910387e-09, 1, -8.24392288e-09, -0.18326205, -8.43218029e-09, -0.983064115))
+                    wait()
+                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("gravestoneEvent",2)
+                end
+            end
+        end)
+    end)      
+    
        AutoFarm:Seperator("Tyrant of the Skies Farm")
               
        AutoFarm:Toggle("Auto Farm Tyrant of the Skies", false,function(value)         
