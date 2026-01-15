@@ -5218,7 +5218,7 @@ _G.SelectWeapon = "Melee"
         end
     end)
   
-  AutoFarm:Toggle("Auto Farm Nearest", false,function(value)
+  AutoFarm:Toggle("Farm Nearest", false,function(value)
          _G.AutoNear = value
         StopTween(_G.AutoNear)
     end)
@@ -5272,7 +5272,7 @@ _G.SelectWeapon = "Melee"
       AutoFarm:Toggle("Auto Farm Mastery Fruit", false,function(value)
          _G.AutoFarmFruits = value 
          StopTween(_G.AutoFarmFruits)
-        end)
+        end)  
                                           
 spawn(function()
     while task.wait() do
@@ -11914,32 +11914,7 @@ game:GetService("StarterGui"):SetCore(
     {
         Title = " TinhSuper Hub ",
         Text = "Đã Tải Xong",
-        Icon = "rbxassetid://91978763568989",
+        Icon = "rbxassetid://100306458933414",
         Duration = 5
     }
 )
--- Đổi tất cả skill hiện tại + skill mới xuất hiện thành nhiều màu cầu vồng
-local function rainbowSkill(obj)
-    if obj:IsA("ParticleEmitter") or obj:IsA("Beam") or obj:IsA("Trail") then
-        obj.Color = ColorSequence.new{
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
-            ColorSequenceKeypoint.new(0.2, Color3.fromRGB(255, 165, 0)),
-            ColorSequenceKeypoint.new(0.4, Color3.fromRGB(255, 255, 0)),
-            ColorSequenceKeypoint.new(0.6, Color3.fromRGB(0, 255, 0)),
-            ColorSequenceKeypoint.new(0.8, Color3.fromRGB(0, 0, 255)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(128, 0, 128))
-        }
-    end
-end
-
--- Đổi cho toàn bộ hiện có
-for _, obj in ipairs(workspace:GetDescendants()) do
-    rainbowSkill(obj)
-end
-
--- Nghe khi có skill mới
-workspace.DescendantAdded:Connect(rainbowSkill)
-
-
-
-
