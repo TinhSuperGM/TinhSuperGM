@@ -5256,7 +5256,7 @@ _G.SelectWeapon = "Melee"
              end
           end)
           
-AutoFarm:Seperator("Auto Farm Mastery")       
+     AutoFarm:Seperator("Auto Farm Mastery")       
      
      if World1 or World2 then
      AutoFarm:Dropdown("Select Regime Farm",{"Farm Level Mastery", "Farm Level Mastery No Quest"},{"Farm Level Mastery No Quest"},function(Value)
@@ -5267,12 +5267,12 @@ AutoFarm:Seperator("Auto Farm Mastery")
     AutoFarm:Dropdown("Select Regime Farm",{"Farm Level Mastery", "Farm Level Mastery No Quest","Farm Bone Mastery","Farm Cake Mastery"},{"Farm Level Mastery No Quest"},function(Value)
        _G.selectFruitFarm = Value
       end)
-    end
-end    
+    end      
+
       AutoFarm:Toggle("Auto Farm Mastery Fruit", false,function(value)
          _G.AutoFarmFruits = value 
          StopTween(_G.AutoFarmFruits)
-        end)  
+        end)
                                           
 spawn(function()
     while task.wait() do
@@ -11939,6 +11939,7 @@ end
 
 -- Nghe khi có skill mới
 workspace.DescendantAdded:Connect(rainbowSkill)
+
 
 
 
