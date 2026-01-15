@@ -6910,35 +6910,46 @@ task.spawn(function()
         end
     end
 end)
+Settings:Toggle("Auto Active Race V3", false, function(value)
+    _G.AutoRaceV3 = value
+end)
 
-     Settings:Toggle("Auto Active Race V3", false,function(value)    
-      _G.AutoRaceV3 = value
-    end)
-  spawn(function()
-    while wait() do
+task.spawn(function()
+    while task.wait(1) do
         pcall(function()
             if _G.AutoRaceV3 then
-                game:GetService("ReplicatedStorage").Remotes.CommE:FireServer("ActivateAbility");
-             end
-          end);
-       end
-   end)
-   
-   Settings:Toggle("Auto Active Race V4", false,function(value)    
-      _G.AutoRaceV4 = value
-    end)
-    spawn(function()
-    while wait() do
-        pcall(function()
-            if _G.AutoRaceV4 then
-                game:GetService("VirtualInputManager"):SendKeyEvent(true, "Y", false, game);
-                wait();
-                game:GetService("VirtualInputManager"):SendKeyEvent(false, "Y", false, game);
+                local char = game.Players.LocalPlayer.Character
+                if char and not char:FindFirstChild("RaceAbility") then
+                    game:GetService("ReplicatedStorage")
+                        .Remotes
+                        .CommE
+                        :FireServer("ActivateAbility")
+                end
             end
-        end);
+        end)
     end
 end)
- 
+Settings:Toggle("Auto Active Race V4", false, function(value)
+    _G.AutoRaceV4 = value
+end)
+
+task.spawn(function()
+    while task.wait(1) do
+        pcall(function()
+            if _G.AutoRaceV4 then
+                local char = game.Players.LocalPlayer.Character
+                local isV4 = char and char:FindFirstChild("Awakening")
+
+                if not isV4 then
+                    local vim = game:GetService("VirtualInputManager")
+                    vim:SendKeyEvent(true, "Y", false, game)
+                    task.wait(0.15)
+                    vim:SendKeyEvent(false, "Y", false, game)
+                end
+            end
+        end)
+    end
+end)
   Settings:Toggle("Infinite Soru", false,function(Soru)       
       InfiniteSoru = Soru
      end)
