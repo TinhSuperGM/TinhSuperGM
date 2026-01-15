@@ -132,10 +132,10 @@ pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/AnhDzaiScript/Setting/refs/heads/main/FastMax.lua"))()
 end)
 local plr = game:GetService("Players").LocalPlayer
-local Notification = require(game:GetService("ReplicatedStorage").Notification)
-
--- Thông báo chào mừng
-Notification.new("<Color=Yellow> Welcome to TinhSuper Hub <Color=/>"):Display()
+pcall(function()
+    local Notification = require(game:GetService("ReplicatedStorage"):WaitForChild("Notification"))
+    Notification.new("<Color=Yellow> Welcome to TinhSuper Hub <Color=/>"):Display()
+end)
 task.wait(1)
 
 -- LocalScript (đặt trong StarterPlayerScripts)
@@ -223,7 +223,7 @@ local Players = game:GetService("Players")
 local screenGui = Instance.new("ScreenGui")
 local textLabel = Instance.new("TextLabel")
 
-screenGui.Parent = game.CoreGui
+screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
 screenGui.DisplayOrder = 100
 
 textLabel.Parent = screenGui
@@ -257,7 +257,7 @@ RunService.RenderStepped:Connect(function()
         frameCount = 0
         lastUpdate = now
 
-        textLabel.Text = string.format("")
+        textLabel.Text = string.format("FPS: %d", math.floor(fps))
     end
 end)
 
@@ -497,7 +497,9 @@ if not player.Team then
     until player.Team
 end   
    
-hookfunction(require(game:GetService("ReplicatedStorage").Effect.Container.Death), function()end)
+pcall(function()
+    hookfunction(require(game:GetService("ReplicatedStorage").Effect.Container.Death), function() end)
+end)
 hookfunction(require(game:GetService("ReplicatedStorage").Effect.Container.Respawn), function()end)
 if game.PlaceId == 2753915549 then
         World1 = true
@@ -3544,7 +3546,6 @@ function library:Destroy()
 		UI:Destroy()
 	end
 end
-
 function library:NaJa()
 	local Main = Instance.new("Frame")
 	local Logo = Instance.new("ImageButton")
