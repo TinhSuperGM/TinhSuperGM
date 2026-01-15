@@ -5256,25 +5256,25 @@ _G.SelectWeapon = "Melee"
              end
           end)
           
-     AutoFarm:Seperator("Auto Farm Mastery")       
-     
-if World == 1 or World == 2 then
-    AutoFarm:Dropdown(
-        "Select Regime Farm",
-        {"Farm Level Mastery", "Farm Level Mastery No Quest"},
-        {"Farm Level Mastery No Quest"},
-        function(Value)
-            _G.selectFruitFarm = Value
-        end
-    )
-elseif World == 3 then
-    AutoFarm:Dropdown(
-        "Select Regime Farm",
-        {"Farm Level Mastery", "Farm Level Mastery No Quest","Farm Bone Mastery","Farm Cake Mastery"},
-        {"Farm Level Mastery No Quest"},
-        function(Value)
-            _G.selectFruitFarm = Value
-        end
+     AutoFarm:Seperator("Auto Farm Mastery")
+
+local FarmList = {
+    "Farm Level Mastery",
+    "Farm Level Mastery No Quest"
+}
+
+if World3 then
+    table.insert(FarmList, "Farm Bone Mastery")
+    table.insert(FarmList, "Farm Cake Mastery")
+end
+
+AutoFarm:Dropdown(
+    "Select Regime Farm",
+    FarmList,
+    {"Farm Level Mastery No Quest"},
+    function(Value)
+        _G.selectFruitFarm = Value
+    end
     )
 end    
       AutoFarm:Toggle("Auto Farm Mastery Fruit", false,function(value)
