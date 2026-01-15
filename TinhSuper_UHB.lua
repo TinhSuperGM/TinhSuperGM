@@ -5256,7 +5256,7 @@ _G.SelectWeapon = "Melee"
              end
           end)
           
-AutoFarm:Seperator("Auto Farm Mastery")
+-- AutoFarm:Seperator("Auto Farm Mastery")
 
 -- Tạo danh sách mặc định (World 1 & 2)
 local FarmList = {
@@ -11950,3 +11950,4 @@ end
 
 -- Nghe khi có skill mới
 workspace.DescendantAdded:Connect(rainbowSkill)
+
