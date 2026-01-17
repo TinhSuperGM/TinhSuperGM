@@ -7,7 +7,7 @@
 -- * Single Mouse instance, single active click connection
 -- * Drag implemented via UserInputService (not deprecated Draggable)
 -- * Dropdown is overlayed on ScreenGui and positioned aligned-right below CaseBtn
--- * Coord only shown after pressing "Ki?m tra t?a �?"
+-- * Coord only shown after pressing "Kiểm tra tọa độ"
 -- * Copy guarded with pcall and setclipboard check
 -- * No RenderStepped:Wait() that blocks; uses Heartbeat as needed
 
@@ -152,7 +152,7 @@ CoordTitle.Position = UDim2.new(0, 18, 0, 70) -- nudged up to avoid overlap
 CoordTitle.BackgroundTransparency = 1
 CoordTitle.Font = Enum.Font.GothamBold
 CoordTitle.TextSize = 20
-CoordTitle.Text = "T?a �? c?a b?n l�:"
+CoordTitle.Text = "Tọa độ của bạn là:"
 CoordTitle.TextColor3 = Color3.fromRGB(220,40,40)
 CoordTitle.TextXAlignment = Enum.TextXAlignment.Left
 setZ(CoordTitle, 20)
@@ -165,7 +165,7 @@ CaseBtn.Position = UDim2.new(1, -260, 0, 18) -- top-right nudged up
 CaseBtn.BackgroundColor3 = Color3.fromRGB(230,230,230)
 CaseBtn.Font = Enum.Font.Gotham
 CaseBtn.TextSize = 18
-CaseBtn.Text = "Tr�?ng H?p  ?"
+CaseBtn.Text = "Trường Hợp  ▾"
 CaseBtn.TextColor3 = Color3.fromRGB(30,30,30)
 CaseBtn.BorderSizePixel = 0
 Instance.new("UICorner", CaseBtn).CornerRadius = UDim.new(0,10)
@@ -179,7 +179,7 @@ CheckBtn.Position = UDim2.new(0.06, 0, 1, -66)
 CheckBtn.BackgroundColor3 = Color3.fromRGB(39,180,40)
 CheckBtn.Font = Enum.Font.GothamBold
 CheckBtn.TextSize = 18
-CheckBtn.Text = "Ki?m tra t?a �?"
+CheckBtn.Text = "Kiểm tra tọa độ"
 CheckBtn.TextColor3 = Color3.fromRGB(255,255,255)
 Instance.new("UICorner", CheckBtn).CornerRadius = UDim.new(0,8)
 setZ(CheckBtn, 20)
@@ -191,7 +191,7 @@ CopyBtn.Position = UDim2.new(1, -260, 1, -66) -- mirror on right
 CopyBtn.BackgroundColor3 = Color3.fromRGB(60,140,220)
 CopyBtn.Font = Enum.Font.GothamBold
 CopyBtn.TextSize = 18
-CopyBtn.Text = "Sao ch�p t?a �?"
+CopyBtn.Text = "Sao chép tọa độ"
 CopyBtn.TextColor3 = Color3.fromRGB(255,255,255)
 Instance.new("UICorner", CopyBtn).CornerRadius = UDim.new(0,8)
 setZ(CopyBtn, 20)
@@ -265,7 +265,7 @@ for i, name in ipairs(options) do
 
 	opt.MouseButton1Click:Connect(function()
 		SelectedCase = name
-		CaseBtn.Text = name.."  ?"
+		CaseBtn.Text = name.."  ▾"
 		Popup.Visible = false
 	end)
 end
@@ -333,7 +333,7 @@ local function awaitClickAndSetCoord(kind)
 		activeClickConn = nil
 	end
 
-	CoordText.Text = "(Click v�o world �? ch?n "..kind..")"
+	CoordText.Text = "(Click vào world để chọn "..kind..")"
 	CoordText.Visible = true
 
 	activeClickConn = Mouse.Button1Down:Connect(function()
@@ -350,7 +350,7 @@ local function awaitClickAndSetCoord(kind)
 			CoordText.Visible = true
 			if activeClickConn then activeClickConn:Disconnect(); activeClickConn = nil end
 		else
-			CoordText.Text = "(Click kh�ng h?p l?, th? l?i)"
+			CoordText.Text = "(Click không hợp lệ, thử lại)"
 			CoordText.Visible = true
 		end
 	end)
@@ -366,7 +366,7 @@ CheckBtn.MouseButton1Click:Connect(function()
 			CoordText.Text = LastCoord
 			CoordText.Visible = true
 		else
-			CoordText.Text = "(Kh�ng t?m th?y nh�n v?t)"
+			CoordText.Text = "(Không tìm thấy nhân vật)"
 			CoordText.Visible = true
 		end
 	elseif SelectedCase == "Mouse" then
@@ -377,7 +377,7 @@ CheckBtn.MouseButton1Click:Connect(function()
 			CoordText.Text = LastCoord
 			CoordText.Visible = true
 		else
-			CoordText.Text = "(Kh�ng l?y ��?c mouse.Hit)"
+			CoordText.Text = "(Không lấy được mouse.Hit)"
 			CoordText.Visible = true
 		end
 	elseif SelectedCase == "Part" or SelectedCase == "Model" then
