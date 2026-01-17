@@ -1,14 +1,12 @@
---// TinhSuper Hub - Coordinate UI (FINAL LAYOUT FIX)
+--// TinhSuper Hub - Coordinate UI (FINAL ADJUSTED)
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
 local Player = Players.LocalPlayer
 
--- Remove old
 pcall(function()
 	Player.PlayerGui:FindFirstChild("TinhSuper_Coord_UI"):Destroy()
 end)
 
--- ScreenGui
 local Gui = Instance.new("ScreenGui", Player.PlayerGui)
 Gui.Name = "TinhSuper_Coord_UI"
 Gui.IgnoreGuiInset = true
@@ -18,15 +16,15 @@ Gui.ResetOnSpawn = false
 -- L?P 1 - N?N (DRAG)
 --======================
 local Main = Instance.new("Frame", Gui)
-Main.Size = UDim2.fromScale(0.7, 0.45)
-Main.Position = UDim2.fromScale(0.15, 0.25)
+Main.Size = UDim2.fromScale(0.72, 0.46)
+Main.Position = UDim2.fromScale(0.14, 0.24)
 Main.BackgroundColor3 = Color3.fromRGB(60,60,60)
 Main.BorderSizePixel = 0
 Main.Active = true
 Main.ZIndex = 10
 Instance.new("UICorner", Main).CornerRadius = UDim.new(0,18)
 
--- Drag
+-- Drag UI
 do
 	local dragging, dragStart, startPos
 	Main.InputBegan:Connect(function(i)
@@ -55,7 +53,7 @@ do
 end
 
 --======================
--- L?P 2 - HEADER CH?
+-- HEADER
 --======================
 local Title = Instance.new("TextLabel", Main)
 Title.Size = UDim2.fromScale(0.5, 0.1)
@@ -64,53 +62,54 @@ Title.BackgroundTransparency = 1
 Title.Text = "TinhSuper Hub"
 Title.Font = Enum.Font.GothamBold
 Title.TextSize = 26
-Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.TextXAlignment = Left
 Title.TextColor3 = Color3.new(1,1,1)
 Title.ZIndex = 20
 
 local Credit = Instance.new("TextLabel", Main)
 Credit.Size = UDim2.fromScale(0.5, 0.06)
-Credit.Position = UDim2.fromScale(0.03, 0.12)
+Credit.Position = UDim2.fromScale(0.03, 0.145) -- ? xu?ng thêm
 Credit.BackgroundTransparency = 1
 Credit.Text = "by tinhsuper_gm"
-Credit.Font = Enum.Font.Gotham
+Credit.Font = Enum.Font.GothamMedium
 Credit.TextSize = 14
-Credit.TextXAlignment = Enum.TextXAlignment.Left
-Credit.TextColor3 = Color3.fromRGB(220,220,220)
+Credit.TextXAlignment = Left
+Credit.TextColor3 = Color3.fromRGB(210,210,210)
 Credit.ZIndex = 20
 
 --======================
--- T?A Ð? LABEL (Ð?)
+-- LABEL T?A Ð? (Ð?)
 --======================
 local Info = Instance.new("TextLabel", Main)
 Info.Size = UDim2.fromScale(0.45, 0.1)
-Info.Position = UDim2.fromScale(0.03, 0.38)
+Info.Position = UDim2.fromScale(0.03, 0.32) -- ? lên
 Info.BackgroundTransparency = 1
 Info.Text = "T?a ð? c?a b?n là:"
 Info.Font = Enum.Font.GothamBold
 Info.TextSize = 22
-Info.TextXAlignment = Enum.TextXAlignment.Left
+Info.TextXAlignment = Left
 Info.TextColor3 = Color3.fromRGB(220,40,40)
 Info.ZIndex = 20
 
 --======================
--- L?P 3 - B?NG T?A Ð?
+-- KHUNG T?A Ð? (R?NG)
 --======================
 local CoordBox = Instance.new("Frame", Main)
-CoordBox.Size = UDim2.fromScale(0.55, 0.18)
-CoordBox.Position = UDim2.fromScale(0.03, 0.5)
-CoordBox.BackgroundColor3 = Color3.fromRGB(90,90,90) -- nh?t hõn n?n
+CoordBox.Size = UDim2.fromScale(0.7, 0.18) -- ? r?ng sang ph?i
+CoordBox.Position = UDim2.fromScale(0.03, 0.44)
+CoordBox.BackgroundColor3 = Color3.fromRGB(92,92,92)
 CoordBox.BorderSizePixel = 0
 CoordBox.ZIndex = 15
 Instance.new("UICorner", CoordBox).CornerRadius = UDim.new(0,12)
 
 local CoordText = Instance.new("TextLabel", CoordBox)
-CoordText.Size = UDim2.fromScale(0.95, 0.9)
-CoordText.Position = UDim2.fromScale(0.025, 0.05)
+CoordText.Size = UDim2.fromScale(0.96, 0.9)
+CoordText.Position = UDim2.fromScale(0.02, 0.05)
 CoordText.BackgroundTransparency = 1
 CoordText.Font = Enum.Font.GothamBold
 CoordText.TextSize = 20
 CoordText.TextWrapped = true
+CoordText.TextXAlignment = Left
 CoordText.Text = ""
 CoordText.TextColor3 = Color3.new(1,1,1)
 CoordText.ZIndex = 20
@@ -119,8 +118,8 @@ CoordText.ZIndex = 20
 -- TRÝ?NG H?P (BÊN PH?I)
 --======================
 local CaseBtn = Instance.new("TextButton", Main)
-CaseBtn.Size = UDim2.fromScale(0.3, 0.1)
-CaseBtn.Position = UDim2.fromScale(0.65, 0.33) -- ~1/3 t? trên
+CaseBtn.Size = UDim2.fromScale(0.28, 0.1)
+CaseBtn.Position = UDim2.fromScale(0.69, 0.33)
 CaseBtn.Text = "Trý?ng H?p"
 CaseBtn.Font = Enum.Font.GothamBold
 CaseBtn.TextSize = 18
@@ -129,12 +128,10 @@ CaseBtn.TextColor3 = Color3.new(1,1,1)
 CaseBtn.ZIndex = 20
 Instance.new("UICorner", CaseBtn)
 
---======================
--- L?P 4 - POPUP
---======================
+-- Popup
 local Popup = Instance.new("Frame", Main)
-Popup.Size = UDim2.fromScale(0.3, 0.32)
-Popup.Position = UDim2.fromScale(0.65, 0.44)
+Popup.Size = UDim2.fromScale(0.28, 0.32)
+Popup.Position = UDim2.fromScale(0.69, 0.44)
 Popup.BackgroundColor3 = Color3.fromRGB(80,80,80)
 Popup.Visible = false
 Popup.ZIndex = 50
@@ -210,7 +207,12 @@ end)
 Check.MouseButton1Click:Connect(function()
 	local hrp = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
 	if hrp then
-		CoordText.Text = string.format("CFrame.new(%.2f, %.2f, %.2f)", hrp.Position.X, hrp.Position.Y, hrp.Position.Z)
+		CoordText.Text = string.format(
+			"CFrame.new(%.2f, %.2f, %.2f)",
+			hrp.Position.X,
+			hrp.Position.Y,
+			hrp.Position.Z
+		)
 	end
 end)
 
