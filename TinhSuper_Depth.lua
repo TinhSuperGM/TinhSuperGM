@@ -152,7 +152,7 @@ CoordTitle.Position = UDim2.new(0, 18, 0, 70) -- nudged up to avoid overlap
 CoordTitle.BackgroundTransparency = 1
 CoordTitle.Font = Enum.Font.GothamBold
 CoordTitle.TextSize = 20
-CoordTitle.Text = "Tọa độ của bạn là:"
+CoordTitle.Text = "Your coordinates are:"
 CoordTitle.TextColor3 = Color3.fromRGB(220,40,40)
 CoordTitle.TextXAlignment = Enum.TextXAlignment.Left
 setZ(CoordTitle, 20)
@@ -165,7 +165,7 @@ CaseBtn.Position = UDim2.new(1, -260, 0, 18) -- top-right nudged up
 CaseBtn.BackgroundColor3 = Color3.fromRGB(230,230,230)
 CaseBtn.Font = Enum.Font.Gotham
 CaseBtn.TextSize = 18
-CaseBtn.Text = "Trường Hợp  ▾"
+CaseBtn.Text = "Mode  ▾"
 CaseBtn.TextColor3 = Color3.fromRGB(30,30,30)
 CaseBtn.BorderSizePixel = 0
 Instance.new("UICorner", CaseBtn).CornerRadius = UDim.new(0,10)
@@ -179,7 +179,7 @@ CheckBtn.Position = UDim2.new(0.06, 0, 1, -66)
 CheckBtn.BackgroundColor3 = Color3.fromRGB(39,180,40)
 CheckBtn.Font = Enum.Font.GothamBold
 CheckBtn.TextSize = 18
-CheckBtn.Text = "Kiểm tra tọa độ"
+CheckBtn.Text = "Check coordinates"
 CheckBtn.TextColor3 = Color3.fromRGB(255,255,255)
 Instance.new("UICorner", CheckBtn).CornerRadius = UDim.new(0,8)
 setZ(CheckBtn, 20)
@@ -191,7 +191,7 @@ CopyBtn.Position = UDim2.new(1, -260, 1, -66) -- mirror on right
 CopyBtn.BackgroundColor3 = Color3.fromRGB(60,140,220)
 CopyBtn.Font = Enum.Font.GothamBold
 CopyBtn.TextSize = 18
-CopyBtn.Text = "Sao chép tọa độ"
+CopyBtn.Text = "Copy coordinates"
 CopyBtn.TextColor3 = Color3.fromRGB(255,255,255)
 Instance.new("UICorner", CopyBtn).CornerRadius = UDim.new(0,8)
 setZ(CopyBtn, 20)
