@@ -1,318 +1,351 @@
--- LocalScript: TinhSuper Hub - Adjusted (smaller UI, reliable font, wider coord, case up)
+-- LocalScript: TinhSuper Hub - Final fixed (size like original, wider coord, case up, reliable font)
+-- Paste into StarterPlayerScripts
+
 local Players = game:GetService("Players")
 local UIS = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local Player = Players.LocalPlayer
 local PlayerGui = Player:WaitForChild("PlayerGui")
 
--- remove previous
+-- cleanup old
 pcall(function()
-	local old = PlayerGui:FindFirstChild("TinhSuper_Coord_UI")
+	local old = PlayerGui:FindFirstChild("TinhSuper_Hub_UI")
 	if old then old:Destroy() end
 end)
 
--- ScreenGui
-local Gui = Instance.new("ScreenGui")
-Gui.Name = "TinhSuper_Coord_UI"
-Gui.ResetOnSpawn = false
-Gui.IgnoreGuiInset = true
-Gui.Parent = PlayerGui
-
--- helper setZ
-local function setZ(obj, z)
-	if obj:IsA("GuiObject") then obj.ZIndex = z end
-	for _,d in ipairs(obj:GetDescendants()) do
-		if d:IsA("GuiObject") then d.ZIndex = z + 1 end
+-- helper setZ: set ZIndex for obj and descendants
+local function setZ(root, z)
+	if root and root:IsA("GuiObject") then
+		root.ZIndex = z
+	end
+	for _,d in ipairs(root:GetDescendants()) do
+		if d:IsA("GuiObject") then
+			d.ZIndex = z + 1
+		end
 	end
 end
 
--- ========== LAYER 1: N?N (NH? HÕN) ==========
-local Main = Instance.new("Frame")
-Main.Name = "Layer1_Main"
-Main.Size = UDim2.new(0, 640, 0, 260)       -- smaller
-Main.Position = UDim2.new(0, 80, 0, 60)
-Main.BackgroundColor3 = Color3.fromRGB(58,58,58)
-Main.BorderSizePixel = 0
-Main.Parent = Gui
-Instance.new("UICorner", Main).CornerRadius = UDim.new(0,12)
-Main.Active = true
+-- ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "TinhSuper_Hub_UI"
+screenGui.ResetOnSpawn = false
+screenGui.IgnoreGuiInset = true
+screenGui.Parent = PlayerGui
 
--- drag whole Main (mouse + touch)
+-- MAIN (layer 1) - size like original image
+local main = Instance.new("Frame")
+main.Name = "Main"
+main.Size = UDim2.new(0, 720, 0, 220)
+main.AnchorPoint = Vector2.new(0.5, 0.5)
+main.Position = UDim2.new(0.5, 0, 0.35, 0) -- center-ish like image
+main.BackgroundColor3 = Color3.fromRGB(126,126,126)
+main.BorderSizePixel = 0
+main.Parent = screenGui
+Instance.new("UICorner", main).CornerRadius = UDim.new(0,18)
+main.Active = true
+
+setZ(main, 10) -- layer 1
+
+-- Drag whole main by holding on main background
 do
 	local dragging = false
-	local dragStart, startPos
-	Main.InputBegan:Connect(function(input)
+	local dragStart = Vector2.new()
+	local startPos = main.Position
+	local dragInput
+
+	main.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 			dragging = true
 			dragStart = input.Position
-			startPos = Main.Position
+			startPos = main.Position
 			input.Changed:Connect(function()
-				if input.UserInputState == Enum.UserInputState.End then dragging = false end
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
 			end)
 		end
 	end)
+
+	main.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+			dragInput = input
+		end
+	end)
+
 	UIS.InputChanged:Connect(function(input)
-		if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+		if dragging and input == dragInput then
 			local delta = input.Position - dragStart
-			Main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+			main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 		end
 	end)
 end
-setZ(Main, 10)
 
--- ========== LAYER 2: CH? & NÚT ==========
--- Title (top-left)
-local Title = Instance.new("TextLabel", Main)
-Title.Name = "Title"
-Title.BackgroundTransparency = 1
-Title.Font = Enum.Font.SourceSansBold        -- reliable font
-Title.TextSize = 22
-Title.Text = "TinhSuper Hub"
-Title.TextColor3 = Color3.fromRGB(255,255,255)
-Title.TextXAlignment = Enum.TextXAlignment.Left
-Title.Position = UDim2.new(0, 14, 0, 10)
-Title.Size = UDim2.new(0.6, 0, 0, 28)
+-- ===== LAYER 2: Title / by / Case button / action buttons / X circle =====
 
--- by under title, moved down a bit
-local By = Instance.new("TextLabel", Main)
-By.Name = "By"
-By.BackgroundTransparency = 1
-By.Font = Enum.Font.SourceSans
-By.TextSize = 13
-By.Text = "by tinhsuper_gm"
-By.TextColor3 = Color3.fromRGB(210,210,210)
-By.TextXAlignment = Enum.TextXAlignment.Left
-By.Position = UDim2.new(0, 14, 0, 40)
-By.Size = UDim2.new(0.6, 0, 0, 18)
+-- Title
+local title = Instance.new("TextLabel", main)
+title.Size = UDim2.new(0.6, 0, 0, 36)
+title.Position = UDim2.new(0, 16, 0, 8)
+title.BackgroundTransparency = 1
+title.Font = Enum.Font.SourceSansBold
+title.TextSize = 28
+title.Text = "TinhSuper Hub"
+title.TextColor3 = Color3.fromRGB(255,255,255)
+title.TextXAlignment = Enum.TextXAlignment.Left
+setZ(title, 20)
 
--- "T?a ð? c?a b?n là:" moved up a bit (bigger, red)
-local LabelCoord = Instance.new("TextLabel", Main)
-LabelCoord.Name = "LabelCoord"
-LabelCoord.BackgroundTransparency = 1
-LabelCoord.Font = Enum.Font.SourceSansBold
-LabelCoord.TextSize = 18
-LabelCoord.Text = "T?a ð? c?a b?n là:"
-LabelCoord.TextColor3 = Color3.fromRGB(220,40,40)
-LabelCoord.TextXAlignment = Enum.TextXAlignment.Left
-LabelCoord.Position = UDim2.new(0, 14, 0, 70) -- moved up
-LabelCoord.Size = UDim2.new(0.6, 0, 0, 22)
+-- by under title (moved slightly down)
+local bylabel = Instance.new("TextLabel", main)
+bylabel.Size = UDim2.new(0.6, 0, 0, 18)
+bylabel.Position = UDim2.new(0, 18, 0, 44) -- a bit lower than title
+bylabel.BackgroundTransparency = 1
+bylabel.Font = Enum.Font.SourceSans
+bylabel.TextSize = 14
+bylabel.Text = "by tinhsuper_gm"
+bylabel.TextColor3 = Color3.fromRGB(230,230,230)
+bylabel.TextXAlignment = Enum.TextXAlignment.Left
+setZ(bylabel, 20)
 
--- Case button: placed on right, 1/3 but moved slightly up
-local CaseBtn = Instance.new("TextButton", Main)
-CaseBtn.Name = "CaseBtn"
-CaseBtn.Font = Enum.Font.SourceSansBold
-CaseBtn.TextSize = 15
-CaseBtn.Text = "Trý?ng H?p  ?"
-CaseBtn.TextColor3 = Color3.new(1,1,1)
-CaseBtn.BackgroundColor3 = Color3.fromRGB(86,86,86)
-CaseBtn.BorderSizePixel = 0
-CaseBtn.Size = UDim2.new(0, 180, 0, 34)
--- position: right, ~1/3 from top but slightly up
-CaseBtn.Position = UDim2.new(1, -200, 0, 64)
-Instance.new("UICorner", CaseBtn).CornerRadius = UDim.new(0,8)
+-- "T?a Ð? C?a B?n Là:" moved up a bit, red, larger, middle-left
+local coordLabelTitle = Instance.new("TextLabel", main)
+coordLabelTitle.Size = UDim2.new(0.55, 0, 0, 28)
+coordLabelTitle.Position = UDim2.new(0, 18, 0, 76) -- moved up
+coordLabelTitle.BackgroundTransparency = 1
+coordLabelTitle.Font = Enum.Font.SourceSansBold
+coordLabelTitle.TextSize = 20
+coordLabelTitle.Text = "T?a Ð? C?a B?n Là:"
+coordLabelTitle.TextColor3 = Color3.fromRGB(220,40,40)
+coordLabelTitle.TextXAlignment = Enum.TextXAlignment.Left
+setZ(coordLabelTitle, 20)
 
--- Ki?m tra button (left bottom)
-local CheckBtn = Instance.new("TextButton", Main)
-CheckBtn.Name = "CheckBtn"
-CheckBtn.Font = Enum.Font.SourceSansBold
-CheckBtn.TextSize = 16
-CheckBtn.Text = "Ki?m tra t?a ð?"
-CheckBtn.TextColor3 = Color3.new(1,1,1)
-CheckBtn.BackgroundColor3 = Color3.fromRGB(36,160,72)
-CheckBtn.BorderSizePixel = 0
-CheckBtn.Size = UDim2.new(0, 240, 0, 44)
-CheckBtn.Position = UDim2.new(0, 14, 1, -68)
-Instance.new("UICorner", CheckBtn).CornerRadius = UDim.new(0,8)
+-- Display area (layer 3 will go inside this frame)
+local displayFrame = Instance.new("Frame", main)
+displayFrame.Size = UDim2.new(0.9, 0, 0, 90) -- wide and tall
+displayFrame.Position = UDim2.new(0.05, 0, 0, 108)
+displayFrame.BackgroundColor3 = Color3.fromRGB(48,48,48) -- darker inner
+displayFrame.BorderSizePixel = 0
+Instance.new("UICorner", displayFrame).CornerRadius = UDim.new(0,12)
+setZ(displayFrame, 15)
 
--- Copy button (right bottom)
-local CopyBtn = Instance.new("TextButton", Main)
-CopyBtn.Name = "CopyBtn"
-CopyBtn.Font = Enum.Font.SourceSansBold
-CopyBtn.TextSize = 16
-CopyBtn.Text = "Sao chép t?a ð?"
-CopyBtn.TextColor3 = Color3.new(1,1,1)
-CopyBtn.BackgroundColor3 = Color3.fromRGB(60,128,204)
-CopyBtn.BorderSizePixel = 0
-CopyBtn.Size = UDim2.new(0, 240, 0, 44)
-CopyBtn.Position = UDim2.new(1, -254, 1, -68)
-Instance.new("UICorner", CopyBtn).CornerRadius = UDim.new(0,8)
+-- Coord text: hidden until check
+local coordText = Instance.new("TextLabel", displayFrame)
+coordText.Size = UDim2.new(1, -32, 1, -24)
+coordText.Position = UDim2.new(0, 16, 0, 12)
+coordText.BackgroundTransparency = 1
+coordText.Font = Enum.Font.SourceSansBold
+coordText.TextSize = 34
+coordText.TextColor3 = Color3.fromRGB(255,255,255)
+coordText.Text = "" -- empty initially
+coordText.Visible = false
+coordText.TextWrapped = true
+coordText.TextXAlignment = Enum.TextXAlignment.Center
+coordText.TextYAlignment = Enum.TextYAlignment.Center
+setZ(coordText, 30)
 
--- X circle in middle
-local CloseCircle = Instance.new("TextButton", Main)
-CloseCircle.Name = "CloseCircle"
-CloseCircle.Font = Enum.Font.SourceSansBold
-CloseCircle.TextSize = 18
-CloseCircle.Text = "X"
-CloseCircle.TextColor3 = Color3.fromRGB(30,30,30)
-CloseCircle.BackgroundColor3 = Color3.fromRGB(245,245,245)
-CloseCircle.BorderSizePixel = 0
-CloseCircle.Size = UDim2.new(0,46,0,46)
-CloseCircle.Position = UDim2.new(0.5, -23, 1, -76)
-Instance.new("UICorner", CloseCircle).CornerRadius = UDim.new(1,0)
+-- Case button (layer 2) - move up a bit (1/3 from top, but higher)
+local caseBtn = Instance.new("TextButton", main)
+caseBtn.Size = UDim2.new(0, 220, 0, 42)
+caseBtn.Position = UDim2.new(1, -246, 0, 20) -- near top-right; nhích lên
+caseBtn.AnchorPoint = Vector2.new(0,0)
+caseBtn.BackgroundColor3 = Color3.fromRGB(220,220,220)
+caseBtn.Font = Enum.Font.SourceSans
+caseBtn.TextSize = 20
+caseBtn.Text = "Trý?ng H?p  ?"
+caseBtn.TextColor3 = Color3.fromRGB(30,30,30)
+Instance.new("UICorner", caseBtn).CornerRadius = UDim.new(0,10)
+setZ(caseBtn, 22)
 
--- set Layer 2 Z
-setZ(Title, 20); setZ(By, 20); setZ(LabelCoord, 20)
-setZ(CaseBtn, 20); setZ(CheckBtn,20); setZ(CopyBtn,20); setZ(CloseCircle,20)
+-- Buttons bottom: Ki?m tra (left), Sao chép (right)
+local checkBtn = Instance.new("TextButton", main)
+checkBtn.Size = UDim2.new(0, 260, 0, 44)
+checkBtn.Position = UDim2.new(0.06, 0, 1, -60)
+checkBtn.BackgroundColor3 = Color3.fromRGB(39,180,40)
+checkBtn.Font = Enum.Font.SourceSansBold
+checkBtn.TextSize = 20
+checkBtn.Text = "Ki?m tra t?a ð?"
+checkBtn.TextColor3 = Color3.fromRGB(255,255,255)
+Instance.new("UICorner", checkBtn).CornerRadius = UDim.new(0,8)
+setZ(checkBtn, 20)
 
--- ========== LAYER 3: KHUNG T?A Ð? (R?NG HÕN SANG PH?I) ==========
-local CoordFrame = Instance.new("Frame", Main)
-CoordFrame.Name = "Layer3_CoordFrame"
-CoordFrame.Size = UDim2.new(0.9, 0, 0, 78)   -- wider to the right (0.9 of main width)
-CoordFrame.Position = UDim2.new(0, 14, 0, 98) -- below LabelCoord
-CoordFrame.BackgroundColor3 = Color3.fromRGB(95,95,95) -- lighter than outer
-CoordFrame.BorderSizePixel = 0
-Instance.new("UICorner", CoordFrame).CornerRadius = UDim.new(0,8)
-CoordFrame.ZIndex = 30
+local copyBtn = Instance.new("TextButton", main)
+copyBtn.Size = UDim2.new(0, 260, 0, 44)
+copyBtn.Position = UDim2.new(0.72, 0, 1, -60)
+copyBtn.BackgroundColor3 = Color3.fromRGB(60,140,220)
+copyBtn.Font = Enum.Font.SourceSansBold
+copyBtn.TextSize = 20
+copyBtn.Text = "Sao chép t?a ð?"
+copyBtn.TextColor3 = Color3.fromRGB(255,255,255)
+Instance.new("UICorner", copyBtn).CornerRadius = UDim.new(0,8)
+setZ(copyBtn, 20)
 
-local CoordText = Instance.new("TextLabel", CoordFrame)
-CoordText.Name = "CoordText"
-CoordText.Size = UDim2.new(1, -20, 1, -20)
-CoordText.Position = UDim2.new(0, 10, 0, 10)
-CoordText.BackgroundTransparency = 1
-CoordText.Font = Enum.Font.SourceSansBold
-CoordText.TextSize = 16
-CoordText.TextColor3 = Color3.fromRGB(255,255,255)
-CoordText.TextXAlignment = Enum.TextXAlignment.Left
-CoordText.TextYAlignment = Enum.TextYAlignment.Top
-CoordText.TextWrapped = true
-CoordText.Text = ""
-CoordText.Visible = false
-setZ(CoordFrame, 30); setZ(CoordText, 30)
+-- Center circular X between two buttons
+local centerX = Instance.new("TextButton", main)
+centerX.Size = UDim2.new(0, 48, 0, 48)
+centerX.Position = UDim2.new(0.5, -24, 1, -64)
+centerX.BackgroundColor3 = Color3.fromRGB(245,245,245)
+centerX.Font = Enum.Font.SourceSansBold
+centerX.TextSize = 22
+centerX.Text = "X"
+centerX.TextColor3 = Color3.fromRGB(30,30,30)
+Instance.new("UICorner", centerX).CornerRadius = UDim.new(1,0)
+setZ(centerX, 20)
 
--- ========== LAYER 4: POPUP (Trý?ng H?p) ==========
-local Popup = Instance.new("Frame")
-Popup.Name = "Layer4_Popup"
-Popup.Parent = Gui -- as overlay so it's always above Main
-Popup.Size = UDim2.new(0, 180, 0, 150)
-Popup.BackgroundColor3 = Color3.fromRGB(80,80,80)
-Popup.BorderSizePixel = 0
-Popup.Visible = false
-Instance.new("UICorner", Popup).CornerRadius = UDim.new(0,8)
+centerX.MouseButton1Click:Connect(function()
+	screenGui:Destroy()
+end)
 
--- options
-local options = {"CFrame","Part","Model","Mouse"}
-local Selected = "CFrame"
+-- ===== LAYER 4: Popup (Trý?ng H?p) =====
+local popup = Instance.new("Frame")
+popup.Name = "Popup"
+popup.Parent = screenGui -- parent to ScreenGui so it overlays
+popup.Size = UDim2.new(0, 220, 0, 160)
+popup.BackgroundColor3 = Color3.fromRGB(245,245,245)
+popup.BorderSizePixel = 0
+popup.Visible = false
+Instance.new("UICorner", popup).CornerRadius = UDim.new(0,10)
+setZ(popup, 60)
+
+-- create options
+local options = {"CFrame", "Part", "Model", "Mouse"}
+local selected = "CFrame" -- default
 for i,opt in ipairs(options) do
-	local b = Instance.new("TextButton", Popup)
-	b.Size = UDim2.new(1, -16, 0, 32)
-	b.Position = UDim2.new(0, 8, 0, 8 + (i-1)*36)
-	b.BackgroundColor3 = Color3.fromRGB(100,100,100)
-	b.Font = Enum.Font.SourceSans
-	b.TextSize = 14
-	b.Text = opt
-	b.TextColor3 = Color3.fromRGB(245,245,245)
-	Instance.new("UICorner", b).CornerRadius = UDim.new(0,6)
-	b.MouseButton1Click:Connect(function()
-		Selected = opt
-		CaseBtn.Text = opt.."  ?"
-		Popup.Visible = false
+	local btn = Instance.new("TextButton", popup)
+	btn.Size = UDim2.new(1, -16, 0, 34)
+	btn.Position = UDim2.new(0, 8, 0, 8 + (i-1)*38)
+	btn.BackgroundColor3 = Color3.fromRGB(95,95,95)
+	btn.Font = Enum.Font.SourceSans
+	btn.TextSize = 16
+	btn.Text = opt
+	btn.TextColor3 = Color3.fromRGB(240,240,240)
+	Instance.new("UICorner", btn).CornerRadius = UDim.new(0,6)
+	btn.MouseButton1Click:Connect(function()
+		selected = opt
+		caseBtn.Text = opt.."  ?"
+		popup.Visible = false
 	end)
 end
 
--- helper to position popup under CaseBtn aligned right
-local function positionPopup()
-	RunService.RenderStepped:Wait()
-	local ddPos = CaseBtn.AbsolutePosition
-	local ddSize = CaseBtn.AbsoluteSize
-	local popupW = Popup.AbsoluteSize.X
-	local popupH = Popup.AbsoluteSize.Y
-	local px = ddPos.X + ddSize.X - popupW -- align right edge
-	local py = ddPos.Y + ddSize.Y + 6
-	local screenW, screenH = workspace.CurrentCamera.ViewportSize.X, workspace.CurrentCamera.ViewportSize.Y
+-- helper to position popup under caseBtn and align right
+local function positionPopupUnderCase()
+	RunService.RenderStepped:Wait() -- ensure AbsolutePosition ready
+	local ddPos = caseBtn.AbsolutePosition
+	local ddSize = caseBtn.AbsoluteSize
+	local popupW = popup.AbsoluteSize.X
+	local popupH = popup.AbsoluteSize.Y
+	local px = ddPos.X + ddSize.X - popupW -- align right edge with caseBtn right
+	local py = ddPos.Y + ddSize.Y + 8
+	-- clamp
+	local screenSize = workspace.CurrentCamera.ViewportSize
 	if px < 8 then px = 8 end
-	if py + popupH + 8 > screenH then
-		py = ddPos.Y - popupH - 6
+	if py + popupH + 8 > screenSize.Y then
+		py = ddPos.Y - popupH - 8
 		if py < 8 then py = 8 end
 	end
-	Popup.Position = UDim2.new(0, math.floor(px), 0, math.floor(py))
-	setZ(Popup, 40)
+	popup.Position = UDim2.new(0, math.floor(px), 0, math.floor(py))
+	setZ(popup, 60)
 end
 
-CaseBtn.MouseButton1Click:Connect(function()
-	Popup.Visible = not Popup.Visible
-	if Popup.Visible then positionPopup() end
+caseBtn.MouseButton1Click:Connect(function()
+	popup.Visible = not popup.Visible
+	if popup.Visible then positionPopupUnderCase() end
 end)
 
+-- hide popup if clicking outside
 UIS.InputBegan:Connect(function(input, gp)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		if Popup.Visible then
-			local mouse = UIS:GetMouseLocation()
-			local ppos = Popup.AbsolutePosition
-			local psize = Popup.AbsoluteSize
-			if not (mouse.X >= ppos.X and mouse.X <= ppos.X + psize.X and mouse.Y >= ppos.Y and mouse.Y <= ppos.Y + psize.Y) then
-				local ddp = CaseBtn.AbsolutePosition
-				local dds = CaseBtn.AbsoluteSize
-				if not (mouse.X >= ddp.X and mouse.X <= ddp.X + dds.X and mouse.Y >= ddp.Y and mouse.Y <= ddp.Y + dds.Y) then
-					Popup.Visible = false
+		if popup.Visible then
+			local m = UIS:GetMouseLocation()
+			local ppos = popup.AbsolutePosition
+			local psize = popup.AbsoluteSize
+			if not (m.X >= ppos.X and m.X <= ppos.X + psize.X and m.Y >= ppos.Y and m.Y <= ppos.Y + psize.Y) then
+				local ddp = caseBtn.AbsolutePosition
+				local dds = caseBtn.AbsoluteSize
+				if not (m.X >= ddp.X and m.X <= ddp.X + dds.X and m.Y >= ddp.Y and m.Y <= ddp.Y + dds.Y) then
+					popup.Visible = false
 				end
 			end
 		end
 	end
 end)
 
--- ========== LOGIC: Check / Copy / Close ==========
-CheckBtn.MouseButton1Click:Connect(function()
-	Popup.Visible = false
-	if Selected == "CFrame" then
-		local hrp = Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
+-- ===== LOGIC: Check / Part-Model click / Mouse / Copy =====
+checkBtn.MouseButton1Click:Connect(function()
+	-- hide popup
+	popup.Visible = false
+
+	if selected == "CFrame" then
+		local char = Player.Character
+		local hrp = char and char:FindFirstChild("HumanoidRootPart")
 		if hrp then
-			CoordText.Text = string.format("CFrame.new(%.3f, %.3f, %.3f)", hrp.Position.X, hrp.Position.Y, hrp.Position.Z)
-			CoordText.Visible = true
+			local p = hrp.Position
+			coordText.Text = string.format("CFrame.new(%.3f, %.3f, %.3f)", p.X, p.Y, p.Z)
+			coordText.Visible = true
 		else
-			CoordText.Text = "(Không t?m th?y nhân v?t)"
-			CoordText.Visible = true
+			coordText.Text = "(Không t?m th?y nhân v?t)"
+			coordText.Visible = true
 		end
-	elseif Selected == "Mouse" then
+	elseif selected == "Mouse" then
 		local m = Player:GetMouse()
 		if m and m.Hit then
 			local p = m.Hit.Position
-			CoordText.Text = string.format("Vector3.new(%.3f, %.3f, %.3f)", p.X, p.Y, p.Z)
-			CoordText.Visible = true
+			coordText.Text = string.format("Vector3.new(%.3f, %.3f, %.3f)", p.X, p.Y, p.Z)
+			coordText.Visible = true
 		else
-			CoordText.Text = "(Không l?y ðý?c mouse.Hit)"
-			CoordText.Visible = true
+			coordText.Text = "(Không l?y ðý?c mouse.Hit)"
+			coordText.Visible = true
 		end
-	else -- Part / Model
-		CoordText.Text = "(Click vào world ð? ch?n "..Selected..")"
-		CoordText.Visible = true
+	elseif selected == "Part" or selected == "Model" then
+		coordText.Text = "(Click vào world ð? ch?n "..selected..")"
+		coordText.Visible = true
 		local m = Player:GetMouse()
 		local conn
 		conn = m.Button1Down:Connect(function()
 			local target = m.Target
 			if target and target:IsA("BasePart") then
-				if Selected == "Part" then
-					CoordText.Text = string.format("CFrame.new(%.3f, %.3f, %.3f)", target.Position.X, target.Position.Y, target.Position.Z)
+				if selected == "Part" then
+					coordText.Text = string.format("CFrame.new(%.3f, %.3f, %.3f)", target.Position.X, target.Position.Y, target.Position.Z)
 				else
 					local model = target:FindFirstAncestorOfClass("Model")
-					local partForPos = model and (model:FindFirstChild("HumanoidRootPart") or model.PrimaryPart) or target
-					CoordText.Text = string.format("CFrame.new(%.3f, %.3f, %.3f)", partForPos.Position.X, partForPos.Position.Y, partForPos.Position.Z)
+					local posPart = model and (model:FindFirstChild("HumanoidRootPart") or model.PrimaryPart) or target
+					coordText.Text = string.format("CFrame.new(%.3f, %.3f, %.3f)", posPart.Position.X, posPart.Position.Y, posPart.Position.Z)
 				end
 			else
-				CoordText.Text = "(Click không h?p l?, th? l?i)"
+				coordText.Text = "(Click không h?p l?, th? l?i)"
 			end
-			CoordText.Visible = true
+			coordText.Visible = true
 			if conn then conn:Disconnect() end
 		end)
-		-- cleanup if GUI destroyed
-		Gui.AncestryChanged:Connect(function()
-			if not Gui:IsDescendantOf(game) and conn then conn:Disconnect() end
+		-- cleanup if gui destroyed
+		screenGui.AncestryChanged:Connect(function()
+			if not screenGui:IsDescendantOf(game) and conn then conn:Disconnect() end
 		end)
 	end
 end)
 
-CopyBtn.MouseButton1Click:Connect(function()
-	if CoordText.Visible and CoordText.Text ~= "" then
-		pcall(function() setclipboard(CoordText.Text) end)
+copyBtn.MouseButton1Click:Connect(function()
+	if coordText.Visible and coordText.Text ~= "" then
+		pcall(function() setclipboard(coordText.Text) end)
 	end
 end)
 
-CloseCircle.MouseButton1Click:Connect(function()
-	Gui:Destroy()
+-- centerX is close
+centerX.MouseButton1Click:Connect(function()
+	screenGui:Destroy()
 end)
 
--- initial Z layers
-setZ(Main, 10)
-setZ(Title, 20); setZ(By, 20); setZ(LabelCoord, 20)
-setZ(CaseBtn, 20); setZ(CheckBtn,20); setZ(CopyBtn,20); setZ(CloseCircle,20)
-setZ(CoordFrame, 30); setZ(CoordText, 30)
-setZ(Popup, 40)
+-- ensure Z ordering final
+setZ(main, 10)
+setZ(title, 20); setZ(bylabel, 20); setZ(coordLabelTitle, 20); setZ(caseBtn, 22)
+setZ(displayFrame, 25); setZ(coordText, 30)
+setZ(checkBtn, 20); setZ(copyBtn, 20); setZ(centerX, 20)
+setZ(popup, 60)
+
+-- final reposition to ensure caseBtn Y correct (slight upward nudge)
+RunService.Heartbeat:Wait()
+local mainAbs = main.AbsolutePosition
+local mainSize = main.AbsoluteSize
+-- place caseBtn ~1/3 from top (up a bit)
+local caseY = mainAbs.Y + math.floor(mainSize.Y * 0.18) -- slightly higher than 1/3
+caseBtn.Position = UDim2.new(0, mainAbs.X + mainSize.X - caseBtn.AbsoluteSize.X - 18 - screenGui.AbsolutePosition.X, 0, caseY - screenGui.AbsolutePosition.Y)
+
+-- done
