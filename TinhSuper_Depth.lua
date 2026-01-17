@@ -1,25 +1,23 @@
--- LocalScript (dán vào StarterPlayerScripts)
--- TinhSuper Hub - Full version theo yêu c?u: centered, popup priority, header-drag, hidden placeholder
-
+-- LocalScript: TinhSuper Hub - Fixed (popup under button, header drag, vietnamese fonts, correct buttons)
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 
--- Create ScreenGui
+-- ScreenGui
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "TinhSuperHubGui"
 screenGui.ResetOnSpawn = false
 screenGui.IgnoreGuiInset = true
 screenGui.Parent = PlayerGui
 
--- Main frame (rounded)
+-- Main frame
 local main = Instance.new("Frame")
 main.Name = "MainFrame"
 main.Size = UDim2.new(0, 780, 0, 260)
 main.AnchorPoint = Vector2.new(0.5, 0.5)
-main.Position = UDim2.new(0.5, 0, 0.35, 0) -- centered horizontally, slightly up vertically
+main.Position = UDim2.new(0.5, 0, 0.35, 0)
 main.BackgroundColor3 = Color3.fromRGB(126,126,126)
 main.BorderSizePixel = 0
 main.ZIndex = 2
@@ -39,7 +37,7 @@ header.ZIndex = 3
 local headerCorner = Instance.new("UICorner", header)
 headerCorner.CornerRadius = UDim.new(0, 16)
 
--- Title & by
+-- Title + by
 local titleLabel = Instance.new("TextLabel", header)
 titleLabel.Size = UDim2.new(0.5, -20, 1, 0)
 titleLabel.Position = UDim2.new(0, 16, 0, 0)
@@ -62,23 +60,23 @@ byLabel.Text = "by tinhsuper_gm"
 byLabel.TextXAlignment = Enum.TextXAlignment.Left
 byLabel.ZIndex = 4
 
--- Dropdown button (shows "Trý?ng H?p ?" initially)
+-- Dropdown button (compact chip on header)
 local dropdownBtn = Instance.new("TextButton", header)
 dropdownBtn.Name = "DropdownBtn"
-dropdownBtn.Size = UDim2.new(0, 280, 0, 36)
+dropdownBtn.Size = UDim2.new(0, 260, 0, 36)
 dropdownBtn.Position = UDim2.new(1, -320, 0, 10)
-dropdownBtn.BackgroundColor3 = Color3.fromRGB(220,220,220)
+dropdownBtn.BackgroundColor3 = Color3.fromRGB(230,230,230)
 dropdownBtn.BorderSizePixel = 0
 dropdownBtn.Font = Enum.Font.SourceSans
 dropdownBtn.TextSize = 18
 dropdownBtn.TextColor3 = Color3.fromRGB(30,30,30)
 dropdownBtn.TextXAlignment = Enum.TextXAlignment.Left
-dropdownBtn.Text = "Trý?ng H?p  ?" -- initial label shown
+dropdownBtn.Text = "Trý?ng H?p  ?"
 dropdownBtn.ZIndex = 6
 local dropdownCorner = Instance.new("UICorner", dropdownBtn)
 dropdownCorner.CornerRadius = UDim.new(0, 8)
 
--- Close X (header)
+-- Close X button (top-right)
 local closeBtn = Instance.new("TextButton", header)
 closeBtn.Name = "CloseBtn"
 closeBtn.Size = UDim2.new(0, 44, 0, 36)
@@ -105,7 +103,7 @@ labelTop.Text = "T?a Ð? C?a B?n Là:"
 labelTop.TextXAlignment = Enum.TextXAlignment.Left
 labelTop.ZIndex = 2
 
--- Big dark display for coordinate (initially HIDDEN)
+-- Display frame (dark) - coord area hidden until check
 local displayFrame = Instance.new("Frame", main)
 displayFrame.Size = UDim2.new(0.92, 0, 0.46, 0)
 displayFrame.Position = UDim2.new(0.04, 0, 0.35, 0)
@@ -119,20 +117,21 @@ local coordLabel = Instance.new("TextLabel", displayFrame)
 coordLabel.Size = UDim2.new(1, -20, 1, -20)
 coordLabel.Position = UDim2.new(0, 10, 0, 10)
 coordLabel.BackgroundTransparency = 1
-coordLabel.Font = Enum.Font.GothamBold
-coordLabel.TextSize = 34
+-- Use SourceSansBold for Vietnamese characters
+coordLabel.Font = Enum.Font.SourceSansBold
+coordLabel.TextSize = 32
 coordLabel.TextColor3 = Color3.fromRGB(255,255,255)
 coordLabel.TextWrapped = true
-coordLabel.Text = "" -- initially empty (important)
-coordLabel.Visible = false -- invisible until user checks
+coordLabel.Text = "" -- initially empty
+coordLabel.Visible = false
 coordLabel.TextXAlignment = Enum.TextXAlignment.Center
 coordLabel.TextYAlignment = Enum.TextYAlignment.Center
 coordLabel.ZIndex = 3
 
--- Buttons bottom
+-- Buttons bottom: green left, blue right (arranged to match image)
 local checkBtn = Instance.new("TextButton", main)
-checkBtn.Size = UDim2.new(0, 260, 0, 44)
-checkBtn.Position = UDim2.new(0.06, 0, 0.82, 0)
+checkBtn.Size = UDim2.new(0, 300, 0, 48)
+checkBtn.Position = UDim2.new(0.04, 0, 0.82, 0)
 checkBtn.BackgroundColor3 = Color3.fromRGB(39,171,63)
 checkBtn.Font = Enum.Font.SourceSansBold
 checkBtn.TextSize = 20
@@ -140,11 +139,11 @@ checkBtn.TextColor3 = Color3.fromRGB(255,255,255)
 checkBtn.Text = "Ki?m tra t?a ð?"
 checkBtn.ZIndex = 3
 local checkCorner = Instance.new("UICorner", checkBtn)
-checkCorner.CornerRadius = UDim.new(0,6)
+checkCorner.CornerRadius = UDim.new(0,8)
 
 local copyBtn = Instance.new("TextButton", main)
-copyBtn.Size = UDim2.new(0, 300, 0, 44)
-copyBtn.Position = UDim2.new(0.35, 0, 0.82, 0)
+copyBtn.Size = UDim2.new(0, 340, 0, 48)
+copyBtn.Position = UDim2.new(0.42, 0, 0.82, 0)
 copyBtn.BackgroundColor3 = Color3.fromRGB(64,134,206)
 copyBtn.Font = Enum.Font.SourceSansBold
 copyBtn.TextSize = 20
@@ -152,80 +151,73 @@ copyBtn.TextColor3 = Color3.fromRGB(255,255,255)
 copyBtn.Text = "Sao chép t?a ð?"
 copyBtn.ZIndex = 3
 local copyCorner = Instance.new("UICorner", copyBtn)
-copyCorner.CornerRadius = UDim.new(0,6)
+copyCorner.CornerRadius = UDim.new(0,8)
 
 -- small decorative circle in center bottom
 local midX = Instance.new("TextLabel", main)
-midX.Size = UDim2.new(0, 42, 0, 42)
-midX.Position = UDim2.new(0.495, -21, 0.75, -21)
-midX.BackgroundColor3 = Color3.fromRGB(240,240,240)
+midX.Size = UDim2.new(0, 46, 0, 46)
+midX.Position = UDim2.new(0.495, -23, 0.75, -23)
+midX.BackgroundColor3 = Color3.fromRGB(245,245,245)
 midX.BorderSizePixel = 0
 midX.Font = Enum.Font.SourceSansBold
 midX.Text = "?"
 midX.TextSize = 22
 midX.TextColor3 = Color3.fromRGB(30,30,30)
 local midXcorner = Instance.new("UICorner", midX)
-midXcorner.CornerRadius = UDim.new(0, 21)
+midXcorner.CornerRadius = UDim.new(0, 23)
 midX.ZIndex = 2
 
--- Popup small options (parent = screenGui to stay above)
+-- Popup frame (parent = screenGui so it overlays)
 local popup = Instance.new("Frame")
 popup.Name = "PopupOptions"
-popup.Size = UDim2.new(0, 260, 0, 180)
+popup.Size = UDim2.new(0, 240, 0, 170)
 popup.Position = UDim2.new(0, 0, 0, 0)
-popup.BackgroundColor3 = Color3.fromRGB(245,245,245)
+popup.BackgroundColor3 = Color3.fromRGB(250,250,250)
 popup.BorderSizePixel = 0
-popup.ZIndex = 250
+popup.ZIndex = 400
 popup.Visible = false
 popup.Parent = screenGui
 local popupCorner = Instance.new("UICorner", popup)
 popupCorner.CornerRadius = UDim.new(0,10)
 
 local popupTitle = Instance.new("TextLabel", popup)
-popupTitle.Size = UDim2.new(1, -16, 0, 32)
+popupTitle.Size = UDim2.new(1, -16, 0, 28)
 popupTitle.Position = UDim2.new(0,8,0,8)
 popupTitle.BackgroundTransparency = 1
 popupTitle.Font = Enum.Font.SourceSansBold
-popupTitle.TextSize = 16
+popupTitle.TextSize = 15
 popupTitle.TextColor3 = Color3.fromRGB(60,60,60)
 popupTitle.Text = "Ch?n Trý?ng H?p"
 popupTitle.TextXAlignment = Enum.TextXAlignment.Left
-popupTitle.ZIndex = 251
+popupTitle.ZIndex = 401
 
--- Options list and state
+-- Options list
 local options = {"CFrame", "Nhân v?t", "Part", "Model", "Mouse"}
-local selectedOption = "CFrame" -- default if user doesn't change (but dropdown shows "Trý?ng H?p ?" at start)
-local function updateDropdownTextFromSelection()
-    -- after user selects, replace "Trý?ng H?p" with chosen option + arrow
-    dropdownBtn.Text = selectedOption .. "  ?"
-end
+local selectedOption = nil -- nil means user hasn't picked; treat as CFrame default on check
 
--- create options in popup
-local function makeOptionButton(name, idx)
+local function createOption(name, idx)
     local btn = Instance.new("TextButton", popup)
     btn.Size = UDim2.new(1, -16, 0, 30)
-    btn.Position = UDim2.new(0,8,0, 8 + 32 + (idx-1) * 34)
+    btn.Position = UDim2.new(0,8,0, 8 + 28 + (idx-1)*34)
     btn.BackgroundColor3 = Color3.fromRGB(255,255,255)
     btn.BorderSizePixel = 0
     btn.Font = Enum.Font.SourceSans
     btn.TextSize = 16
-    btn.TextColor3 = Color3.fromRGB(40,40,40)
+    btn.TextColor3 = Color3.fromRGB(30,30,30)
     btn.Text = name
-    btn.ZIndex = 251
+    btn.ZIndex = 402
     local c = Instance.new("UICorner", btn)
     c.CornerRadius = UDim.new(0,6)
     btn.MouseButton1Click:Connect(function()
         selectedOption = name
-        updateDropdownTextFromSelection()
+        dropdownBtn.Text = name .. "  ?"
         popup.Visible = false
     end)
     return btn
 end
-for i,name in ipairs(options) do
-    makeOptionButton(name,i)
-end
+for i,name in ipairs(options) do createOption(name, i) end
 
--- Utility/state
+-- Utilities & state
 local currentCoordinateText = nil
 local awaitingClick = false
 local tempMouseConnection = nil
@@ -264,11 +256,12 @@ end
 
 local function getPlayerHRP()
     local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    if not char then return nil end
     local hrp = char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Torso") or char:FindFirstChild("UpperTorso")
     return hrp
 end
 
--- Await click to choose Part/Model
+-- Await click for Part/Model selection
 local function awaitClickForTarget(mode)
     stopAwaitingClick()
     local mouse = LocalPlayer:GetMouse()
@@ -280,7 +273,7 @@ local function awaitClickForTarget(mode)
         if target and target:IsA("BasePart") then
             if mode == "Part" then
                 setCoordinateText(formatVecOrCFrame(target.CFrame))
-            else -- Model
+            else
                 local model = target:FindFirstAncestorOfClass("Model")
                 if model then
                     local hrp = model:FindFirstChild("HumanoidRootPart") or model.PrimaryPart or model:FindFirstChildWhichIsA("BasePart")
@@ -300,9 +293,14 @@ local function awaitClickForTarget(mode)
     end)
 end
 
--- Position popup relative to dropdownBtn (avoid offscreen)
+-- Popup positioning utility (robust: waits until AbsoluteSize ready)
 local function positionPopupUnderDropdown()
-    -- ensure AbsolutePosition/Size are ready
+    -- wait until dropdownBtn AbsoluteSize is available
+    local tries = 0
+    while dropdownBtn.AbsoluteSize.X == 0 and tries < 60 do
+        RunService.RenderStepped:Wait()
+        tries = tries + 1
+    end
     local ddPos = dropdownBtn.AbsolutePosition
     local ddSize = dropdownBtn.AbsoluteSize
     local screenSize = UserInputService:GetScreenSize()
@@ -311,60 +309,52 @@ local function positionPopupUnderDropdown()
     local popupW = popup.Size.X.Offset
     local popupH = popup.Size.Y.Offset
 
-    -- if overflow right, shift left
-    if px + popupW + 8 > screenSize.X then
-        px = math.max(8, screenSize.X - popupW - 8)
-    end
-    -- if overflow bottom, position above
+    -- align popup so its right edge matches dropdown's right edge (visually like image)
+    px = ddPos.X + ddSize.X - popupW
+
+    -- if would overflow left, clamp
+    if px < 8 then px = 8 end
+    -- if overflow bottom, show above dropdown
     if py + popupH + 8 > screenSize.Y then
         py = ddPos.Y - popupH - 6
         if py < 8 then py = 8 end
     end
 
     popup.Position = UDim2.new(0, math.floor(px), 0, math.floor(py))
-    popup.ZIndex = 300
-    for _,c in ipairs(popup:GetDescendants()) do
-        if c:IsA("GuiObject") then
-            c.ZIndex = 301
-        end
-    end
+    popup.ZIndex = 400
 end
 
--- Dropdown click toggle
+-- Dropdown toggle
 dropdownBtn.MouseButton1Click:Connect(function()
     popup.Visible = not popup.Visible
     if popup.Visible then
-        -- default display if selection hasn't been changed yet: keep "Trý?ng H?p ?" until user selects
         positionPopupUnderDropdown()
     end
     stopAwaitingClick()
 end)
 
--- Hide popup if click outside
+-- Hide popup when click outside
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         if popup.Visible then
-            local m = UserInputService:GetMouseLocation()
+            local mouseLoc = UserInputService:GetMouseLocation()
             local absPos = popup.AbsolutePosition
             local absSize = popup.AbsoluteSize
-            local inside = m.X >= absPos.X and m.X <= absPos.X + absSize.X and m.Y >= absPos.Y and m.Y <= absPos.Y + absSize.Y
+            local inside = mouseLoc.X >= absPos.X and mouseLoc.X <= absPos.X + absSize.X and mouseLoc.Y >= absPos.Y and mouseLoc.Y <= absPos.Y + absSize.Y
             if not inside then
-                -- also check dropdownBtn click
+                -- check if clicking dropdown
                 local ddPos = dropdownBtn.AbsolutePosition
                 local ddSize = dropdownBtn.AbsoluteSize
-                local clickedDD = m.X >= ddPos.X and m.X <= ddPos.X + ddSize.X and m.Y >= ddPos.Y and m.Y <= ddPos.Y + ddSize.Y
-                if not clickedDD then
-                    popup.Visible = false
-                end
+                local clickedDD = mouseLoc.X >= ddPos.X and mouseLoc.X <= ddPos.X + ddSize.X and mouseLoc.Y >= ddPos.Y and mouseLoc.Y <= ddPos.Y + ddSize.Y
+                if not clickedDD then popup.Visible = false end
             end
         end
     end
 end)
 
--- Check button behavior
+-- Check button logic
 checkBtn.MouseButton1Click:Connect(function()
     stopAwaitingClick()
-    -- If user never picked an option (dropdown still "Trý?ng H?p ?"), treat as CFrame default
     local sel = selectedOption or "CFrame"
     if sel == "CFrame" or sel == "Nhân v?t" then
         local hrp = getPlayerHRP()
@@ -387,26 +377,19 @@ checkBtn.MouseButton1Click:Connect(function()
         awaitClickForTarget("Model")
     else
         local hrp = getPlayerHRP()
-        if hrp then
-            setCoordinateText(formatVecOrCFrame(hrp.CFrame))
-        else
-            setCoordinateText("(L?a ch?n không h?p l?)")
-        end
+        if hrp then setCoordinateText(formatVecOrCFrame(hrp.CFrame)) end
     end
 end)
 
--- Copy button
+-- Copy button logic
 copyBtn.MouseButton1Click:Connect(function()
     if not currentCoordinateText then
-        -- show a brief message in coord area (becomes visible)
+        -- show short message then hide
         setCoordinateText("( Chýa có t?a ð? ð? sao chép )")
-        -- auto-hide after 1.2s
         delay(1.2, function() setCoordinateText(nil) end)
         return
     end
-    local ok, err = pcall(function()
-        setclipboard(currentCoordinateText)
-    end)
+    local ok, err = pcall(function() setclipboard(currentCoordinateText) end)
     if ok then
         setCoordinateText("( Ð? sao chép vào clipboard )\n" .. currentCoordinateText)
     else
@@ -414,15 +397,13 @@ copyBtn.MouseButton1Click:Connect(function()
     end
 end)
 
--- Close logic
+-- Close
 closeBtn.MouseButton1Click:Connect(function()
     stopAwaitingClick()
-    if screenGui and screenGui.Parent then
-        screenGui:Destroy()
-    end
+    if screenGui and screenGui.Parent then screenGui:Destroy() end
 end)
 
--- Drag header only (safe with rounded corners)
+-- Drag header (mouse + touch)
 do
     local dragging = false
     local dragStart = Vector2.new()
@@ -430,7 +411,7 @@ do
     local dragInput
 
     header.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             dragging = true
             dragStart = input.Position
             startPos = main.Position
@@ -443,7 +424,7 @@ do
     end)
 
     header.InputChanged:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseMovement then
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
             dragInput = input
         end
     end)
@@ -452,16 +433,16 @@ do
         if dragging and input == dragInput then
             local delta = input.Position - dragStart
             main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-            if popup.Visible then
-                positionPopupUnderDropdown()
-            end
+            if popup.Visible then positionPopupUnderDropdown() end
         end
     end)
 end
 
--- Cleanup when player leaves
+-- Cleanup
 LocalPlayer.AncestryChanged:Connect(function()
-    if not LocalPlayer:IsDescendantOf(game) then
-        if screenGui and screenGui.Parent then screenGui:Destroy() end
+    if not LocalPlayer:IsDescendantOf(game) and screenGui and screenGui.Parent then
+        screenGui:Destroy()
     end
 end)
+
+-- End of script
