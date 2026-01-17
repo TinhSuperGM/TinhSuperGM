@@ -145,7 +145,7 @@ setZ(CoordTitle, 20)
 local CaseBtn = Instance.new("TextButton", Main)
 CaseBtn.Font = Enum.Font.Gotham
 CaseBtn.TextSize = 18
-CaseBtn.Text = "Mode  ▾"
+CaseBtn.Text = "Mode  🔻"
 CaseBtn.TextColor3 = Color3.fromRGB(30,30,30)
 CaseBtn.BackgroundColor3 = Color3.fromRGB(230,230,230)
 CaseBtn.Size = UDim2.new(0, 220, 0, 42)
