@@ -1,6 +1,9 @@
 -- ==========================================================
--- SCRIPT FULL FIX NIL: NHẶT TRÁI + HẢI TẶC + BẤT TỬ HOP 3S
+-- SCRIPT ANTI-BAN PREMIUM (FIX SẠCH LỖI NIL VALUE)
 -- ==========================================================
+
+-- Đợi game load xong hoàn toàn trước khi chạy bất cứ thứ gì
+if not game:IsLoaded() then game.Loaded:Wait() end
 
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
@@ -8,11 +11,16 @@ local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
 local TweenService = game:GetService("TweenService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 
 local LocalPlayer = Players.LocalPlayer
-local placeId = game.PlaceId
+if not LocalPlayer.Character then LocalPlayer.CharacterAdded:Wait() end
 
--- DANH SÁCH TRÁI CHÍNH XÁC (Tuyệt đối không nhầm NPC Dealer)
+local placeId = game.PlaceId
+local BlacklistedServers = {}
+local NoClipConnection = nil
+
+-- Danh sách trái Whitelist chuẩn
 local FruitList = {
     "rocket", "spin", "blade", "spring", "bomb", "smoke", "spike", "flame", "ice", "sand",
     "dark", "eagle", "diamond", "light", "rubber", "ghost", "magma", "quake", "buddha", 
@@ -21,60 +29,72 @@ local FruitList = {
     "gas", "spirit", "tiger", "yeti", "kitsune", "control", "dragon"
 }
 
-local BlacklistedServers = {}
-
--- Hàm bọc lỗi an toàn cho Remote
-local function SafeInvoke(remote, ...)
-    local success, result = pcall(function()
-        return remote:InvokeServer(...)
-    end)
-    if not success then
-        warn("Bỏ qua lỗi từ Remote: " .. tostring(result))
-        return nil
-    end
-    return result
-end
-
--- 1. Hàm tự chọn phe Hải Tặc (Chống đơ menu)
+-- 1. Hàm tự chọn phe Hải Tặc an toàn
 local function AutoSelectPirates()
-    task.wait(2)
     if LocalPlayer.Team == nil or LocalPlayer.Team.Name ~= "Pirates" then
-        print("Đang ép hệ thống chọn phe Hải Tặc...")
-        local remote = ReplicatedStorage:FindFirstChild("Remotes") and ReplicatedStorage.Remotes:FindFirstChild("CommF_")
-        if remote then
-            SafeInvoke(remote, "SetTeam", "Pirates")
-        end
-        task.wait(2)
-    end
-end
-
--- 2. Tối ưu đồ họa khối xám mượt mà cho Cloud
-local function MaxOptimize()
-    settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
-    for _, v in pairs(Workspace:GetDescendants()) do
-        if v:IsA("BasePart") then 
-            v.Material = Enum.Material.SmoothPlastic 
-            v.Color = Color3.fromRGB(100, 100, 100)
-        elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then 
-            v.Enabled = false 
+        local remotes = ReplicatedStorage:FindFirstChild("Remotes")
+        local commF = remotes and remotes:FindFirstChild("CommF_")
+        if commF then
+            pcall(function()
+                commF:InvokeServer("SetTeam", "Pirates")
+            end)
         end
     end
 end
 
--- 3. Cất trái vào kho an toàn
+-- 2. Cất trái vào kho
 local function AutoStoreFruit()
-    local remote = ReplicatedStorage:FindFirstChild("Remotes") and ReplicatedStorage.Remotes:FindFirstChild("CommF_")
-    if remote then
-        print("Đang tiến hành cất trái vào kho...")
-        SafeInvoke(remote, "StoreFruit")
+    local remotes = ReplicatedStorage:FindFirstChild("Remotes")
+    local commF = remotes and remotes:FindFirstChild("CommF_")
+    if commF then
+        pcall(function()
+            commF:InvokeServer("StoreFruit")
+        end)
     end
 end
 
--- 4. Quét sâu tìm trái ác quỷ theo Whitelist
+-- 3. NoClip ẩn đi xuyên tường
+local function StartNoClip()
+    if NoClipConnection then NoClipConnection:Disconnect() end
+    NoClipConnection = RunService.Stepped:Connect(function()
+        if LocalPlayer.Character then
+            for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = false
+                end
+            end
+        end
+    end)
+end
+
+local function StopNoClip()
+    if NoClipConnection then
+        NoClipConnection:Disconnect()
+        NoClipConnection = nil
+    end
+end
+
+-- 4. Hàm di chuyển an toàn tốc độ 140
+local function SafeTweenToFruit(targetCFrame)
+    local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+    
+    local distance = (hrp.Position - targetCFrame.Position).Magnitude
+    StartNoClip()
+    
+    local tweenInfo = TweenInfo.new(distance / 140, Enum.EasingStyle.Linear)
+    local tween = TweenService:Create(hrp, tweenInfo, {CFrame = targetCFrame})
+    
+    tween:Play()
+    tween.Completed:Wait()
+    StopNoClip()
+end
+
+-- 5. Quét tìm trái ác quỷ
 local function SnipeFruit()
-    print("Đang quét tìm trái ác quỷ...")
-    for _, obj in pairs(Workspace:GetDescendants()) do
-        if obj:IsA("Model") then
+    local descendants = Workspace:GetDescendants()
+    for _, obj in pairs(descendants) do
+        if obj and obj:IsA("Model") and obj.Name then
             local objName = string.lower(obj.Name)
             local isFruit = false
             
@@ -87,32 +107,25 @@ local function SnipeFruit()
 
             if isFruit then
                 local handle = obj:FindFirstChild("Handle") or obj:FindFirstChildWhichIsA("BasePart")
-                if handle and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                    local hrp = LocalPlayer.Character.HumanoidRootPart
+                local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                if handle and hrp then
                     local distance = (hrp.Position - handle.CFrame.Position).Magnitude
-                    
-                    if distance < 5000 then
-                        print("Tìm thấy trái xịn: " .. obj.Name .. "! Đang bay tới lụm...")
-                        local tween = TweenService:Create(hrp, TweenInfo.new(distance/350, Enum.EasingStyle.Linear), {CFrame = handle.CFrame})
-                        tween:Play() 
-                        tween.Completed:Wait()
-                        task.wait(1.5) -- Chờ nhặt hẳn lên tay
+                    if distance < 6000 then
+                        SafeTweenToFruit(handle.CFrame)
+                        task.wait(1.5)
                         AutoStoreFruit()
-                        print("Đã cất két an toàn!")
                         return true
                     end
                 end
             end
         end
     end
-    print("Không tìm thấy trái nào ở server này.")
     return false
 end
 
--- 5. BẤT TỬ HOP SERVER (Lọc trống > 5 chỗ, né lỗi 773/GameFull)
+-- 6. BẤT TỬ HOP SERVER
 local function AdvancedServerHop()
-    collectgarbage("collect") -- Giải phóng RAM cho Cloud
-    print("Đang delay đúng 3s tốc độ cao trước khi đổi vùng...")
+    pcall(function() collectgarbage("collect") end)
     task.wait(3)
     
     local success, result = pcall(function() 
@@ -120,34 +133,29 @@ local function AdvancedServerHop()
     end)
     
     if not success or not result or not result.data then 
-        print("Lỗi API kết nối, đang quét lại...")
         task.wait(1) 
         return AdvancedServerHop() 
     end
     
     local validServers = {}
     for _, server in pairs(result.data) do
-        if server.playing < (server.maxPlayers - 5) and server.id ~= game.JobId and not BlacklistedServers[server.id] then
+        if server.playing and server.maxPlayers and server.playing < (server.maxPlayers - 5) and server.id ~= game.JobId and not BlacklistedServers[server.id] then
             table.insert(validServers, server.id)
         end
     end
     
     if #validServers > 0 then
         local randomServer = validServers[math.random(1, #validServers)]
-        print("Đang tiến hành chuyển tới server: " .. randomServer)
-        
         local joinSuccess, err = pcall(function() 
             TeleportService:TeleportToPlaceInstance(placeId, randomServer, LocalPlayer) 
         end)
         
         if not joinSuccess or string.find(tostring(err), "773") or string.find(tostring(err), "Full") then 
-            print("Server bị full/lỗi kẹt, ghi vào sổ đen và đổi mục tiêu...")
             BlacklistedServers[randomServer] = true 
             task.wait(0.5) 
             return AdvancedServerHop() 
         end
     else
-        print("Tất cả các server đều full, đang làm mới danh sách...")
         BlacklistedServers = {}
         task.wait(1) 
         AdvancedServerHop()
@@ -155,19 +163,11 @@ local function AdvancedServerHop()
 end
 
 -- ==========================================
--- SỬA PHẦN KÍCH HOẠT CHỐNG LỖI NIL VALUE
+-- CHẠY QUY TRÌNH CHUẨN (TUYỆT ĐỐI KHÔNG DÙNG TASK.DEFER LỖI BIẾN)
 -- ==========================================
-task.defer(function()
-    pcall(function()
-        MaxOptimize()
-        AutoSelectPirates()
-        task.wait(1)
-        
-        -- Chạy quét trái trước
-        local status = SnipeFruit()
-        
-        -- Dù lụm được hay không thì sau đó đều tiến hành nhảy server
-        task.wait(1)
-        AdvancedServerHop()
-    end)
-end)
+task.wait(1)
+pcall(AutoSelectPirates)
+task.wait(1)
+pcall(SnipeFruit)
+task.wait(1)
+AdvancedServerHop()
