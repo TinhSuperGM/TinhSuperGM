@@ -1,7 +1,3 @@
--- ==========================================================
--- SCRIPT FULL: NHẶT TRÁI + TỰ JOIN HẢI TẶC + BẤT TỬ HOP SERVER
--- ==========================================================
-
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
