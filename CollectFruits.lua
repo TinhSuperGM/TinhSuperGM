@@ -1,6 +1,6 @@
 -- ==========================================
--- SCRIPT NHẶT TRÁI + HOP SERVER SIÊU TỐI GIẢN
--- BY TÍNH & GEMINI (BẢN ĐÃ FIX LỖI GAMEFULL)
+-- SCRIPT NHẶT TRÁI + TỰ JOIN HẢI TẶC + HOP 3S
+-- ĐÃ TỐI ƯU CHO DELTA X MOBILE / CLOUD VSPHONE
 -- ==========================================
 
 local Workspace = game:GetService("Workspace")
@@ -8,11 +8,30 @@ local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
 local TweenService = game:GetService("TweenService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local LocalPlayer = Players.LocalPlayer
 local placeId = game.PlaceId
 
--- 1. Tối ưu hóa đồ họa độc quyền cho Cụ Cố
+-- 1. Tự động chọn phe Hải Tặc (Vào phát chiến luôn)
+local function AutoSelectPirates()
+    if LocalPlayer.Team == nil then
+        print("Đang tự động chọn phe Hải Tặc...")
+        local success, err = pcall(function()
+            -- Sử dụng RemoteEvent gốc của Blox Fruits để chọn phe Pirates
+            ReplicatedStorage.Remotes.CommF_:InvokeServer("SetTeam", "Pirates")
+        end)
+        if not success then
+            -- Phương pháp dự phòng nếu cấu trúc Remote thay đổi ở một số Sea
+            pcall(function()
+                ReplicatedStorage.Remotes.SetTeam:FireServer("Pirates")
+            end)
+        end
+        task.wait(1) -- Chờ nhân vật hồi sinh ra map ổn định
+    end
+end
+
+-- 2. Tối ưu hóa đồ họa (Khối xám siêu mượt)
 local function MaxOptimize()
     settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
     for _, v in pairs(Workspace:GetDescendants()) do
@@ -25,20 +44,20 @@ local function MaxOptimize()
     end
 end
 
--- 2. Hàm di chuyển mượt bằng Tween để né Anti-cheat
+-- 3. Hàm di chuyển mượt bằng Tween nhặt trái
 local function SafeTween(targetCFrame)
     if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
     local hrp = LocalPlayer.Character.HumanoidRootPart
     
     local distance = (hrp.Position - targetCFrame.Position).Magnitude
-    local duration = distance / 300
+    local duration = distance / 350
     
     local tween = TweenService:Create(hrp, TweenInfo.new(duration, Enum.EasingStyle.Linear), {CFrame = targetCFrame})
     tween:Play()
     tween.Completed:Wait()
 end
 
--- 3. Quét chính xác vị trí Trái Ác Quỷ
+-- 4. Quét vị trí Trái Ác Quỷ
 local function SnipeFruit()
     for _, obj in pairs(Workspace:GetChildren()) do
         if obj:IsA("Model") and string.match(obj.Name, "Fruit") then
@@ -46,7 +65,7 @@ local function SnipeFruit()
             if handle then
                 print("Tìm thấy trái: " .. obj.Name .. "! Đang bay lại lụm...")
                 SafeTween(handle.CFrame)
-                task.wait(1.5)
+                task.wait(1)
                 return true
             end
         end
@@ -54,12 +73,12 @@ local function SnipeFruit()
     return false
 end
 
--- 4. Server Hop thông minh (Đã đảo delay lên trước để không bị hớt tay trên)
+-- 5. Server Hop siêu tốc (Delay 3s - Vào phát ăn ngay)
 local function AdvancedServerHop()
-    print("Đang delay 10s an toàn TRƯỚC khi quét server...")
-    task.wait(10) -- Máy nghỉ ngơi và giải phóng bớt dữ liệu ở đây
+    print("Đang delay 3s siêu tốc trước khi quét server...")
+    task.wait(3)
     
-    print("Đang quét tìm danh sách server mới nhất...")
+    print("Đang tìm server trống để vào phát ăn ngay...")
     local serverList = {}
     
     local success, result = pcall(function()
@@ -68,8 +87,7 @@ local function AdvancedServerHop()
     
     if success and result and result.data then
         for _, server in pairs(result.data) do
-            -- Chỉ chọn server còn trống ít nhất 2 chỗ để né quả tạ GameFull
-            if server.playing < (server.maxPlayers - 2) and server.id ~= game.JobId then
+            if server.playing < (server.maxPlayers - 3) and server.id ~= game.JobId then
                 table.insert(serverList, server.id)
             end
         end
@@ -77,14 +95,14 @@ local function AdvancedServerHop()
     
     if #serverList > 0 then
         local randomServer = serverList[math.random(1, #serverList)]
-        print("Đã lấy được IP server ngon! Cụ cố xuất kích liền...")
+        print("Đã chọn được server trống! Đang nhảy qua...")
         
         pcall(function()
             TeleportService:TeleportToPlaceInstance(placeId, randomServer, LocalPlayer)
         end)
     else
-        print("Không tìm thấy server phù hợp, thử lại sau 2s...")
-        task.wait(2)
+        print("Chưa tìm thấy server đủ trống, đang quét lại sau 1s...")
+        task.wait(1)
         AdvancedServerHop()
     end
 end
@@ -93,11 +111,12 @@ end
 -- KÍCH HOẠT HỆ THỐNG
 -- ==========================================
 MaxOptimize()
-task.wait(1)
+AutoSelectPirates()
+task.wait(0.5)
 
 local gotFruit = SnipeFruit()
 if not gotFruit then
-    print("Server này không có trái nào cả.")
+    print("Không có trái, tiến hành đổi server tốc độ cao...")
 end
 
 AdvancedServerHop()
