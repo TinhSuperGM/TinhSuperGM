@@ -1,5 +1,5 @@
 -- ==========================================================
--- SCRIPT FULL CHUẨN: NHẶT TRÁI (WHITELIST) + HẢI TẶC + BẤT TỬ HOP 3S
+-- SCRIPT FULL FIX NIL: NHẶT TRÁI + HẢI TẶC + BẤT TỬ HOP 3S
 -- ==========================================================
 
 local Workspace = game:GetService("Workspace")
@@ -155,16 +155,19 @@ local function AdvancedServerHop()
 end
 
 -- ==========================================
--- QUY TRÌNH KÍCH HOẠT VÒNG LẶP KHÉP KÍN
+-- SỬA PHẦN KÍCH HOẠT CHỐNG LỖI NIL VALUE
 -- ==========================================
-pcall(function()
-    MaxOptimize()
-    AutoSelectPirates()
-    task.wait(1)
-    
-    -- Chạy quét trái trước
-    SnipeFruit()
-    
-    -- Quét xong (Dù có trái hay không) thì lập tức Hop server sau 3s
-    AdvancedServerHop()
+task.defer(function()
+    pcall(function()
+        MaxOptimize()
+        AutoSelectPirates()
+        task.wait(1)
+        
+        -- Chạy quét trái trước
+        local status = SnipeFruit()
+        
+        -- Dù lụm được hay không thì sau đó đều tiến hành nhảy server
+        task.wait(1)
+        AdvancedServerHop()
+    end)
 end)
