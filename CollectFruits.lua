@@ -1,22 +1,87 @@
--- ==========================================
--- SCRIPT HOP SERVER SIÊU BỀN (TỰ QUÉT ĐẾN KHI VÀO ĐƯỢC)
--- ==========================================
+-- ==========================================================
+-- SCRIPT FULL: NHẶT TRÁI + TỰ JOIN HẢI TẶC + BẤT TỬ HOP SERVER
+-- ==========================================================
 
+local Workspace = game:GetService("Workspace")
+local Players = game:GetService("Players")
+local TeleportService = game:GetService("TeleportService")
+local HttpService = game:GetService("HttpService")
+local TweenService = game:GetService("TweenService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local LocalPlayer = Players.LocalPlayer
+local placeId = game.PlaceId
+
+-- 1. Hàm chọn phe Hải Tặc thông minh (Chỉ gọi khi cần)
+local function AutoSelectPirates()
+    -- Chờ menu chọn phe xuất hiện
+    task.wait(2) 
+    if LocalPlayer.Team == nil then
+        print("Đang ép hệ thống chọn phe Hải Tặc...")
+        pcall(function()
+            ReplicatedStorage.Remotes.CommF_:InvokeServer("SetTeam", "Pirates")
+        end)
+        task.wait(2) -- Đợi game load xong model sau khi chọn phe
+    end
+end
+
+-- 2. Tối ưu đồ họa
+local function MaxOptimize()
+    settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+    for _, v in pairs(Workspace:GetDescendants()) do
+        if v:IsA("BasePart") then
+            v.Material = Enum.Material.SmoothPlastic
+            v.Color = Color3.fromRGB(100, 100, 100)
+        elseif v:IsA("ParticleEmitter") or v:IsA("Trail") then
+            v.Enabled = false
+        end
+    end
+end
+
+-- 3. Cất trái vào kho
+local function AutoStoreFruit()
+    pcall(function()
+        ReplicatedStorage.Remotes.CommF_:InvokeServer("StoreFruit")
+    end)
+end
+
+-- 4. Quét và nhặt trái
+local function SnipeFruit()
+    for _, obj in pairs(Workspace:GetChildren()) do
+        if obj:IsA("Model") and string.match(obj.Name, "Fruit") then
+            local handle = obj:FindFirstChild("Handle") or obj:FindFirstChildWhichIsA("BasePart")
+            if handle then
+                if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    print("Tìm thấy trái! Đang lướt tới...")
+                    local hrp = LocalPlayer.Character.HumanoidRootPart
+                    local tween = TweenService:Create(hrp, TweenInfo.new((hrp.Position - handle.CFrame.Position).Magnitude/350, Enum.EasingStyle.Linear), {CFrame = handle.CFrame})
+                    tween:Play()
+                    tween.Completed:Wait()
+                    task.wait(1.5)
+                    AutoStoreFruit()
+                    print("Đã cất trái vào kho!")
+                    return true
+                end
+            end
+        end
+    end
+    return false
+end
+
+-- 5. BẤT TỬ HOP SERVER (Đệ quy tự tìm server thay thế)
 local function AdvancedServerHop()
-    print("Đang quét server mới...")
-    task.wait(3) -- Delay 3s theo ý ní
+    print("Đang delay 3s trước khi nhảy...")
+    task.wait(3)
     
     local success, result = pcall(function()
         return HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100"))
     end)
     
     if not success or not result or not result.data then
-        print("Lỗi API, đang thử lại sau 2s...")
         task.wait(2)
-        return AdvancedServerHop() -- Tự gọi lại hàm để quét tiếp
+        return AdvancedServerHop()
     end
     
-    -- Danh sách server lọc theo độ trống
     local validServers = {}
     for _, server in pairs(result.data) do
         if server.playing < (server.maxPlayers - 4) and server.id ~= game.JobId then
@@ -25,23 +90,34 @@ local function AdvancedServerHop()
     end
     
     if #validServers > 0 then
-        -- Random lấy 1 cái trong danh sách server ngon
         local randomServer = validServers[math.random(1, #validServers)]
-        print("Đang cố gắng join server: " .. randomServer)
+        print("Đang join server: " .. randomServer)
         
-        -- Dùng pcall để nếu join lỗi thì nó vẫn chạy tiếp hàm dưới
-        local successJoin, err = pcall(function()
+        local joinSuccess = pcall(function()
             TeleportService:TeleportToPlaceInstance(placeId, randomServer, LocalPlayer)
         end)
         
-        if not successJoin then
-            print("Join lỗi (" .. tostring(err) .. "), đang tìm server thay thế...")
-            task.wait(2)
-            return AdvancedServerHop() -- Ép nó tìm server khác ngay
+        if not joinSuccess then
+            print("Join thất bại, đang tìm server khác ngay...")
+            task.wait(1)
+            AdvancedServerHop()
         end
     else
-        print("Không có server đủ trống, đang thử lại sau 2s...")
+        print("Không có server trống, thử lại sau 2s...")
         task.wait(2)
         AdvancedServerHop()
     end
 end
+
+-- ==========================================
+-- KÍCH HOẠT
+-- ==========================================
+MaxOptimize()
+AutoSelectPirates()
+task.wait(1)
+
+if not SnipeFruit() then
+    print("Không có trái, nhảy server!")
+end
+
+AdvancedServerHop()
