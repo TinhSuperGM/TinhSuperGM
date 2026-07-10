@@ -1,15 +1,13 @@
 -- ==========================================================
--- SCRIPT ANTI-BAN PREMIUM (FIX SẠCH LỖI NIL VALUE)
+-- SCRIPT THỰC CHIẾN: ANTI-CHEAT BYPASS + NHẶT SẠCH TRÁI + FIX LỖI PHE
 -- ==========================================================
 
--- Đợi game load xong hoàn toàn trước khi chạy bất cứ thứ gì
 if not game:IsLoaded() then game.Loaded:Wait() end
 
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
-local TweenService = game:GetService("TweenService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
@@ -20,7 +18,7 @@ local placeId = game.PlaceId
 local BlacklistedServers = {}
 local NoClipConnection = nil
 
--- Danh sách trái Whitelist chuẩn
+-- DANH SÁCH TRÁI CHUẨN KÈM BỘ LỌC
 local FruitList = {
     "rocket", "spin", "blade", "spring", "bomb", "smoke", "spike", "flame", "ice", "sand",
     "dark", "eagle", "diamond", "light", "rubber", "ghost", "magma", "quake", "buddha", 
@@ -29,9 +27,11 @@ local FruitList = {
     "gas", "spirit", "tiger", "yeti", "kitsune", "control", "dragon"
 }
 
--- 1. Hàm tự chọn phe Hải Tặc an toàn
+-- 1. Vòng lặp ép chọn phe Hải Tặc bằng được
 local function AutoSelectPirates()
-    if LocalPlayer.Team == nil or LocalPlayer.Team.Name ~= "Pirates" then
+    local attempts = 0
+    while (LocalPlayer.Team == nil or LocalPlayer.Team.Name ~= "Pirates") and attempts < 10 do
+        attempts = attempts + 1
         local remotes = ReplicatedStorage:FindFirstChild("Remotes")
         local commF = remotes and remotes:FindFirstChild("CommF_")
         if commF then
@@ -39,6 +39,7 @@ local function AutoSelectPirates()
                 commF:InvokeServer("SetTeam", "Pirates")
             end)
         end
+        task.wait(1)
     end
 end
 
@@ -47,83 +48,108 @@ local function AutoStoreFruit()
     local remotes = ReplicatedStorage:FindFirstChild("Remotes")
     local commF = remotes and remotes:FindFirstChild("CommF_")
     if commF then
-        pcall(function()
-            commF:InvokeServer("StoreFruit")
-        end)
+        pcall(function() commF:InvokeServer("StoreFruit") end)
     end
 end
 
--- 3. NoClip ẩn đi xuyên tường
+-- 3. NoClip ẩn xuyên vật thể khi di chuyển
 local function StartNoClip()
     if NoClipConnection then NoClipConnection:Disconnect() end
     NoClipConnection = RunService.Stepped:Connect(function()
         if LocalPlayer.Character then
             for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
-                if part:IsA("BasePart") then
-                    part.CanCollide = false
-                end
+                if part:IsA("BasePart") then part.CanCollide = false end
             end
         end
     end)
 end
 
 local function StopNoClip()
-    if NoClipConnection then
-        NoClipConnection:Disconnect()
-        NoClipConnection = nil
-    end
+    if NoClipConnection then NoClipConnection:Disconnect() NoClipConnection = nil end
 end
 
--- 4. Hàm di chuyển an toàn tốc độ 140
-local function SafeTweenToFruit(targetCFrame)
-    local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-    if not hrp then return end
+-- 4. Cơ chế di chuyển bypass Anti-Cheat (CFrame Step + Giả lập Physics)
+local function SafeMoveTo(targetCFrame)
+    local character = LocalPlayer.Character
+    local hrp = character and character:FindFirstChild("HumanoidRootPart")
+    local humanoid = character and character:FindFirstChildWhichIsA("Humanoid")
+    if not hrp or not humanoid then return end
     
-    local distance = (hrp.Position - targetCFrame.Position).Magnitude
     StartNoClip()
+    -- Đổi trạng thái nhân vật sang Physics để bypass bộ quét vị trí của Blox Fruits
+    humanoid:ChangeState(Enum.HumanoidStateType.Physics)
     
-    local tweenInfo = TweenInfo.new(distance / 140, Enum.EasingStyle.Linear)
-    local tween = TweenService:Create(hrp, tweenInfo, {CFrame = targetCFrame})
+    local speed = 135 -- Tốc độ di chuyển an toàn tuyệt đối chống bị kick
+    while (hrp.Position - targetCFrame.Position).Magnitude > 5 do
+        if not LocalPlayer.Character or not hrp:IsDescendantOf(LocalPlayer.Character) then break end
+        
+        local currentPos = hrp.Position
+        local targetPos = targetCFrame.Position
+        local direction = (targetPos - currentPos).Unit
+        local distance = (targetPos - currentPos).Magnitude
+        
+        -- Di chuyển từng bước nhỏ dựa trên DeltaTime (Heartbeat)
+        local step = math.min(distance, speed * RunService.Heartbeat:Wait())
+        hrp.CFrame = CFrame.new(currentPos + direction * step)
+        
+        -- Triệt tiêu hoàn toàn vận tốc để chống lỗi cao độ/văng ngược
+        hrp.Velocity = Vector3.new(0, 0, 0)
+    end
     
-    tween:Play()
-    tween.Completed:Wait()
+    hrp.CFrame = targetCFrame
+    task.wait(0.2)
+    humanoid:ChangeState(Enum.HumanoidStateType.Running)
     StopNoClip()
 end
 
--- 5. Quét tìm trái ác quỷ
+-- 5. Hàm quét nhặt SẠCH TOÀN BỘ TRÁI trên server trước khi Hop
 local function SnipeFruit()
-    local descendants = Workspace:GetDescendants()
-    for _, obj in pairs(descendants) do
-        if obj and obj:IsA("Model") and obj.Name then
-            local objName = string.lower(obj.Name)
-            local isFruit = false
-            
-            for _, fruitName in pairs(FruitList) do
-                if string.find(objName, fruitName) then 
-                    isFruit = true 
-                    break 
+    print("Đang quét tìm toàn bộ trái ác quỷ hợp lệ...")
+    local pickedAny = false
+    
+    while true do
+        local targetFruit = nil
+        -- CHỈ QUÉT CÁC VẬT THỂ NẰM TRỰC TIẾP TRONG WORKSPACE (Né hoàn toàn map/NPC kẹt)
+        local children = Workspace:GetChildren()
+        
+        for _, obj in pairs(children) do
+            if obj:IsA("Model") and obj.Parent == Workspace and not Players:GetPlayerFromCharacter(obj) then
+                local objName = string.lower(obj.Name)
+                local isFruit = false
+                
+                for _, fruitName in pairs(FruitList) do
+                    if string.find(objName, fruitName) then isFruit = true break end
                 end
-            end
-
-            if isFruit then
-                local handle = obj:FindFirstChild("Handle") or obj:FindFirstChildWhichIsA("BasePart")
-                local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                if handle and hrp then
-                    local distance = (hrp.Position - handle.CFrame.Position).Magnitude
-                    if distance < 6000 then
-                        SafeTweenToFruit(handle.CFrame)
-                        task.wait(1.5)
-                        AutoStoreFruit()
-                        return true
+                
+                if isFruit then
+                    local handle = obj:FindFirstChild("Handle") or obj:FindFirstChildWhichIsA("BasePart")
+                    if handle then
+                        targetFruit = obj
+                        break
                     end
                 end
             end
         end
+        
+        -- Nếu tìm thấy trái, tiến hành xử lý lụm rồi lặp tiếp để check trái khác
+        if targetFruit then
+            pickedAny = true
+            local handle = targetFruit:FindFirstChild("Handle") or targetFruit:FindFirstChildWhichIsA("BasePart")
+            print("Phát hiện trái xịn: " .. targetFruit.Name .. ". Đang tiến hành gom...")
+            SafeMoveTo(handle.CFrame)
+            task.wait(1)
+            AutoStoreFruit()
+            task.wait(1)
+        else
+            -- Không còn trái nào trực tiếp ngoài Workspace nữa thì dừng loop
+            break
+        end
     end
-    return false
+    
+    return pickedAny
 end
 
--- 6. BẤT TỬ HOP SERVER
+-- 6. BẤT TỬ HOP SERVER (Dọn rác RAM Cloud)
 local function AdvancedServerHop()
     pcall(function() collectgarbage("collect") end)
     task.wait(3)
@@ -163,11 +189,11 @@ local function AdvancedServerHop()
 end
 
 -- ==========================================
--- CHẠY QUY TRÌNH CHUẨN (TUYỆT ĐỐI KHÔNG DÙNG TASK.DEFER LỖI BIẾN)
+-- CHẠY QUY TRÌNH CHUẨN THỰC CHIẾN
 -- ==========================================
-task.wait(1)
+task.wait(0.5)
 pcall(AutoSelectPirates)
-task.wait(1)
+task.wait(0.5)
 pcall(SnipeFruit)
-task.wait(1)
+task.wait(0.5)
 AdvancedServerHop()
