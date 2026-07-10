@@ -1,8 +1,3 @@
--- ==========================================
--- SCRIPT NHẶT TRÁI + HOP SERVER SIÊU TỐI GIẢN
--- BY TÍNH & GEMINI (NO UI - SIÊU NHẸ CHO CỤ CỐ)
--- ==========================================
-
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
@@ -12,7 +7,6 @@ local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 local placeId = game.PlaceId
 
--- 1. Tối ưu hóa đồ họa độc quyền cho Cụ Cố (Khối xám + Màn hình đen ngầm)
 local function MaxOptimize()
     settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
     for _, v in pairs(Workspace:GetDescendants()) do
@@ -25,12 +19,10 @@ local function MaxOptimize()
     end
 end
 
--- 2. Hàm di chuyển mượt bằng Tween để né Anti-cheat
 local function SafeTween(targetCFrame)
     if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
     local hrp = LocalPlayer.Character.HumanoidRootPart
     
-    -- Tính toán thời gian lướt dựa trên khoảng cách (Tốc độ ~ 300 studs/s)
     local distance = (hrp.Position - targetCFrame.Position).Magnitude
     local duration = distance / 300
     
@@ -39,16 +31,14 @@ local function SafeTween(targetCFrame)
     tween.Completed:Wait()
 end
 
--- 3. Quét chính xác vị trí Trái Ác Quỷ trong Blox Fruits
 local function SnipeFruit()
     for _, obj in pairs(Workspace:GetChildren()) do
-        -- Blox Fruits đặt tên Model trái cây spawn tự nhiên là "Fruit "
         if obj:IsA("Model") and string.match(obj.Name, "Fruit") then
             local handle = obj:FindFirstChild("Handle") or obj:FindFirstChildWhichIsA("BasePart")
             if handle then
                 print("Tìm thấy trái: " .. obj.Name .. "! Đang bay lại lụm...")
                 SafeTween(handle.CFrame)
-                task.wait(1.5) -- Chờ hệ thống xử lý nhặt vào túi đồ
+                task.wait(1.5)
                 return true
             end
         end
@@ -56,7 +46,6 @@ local function SnipeFruit()
     return false
 end
 
--- 4. Server Hop thông minh (Không trùng server cũ)
 local function AdvancedServerHop()
     print("Đang tìm server mới để nhảy...")
     local serverList = {}
@@ -74,7 +63,6 @@ table.insert(serverList, server.id)
     end
     
     if #serverList > 0 then
-        -- Chọn ngẫu nhiên một server trong danh sách hợp lệ
         local randomServer = serverList[math.random(1, #serverList)]
         print("Đang delay 10s an toàn trước khi nhảy...")
         task.wait(10)
@@ -89,9 +77,6 @@ table.insert(serverList, server.id)
     end
 end
 
--- ==========================================
--- KÍCH HOẠT HỆ THỐNG
--- ==========================================
 MaxOptimize()
 task.wait(1)
 
