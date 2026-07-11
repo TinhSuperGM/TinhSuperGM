@@ -1,118 +1,119 @@
 -- ==========================================================
--- SCANNER V2: QUÉT DỮ LIỆU & GỬI ĐẾN DISCORD (ĐÃ SỬA LỖI)
+-- SCANNER V3: QUÉT & GỬI DỮ LIỆU ĐẾN DISCORD
 -- ==========================================================
 
-if not game:IsLoaded() then game.Loaded:Wait() end
+-- Bật quyền TRƯỚC KHI làm gì khác
+local HttpService = game:GetService("HttpService")
+HttpService.HttpEnabled = true
+
+if not game:IsLoaded() then
+    print("⏳ Đang chờ game tải xong...")
+    game.Loaded:Wait()
+end
 
 -- === CẤU HÌNH ===
-local DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1525298599985020958/FBV9Cuc_Se2A0qvikp-hn7Sqmq2dMlUHy0QS9U0v7kQPjJOluFAzmPiTCEBylKmDjhqB" -- ⚠️ THAY BẰNG LINK WEBHOOK CỦA BẠN
-local HttpService = game:GetService("HttpService")
-HttpService.HttpEnabled = true -- ✅ BẬT QUYỀN GỬI DỮ LIỆU
+local DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1525298599985020958/FBV9Cuc_Se2A0qvikp-hn7Sqmq2dMlUHy0QS9U0v7kQPjJOluFAzmPiTCEBylKmDjhqB" -- ⚠️ THAY BẰNG LINK CỦA BẠN
+local MAX_ITEMS = 30
+local DELAY_BETWEEN_SEND = 2 -- giây
 
--- === Hàm gửi dữ liệu ===
-local function SendToDiscord(tieuDe, noiDung)
-    if not noiDung or noiDung == "" then
-        print("⚠️ Không có dữ liệu để gửi: " .. tieuDe)
-        return
+-- === Hàm gửi dữ liệu an toàn ===
+local function SendEmbed(title, content)
+    if not content or content == "" then
+        print("ℹ️ Bỏ qua: " .. title .. " (không có dữ liệu)")
+        return false
     end
 
-    -- Cắt ngắn nếu quá giới hạn Discord
-    if #noiDung > 1950 then
-        noiDung = noiDung:sub(1, 1950) .. "\n... [Đã cắt ngắn]"
+    -- Cắt xuống dưới 1900 ký tự, đúng giới hạn Discord
+    if #content > 1900 then
+        content = content:sub(1, 1900) .. "\n... [cắt ngắn]"
     end
 
-    local duLieu = {
+    local payload = {
         username = "Blox Fruits Scanner",
         embeds = {{
-            title = tieuDe,
-            description = "```\n" .. noiDung .. "\n```",
-            color = 0x0099FF
+            title = title,
+            description = "```\n" .. content .. "\n```",
+            color = 3066993 -- Màu xanh lá dễ nhìn
         }}
     }
 
-    local thanhCong, loi = pcall(function()
+    local ok, err = pcall(function()
         return HttpService:PostAsync(
             DISCORD_WEBHOOK,
-            HttpService:JSONEncode(duLieu),
+            HttpService:JSONEncode(payload),
             Enum.HttpContentType.ApplicationJson
         )
     end)
 
-    if thanhCong then
-        print("✅ Đã gửi: " .. tieuDe)
+    if ok then
+        print("✅ Đã gửi thành công: " .. title)
+        return true
     else
-        print("❌ Lỗi gửi: " .. tieuDe .. " | Chi tiết: " .. tostring(loi))
+        print("❌ Gửi thất bại: " .. title .. " | Lỗi: " .. tostring(err))
+        return false
     end
 end
 
--- === Quét đúng vị trí Trái theo cấu trúc thực tế ===
-local function QuetDoiTuongTrai()
-    local ketQua = "🍎 DANH SÁCH TRÁI ÁC QUỶ:\n"
-    local Workspace = game:GetService("Workspace")
-    local dem = 0
+-- === Quét Trái theo đường dẫn đúng từ log ===
+local function ScanFruits()
+    local res = "🍎 DANH SÁCH TRÁI:\n"
+    local count = 0
+    local chars = Workspace:FindFirstChild("Characters")
+    if not chars then return "❌ Không tìm thấy thư mục Characters" end
 
-    -- Theo log, trái nằm trong Workspace.Characters
-    local thuMucTrai = Workspace:FindFirstChild("Characters")
-    if not thuMucTrai then
-        return "❌ Không tìm thấy thư mục Characters"
-    end
-
-    for _, nhom in ipairs(thuMucTrai:GetChildren()) do
-        if dem >= 50 then break end
-
-        -- Tìm các đối tượng có chứa "Fruit" trong tên
-        for _, doiTuong in ipairs(nhom:GetDescendants()) do
-            if doiTuong:IsA("Model") and string.find(string.lower(doiTuong.Name), "fruit") then
-                local phanChinh = doiTuong:FindFirstChild("Fruit") or doiTuong:FindFirstChild("Handle") or doiTuong:FindFirstChildWhichIsA("BasePart")
-                if phanChinh then
-                    ketQua = ketQua .. string.format(
-                        "• %s\n  Đường dẫn: %s\n  Tọa độ: (%.1f, %.1f, %.1f)\n\n",
-                        doiTuong.Name,
-                        doiTuong:GetFullName(),
-                        phanChinh.Position.X, phanChinh.Position.Y, phanChinh.Position.Z
+    for _, group in ipairs(chars:GetChildren()) do
+        if count >= MAX_ITEMS then break end
+        for _, obj in ipairs(group:GetDescendants()) do
+            if obj:IsA("Model") and string.find(string.lower(obj.Name), "fruit") then
+                local part = obj:FindFirstChild("Fruit") or obj:FindFirstChild("Handle") or obj:FindFirstChildWhichIsA("BasePart")
+                if part then
+                    res = res .. string.format(
+                        "• %s\n  Đường dẫn: %s\n  Tọa độ: %.1f, %.1f, %.1f\n\n",
+                        obj.Name,
+                        obj:GetFullName(),
+                        part.Position.X, part.Position.Y, part.Position.Z
                     )
-                    dem = dem + 1
+                    count += 1
                 end
             end
         end
     end
-
-    return ketQua ~= "" and ketQua or "Không tìm thấy trái nào trong lần quét này"
+    return res ~= "" and res or "Không tìm thấy trái trong lần quét này"
 end
 
--- === Quét RemoteFunction/Event ===
-local function QuetRemote()
-    local ketQua = "🔌 DANH SÁCH REMOTE:\n"
-    local ReplicatedStorage = game:GetService("ReplicatedStorage")
-    local dem = 0
+-- === Quét Remote ===
+local function ScanRemotes()
+    local res = "🔌 REMOTE FUNCTION/EVENT:\n"
+    local count = 0
+    local rs = ReplicatedStorage
 
-    local function TimRemote(cha)
-        if not cha or dem >= 50 then return end
-        for _, con in ipairs(cha:GetChildren()) do
-            if con:IsA("RemoteFunction") or con:IsA("RemoteEvent") then
-                ketQua = ketQua .. string.format("• %s | Loại: %s\n", con.Name, con.ClassName)
-                dem = dem + 1
-            elseif con:IsA("Folder") then
-                TimRemote(con)
+    local function Scan(parent)
+        if not parent or count >= MAX_ITEMS then return end
+        for _, c in ipairs(parent:GetChildren()) do
+            if c:IsA("RemoteFunction") or c:IsA("RemoteEvent") then
+                res = res .. string.format("• %s | %s\n", c.Name, c.ClassName)
+                count += 1
+            elseif c:IsA("Folder") then
+                Scan(c)
             end
         end
     end
 
-    TimRemote(ReplicatedStorage)
-    return ketQua
+    Scan(rs)
+    return res
 end
 
--- === CHẠY QUÉT ===
+-- === Chạy tất cả ===
 task.spawn(function()
     print("🔍 Bắt đầu quét dữ liệu...")
     task.wait(2)
 
-    SendToDiscord("🔌 DANH SÁCH REMOTE", QuetRemote())
-    task.wait(1.5)
+    SendEmbed("🔌 DANH SÁCH REMOTE", ScanRemotes())
+    task.wait(DELAY_BETWEEN_SEND)
 
-    SendToDiscord("🍎 THÔNG TIN TRÁI ÁC QUỶ", QuetDoiTuongTrai())
-    task.wait(1.5)
+    SendEmbed("🍎 THÔNG TIN TRÁI ÁC QUỶ", ScanFruits())
+    task.wait(DELAY_BETWEEN_SEND)
 
-    SendToDiscord("✅ TRẠNG THÁI", "Hoàn tất quét dữ liệu thành công!")
-    print("✅ Đã hoàn thành tất cả thao tác")
+    SendEmbed("✅ TRẠNG THÁI", "Quét & gửi dữ liệu hoàn tất!")
+    print("✅ Toàn bộ quá trình kết thúc")
 end)
