@@ -11,7 +11,6 @@ local LocalPlayer = Players.LocalPlayer
 local placeId = game.PlaceId
 local BlacklistedServers = {}
 local NoClipConnection = nil
-local ApiErrorCount = 0
 
 local FruitPriority = {
     ["gravity"] = 5, ["mammoth"] = 5, ["trex"] = 5, ["t-rex"] = 5, ["dough"] = 5,
@@ -25,51 +24,34 @@ local FruitPriority = {
     ["rocket"] = 1, ["spin"] = 1, ["blade"] = 1, ["spring"] = 1, ["bomb"] = 1, ["smoke"] = 1, ["spike"] = 1
 }
 
-local function GetCommF()
-    local remotes = ReplicatedStorage:FindFirstChild("Remotes")
-    if remotes then
-        local exact = remotes:FindFirstChild("CommF_")
-        if exact then return exact end
-        for _, obj in pairs(remotes:GetChildren()) do
-            if obj:IsA("RemoteFunction") then return obj end
-        end
-    end
-    return nil
-end
-
 local function AutoSelectPirates()
-    local attempts = 0
-    while (LocalPlayer.Team == nil or LocalPlayer.Team.Name ~= "Pirates") and attempts < 10 do
-        attempts = attempts + 1
-        print("Đang quét dữ liệu và ép chọn phe Hải Tặc (Lần " .. attempts .. ")...")
-        
+    while LocalPlayer.Team == nil or LocalPlayer.Team.Name ~= "Pirates" do
+        print("Đang ép hệ thống chọn phe Hải Tặc...")
         pcall(function()
-            local commF = GetCommF()
-            if commF then
-                task.wait(0.2 + math.random() * 0.3)
-                commF:InvokeServer("SetTeam", "Pirates")
-            end
+            ReplicatedStorage.Remotes.CommF_:InvokeServer("SetTeam", "Pirates")
             
             local playerGui = LocalPlayer:FindFirstChildWhichIsA("PlayerGui")
-            local mainGui = playerGui and playerGui:FindFirstChild("Main")
-            local chooseTeam = mainGui and mainGui:FindFirstChild("ChooseTeam")
-            if chooseTeam and chooseTeam.Visible then
-                chooseTeam.Visible = false
+            if playerGui then
+                local mainGui = playerGui:FindFirstChild("Main")
+                local chooseTeam = mainGui and mainGui:FindFirstChild("ChooseTeam")
+                if chooseTeam and chooseTeam.Visible then
+                    chooseTeam.Visible = false
+                end
             end
         end)
         task.wait(1.5)
     end
+    print("Chọn phe Hải Tặc thành công! Chờ nhân vật hồi sinh...")
+    if not LocalPlayer.Character then LocalPlayer.CharacterAdded:Wait() end
+    task.wait(1)
 end
 
 local function AutoStoreFruit()
-    pcall(function()
-        local commF = GetCommF()
-        if commF then
-            task.wait(0.3 + math.random() * 0.4)
-            commF:InvokeServer("StoreFruit")
-            print("Đã thực thi cất giấu trái ác quỷ vào kho.")
-        end
-    end)
+    local remotes = ReplicatedStorage:FindFirstChild("Remotes")
+    local commF = remotes and remotes:FindFirstChild("CommF_")
+    if commF then
+        pcall(function() commF:InvokeServer("StoreFruit") end)
+    end
 end
 
 local function StartNoClip()
@@ -85,30 +67,20 @@ end
 
 local function StopNoClip()
     if NoClipConnection then NoClipConnection:Disconnect() NoClipConnection = nil end
-    pcall(function()
-        if LocalPlayer.Character then
-            for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
-                if part:IsA("BasePart") then part.CanCollide = true end
-            end
-        end
-    end)
 end
 
 local function SafeMoveTo(targetCFrame)
     local character = LocalPlayer.Character
     local hrp = character and character:FindFirstChild("HumanoidRootPart")
     local humanoid = character and character:FindFirstChildWhichIsA("Humanoid")
-    
-    if not hrp or not humanoid or humanoid.Health <= 0 then return end
+    if not hrp or not humanoid then return end
     
     StartNoClip()
     humanoid:ChangeState(Enum.HumanoidStateType.Physics)
     
-    local speed = 125 
+    local speed = 250
     while (hrp.Position - targetCFrame.Position).Magnitude > 5 do
-        if not LocalPlayer.Character or not hrp:IsDescendantOf(LocalPlayer.Character) or humanoid.Health <= 0 then 
-            break 
-        end
+        if not LocalPlayer.Character or not hrp:IsDescendantOf(LocalPlayer.Character) then break end
         
         local currentPos = hrp.Position
         local targetPos = targetCFrame.Position
@@ -117,70 +89,56 @@ local function SafeMoveTo(targetCFrame)
         
         local step = math.min(distance, speed * RunService.Heartbeat:Wait())
         hrp.CFrame = CFrame.new(currentPos + direction * step)
+        
         hrp.Velocity = Vector3.new(0, 0, 0)
     end
     
-    if hrp and humanoid and humanoid.Health > 0 then
-        hrp.CFrame = targetCFrame
-        task.wait(0.2)
-        humanoid:ChangeState(Enum.HumanoidStateType.Running)
-    end
+    hrp.CFrame = targetCFrame
+    task.wait(0.2)
+    humanoid:ChangeState(Enum.HumanoidStateType.Running)
     StopNoClip()
 end
 
 local function SnipeFruit()
     local startTime = tick()
+    print("Bắt đầu quy trình quét tìm trái ác quỷ...")
     
     while true do
         if tick() - startTime > 60 then
-            print("Đã hết 60s thời gian vàng tại server này. Rút lui!")
+            print("Đã hết 60 giây quy định! Tự động kích hoạt chuyển vùng để tối ưu hóa thời gian...")
             break
         end
 
-        local character = LocalPlayer.Character
-        local humanoid = character and character:FindFirstChildWhichIsA("Humanoid")
-        if not character or not humanoid or humanoid.Health <= 0 then
-            task.wait(2)
-            continue
-        end
-
         local fruitsFound = {}
-        local allObjects = Workspace:GetDescendants()
+        local children = Workspace:GetChildren()
         
-        for _, obj in pairs(allObjects) do
-            if obj:IsA("Model") and not Players:GetPlayerFromCharacter(obj) then
+        for _, obj in pairs(children) do
+            if obj:IsA("Model") and obj.Parent == Workspace and not Players:GetPlayerFromCharacter(obj) then
                 local objName = string.lower(obj.Name)
+                local currentPriority = 0
                 
-                if string.find(objName, "fruit") or string.find(objName, "trái") or FruitPriority[objName] then
-                    local currentPriority = 0
-                    
-                    for fruitName, priority do
-                        if string.find(objName, fruitName) then 
-                            currentPriority = priority 
-                            break 
-                        end
+                for fruitName, priority in pairs(FruitPriority) do
+                    if string.find(objName, fruitName) then 
+                        currentPriority = priority 
+                        break 
                     end
-                    
-                    if currentPriority == 0 and (obj:FindFirstChild("Handle") or obj:FindFirstChildWhichIsA("BasePart")) then
-                        currentPriority = 1
-                    end
-                    
-                    if currentPriority > 0 then
-                        local handle = obj:FindFirstChild("Handle") or obj:FindFirstChildWhichIsA("BasePart")
-                        if handle then
-                            table.insert(fruitsFound, {
-                                model = obj,
-                                handle = handle,
-                                priority = currentPriority
-                            })
-                        end
+                end
+                
+                if currentPriority > 0 then
+                    local handle = obj:FindFirstChild("Handle") or obj:FindFirstChildWhichIsA("BasePart")
+                    if handle then
+                        table.insert(fruitsFound, {
+                            model = obj,
+                            handle = handle,
+                            priority = currentPriority
+                        })
                     end
                 end
             end
         end
         
         if #fruitsFound == 0 then 
-            print("Không phát hiện bất kỳ trái ác quỷ nào ẩn giấu trên server này.")
+            print("Sạch bóng trái ác quỷ trên server hiện tại.")
             break 
         end
         
@@ -189,84 +147,60 @@ local function SnipeFruit()
         end)
         
         local target = fruitsFound[1]
-        print("Tiến hành thu hoạch mục tiêu: " .. target.model.Name .. " [Mức ưu tiên: " .. target.priority .. "]")
+        print("Phát hiện mục tiêu VIP: " .. target.model.Name .. " [Hạng " .. target.priority .. "]. Tiến hành xử lý...")
         SafeMoveTo(target.handle.CFrame)
-        
-        task.wait(1 + math.random() * 0.5) 
+        task.wait(1)
         AutoStoreFruit()
-        task.wait(1 + math.random() * 0.5)
+        task.wait(1)
     end
 end
 
-local function TryServerHop()
-    local waitTime = 3 + (ApiErrorCount * 3)
-    if waitTime > 15 then waitTime = 15 end
-    task.wait(waitTime)
+local function AdvancedServerHop()
+    pcall(function() collectgarbage("collect") end)
     
-    local oldJobId = game.JobId
-    print("Đang truy xuất cổng dữ liệu danh sách máy chủ công khai...")
-    
-    local success, result = pcall(function() 
-        return HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100")) 
-    end)
-    
-    if success and result and result.data and type(result.data) == "table" then 
-        ApiErrorCount = 0 
-        local validServers = {}
+    while true do
+        print("Đang quét tìm kiếm server phù hợp...")
+        task.wait(3)
         
-        for _, server in pairs(result.data) do
-            if server.playing and server.maxPlayers and server.playing < (server.maxPlayers - 5) and server.id ~= oldJobId and not BlacklistedServers[server.id] then
-                table.insert(validServers, server.id)
+        local success, result = pcall(function() 
+            return HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/" .. placeId .. "/servers/Public?sortOrder=Asc&limit=100")) 
+        end)
+        
+        if success and result and result.data then 
+            local validServers = {}
+            for _, server in pairs(result.data) do
+                if server.playing and server.maxPlayers and server.playing < (server.maxPlayers - 5) and server.id ~= game.JobId and not BlacklistedServers[server.id] then
+                    table.insert(validServers, server.id)
+                end
             end
-        end
-        
-        if #validServers > 0 then
-            local randomServer = validServers[math.random(1, #validServers)]
-            print("Tìm thấy vùng trống lý tưởng. Thực thi Teleport tới: " .. randomServer)
             
-            StopNoClip()
-            local joinSuccess, err = pcall(function() 
-                TeleportService:TeleportToPlaceInstance(placeId, randomServer, LocalPlayer) 
-            end)
-            
-            task.wait(10)
-            
-            if game.JobId == oldJobId then
-                print("[TELEPORT FAIL] Lệnh thực thi thành công nhưng bị kẹt lại máy chủ cũ! Ghi danh sách đen và hủy...")
-                BlacklistedServers[randomServer] = true
-                return false
+            if #validServers > 0 then
+                local randomServer = validServers[math.random(1, #validServers)]
+                print("Đang tiến hành nhảy vùng tới server: " .. randomServer)
+                
+                local joinSuccess, err = pcall(function() 
+                    TeleportService:TeleportToPlaceInstance(placeId, randomServer, LocalPlayer) 
+                end)
+                
+                if not joinSuccess or string.find(tostring(err), "773") or string.find(tostring(err), "Full") then 
+                    print("Server kẹt hoặc đầy, ghi vào danh sách đen...")
+                    BlacklistedServers[randomServer] = true 
+                else
+                    task.wait(5)
+                end
             else
-                return true
+                print("Không tìm được server lý tưởng, làm sạch bộ nhớ danh sách đen...")
+                BlacklistedServers = {}
             end
         else
-            print("Toàn bộ danh sách server bị nghẽn hoặc đầy. Đang làm mới bộ nhớ ghi chú...")
-            BlacklistedServers = {}
-            return false
+            print("Lỗi API kết nối mạng Roblox, thử lại sau một nhịp...")
+            task.wait(1)
         end
-    else
-        ApiErrorCount = ApiErrorCount + 1
-        print("[API ERROR] Tần suất yêu cầu quá cao hoặc nghẽn mạng (Lỗi lần: " .. ApiErrorCount .. "). Lùi nhịp nghỉ...")
-        return false
     end
 end
-
-task.spawn(function()
-    while true do
-        print("[MASTER ENGINE V3] Khởi động guồng quay chu kỳ mới...")
-        
-        pcall(AutoSelectPirates)
-        task.wait(0.5)
-        
-        pcall(SnipeFruit)
-        task.wait(0.5)
-        
-        print("[MASTER ENGINE V3] Tiến hành kích hoạt quy trình Hop Server có kiểm định...")
-        local hopSuccess = TryServerHop()
-        
-        if not hopSuccess then
-            print("[MASTER RESCUE] Hệ thống phát hiện đổi server thất bại hoặc nghẽn API! Giải phóng RAM và chạy lại vòng quay...")
-            pcall(function() collectgarbage("collect") end)
-            task.wait(2)
-        end
-    end
-end)
+task.wait(0.5)
+AutoSelectPirates()
+task.wait(0.5)
+pcall(SnipeFruit)
+task.wait(0.5)
+AdvancedServerHop()
