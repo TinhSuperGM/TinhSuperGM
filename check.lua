@@ -1,130 +1,118 @@
 -- ==========================================================
--- SCANNER DATA: QUÉT CẤU TRÚC GAME & GỬI LÊN DISCORD WEBHOOK
--- Chạy 1 lần, tự tắt sau khi gửi xong
+-- SCANNER V2: QUÉT DỮ LIỆU & GỬI ĐẾN DISCORD (ĐÃ SỬA LỖI)
 -- ==========================================================
 
 if not game:IsLoaded() then game.Loaded:Wait() end
 
 -- === CẤU HÌNH ===
-local DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1525298599985020958/FBV9Cuc_Se2A0qvikp-hn7Sqmq2dMlUHy0QS9U0v7kQPjJOluFAzmPiTCEBylKmDjhqB" -- << THAY BẰNG LINK WEBHOOK CỦA BẠN
-local MAX_DEPTH = 3 -- Độ sâu quét thư mục (không quá sâu để tránh quá tải)
-local MAX_ITEMS_PER_TYPE = 50 -- Giới hạn số lượng đối tượng gửi để không quá dài
-
--- === Dịch vụ ===
+local DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1525298599985020958/FBV9Cuc_Se2A0qvikp-hn7Sqmq2dMlUHy0QS9U0v7kQPjJOluFAzmPiTCEBylKmDjhqB" -- ⚠️ THAY BẰNG LINK WEBHOOK CỦA BẠN
 local HttpService = game:GetService("HttpService")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Workspace = game:GetService("Workspace")
+HttpService.HttpEnabled = true -- ✅ BẬT QUYỀN GỬI DỮ LIỆU
 
--- === Hàm gửi dữ liệu lên Discord ===
-local function SendToDiscord(title, content)
-    -- Cắt ngắn nếu quá 1900 ký tự (giới hạn Discord)
-    if #content > 1900 then
-        content = content:sub(1, 1900) .. "\n... [Đã cắt ngắn do quá dài]"
+-- === Hàm gửi dữ liệu ===
+local function SendToDiscord(tieuDe, noiDung)
+    if not noiDung or noiDung == "" then
+        print("⚠️ Không có dữ liệu để gửi: " .. tieuDe)
+        return
     end
 
-    local payload = {
+    -- Cắt ngắn nếu quá giới hạn Discord
+    if #noiDung > 1950 then
+        noiDung = noiDung:sub(1, 1950) .. "\n... [Đã cắt ngắn]"
+    end
+
+    local duLieu = {
         username = "Blox Fruits Scanner",
         embeds = {{
-            title = title,
-            description = "```\n" .. content .. "\n```",
-            color = 3447003 -- Màu xanh dương
+            title = tieuDe,
+            description = "```\n" .. noiDung .. "\n```",
+            color = 0x0099FF
         }}
     }
 
-    pcall(function()
-        HttpService:PostAsync(
+    local thanhCong, loi = pcall(function()
+        return HttpService:PostAsync(
             DISCORD_WEBHOOK,
-            HttpService:JSONEncode(payload),
+            HttpService:JSONEncode(duLieu),
             Enum.HttpContentType.ApplicationJson
         )
-        print("✅ Đã gửi: " .. title)
     end)
-end
 
--- === Quét cấu trúc thư mục & đối tượng ===
-local function ScanInstance(instance, depth, prefix)
-    depth = depth or 0
-    prefix = prefix or ""
-    if depth > MAX_DEPTH then return "" end
-
-    local result = ""
-    for _, child in ipairs(instance:GetChildren()) do
-        result = result .. prefix .. "- " .. child.Name .. " (" .. child.ClassName .. ")\n"
-        -- Chỉ đi sâu nếu là thư mục/đối tượng chứa
-        if child:IsA("Folder") or child:IsA("Model") or child:IsA("ReplicatedStorage") then
-            result = result .. ScanInstance(child, depth + 1, prefix .. "  ")
-        end
+    if thanhCong then
+        print("✅ Đã gửi: " .. tieuDe)
+    else
+        print("❌ Lỗi gửi: " .. tieuDe .. " | Chi tiết: " .. tostring(loi))
     end
-    return result
 end
 
--- === Quét tìm tất cả đối tượng liên quan đến Trái ===
-local function ScanFruits()
-    local result = "📦 DANH SÁCH ĐỐI TƯỢNG LIÊN QUAN TRÁI:\n"
-    local count = 0
+-- === Quét đúng vị trí Trái theo cấu trúc thực tế ===
+local function QuetDoiTuongTrai()
+    local ketQua = "🍎 DANH SÁCH TRÁI ÁC QUỶ:\n"
+    local Workspace = game:GetService("Workspace")
+    local dem = 0
 
-    for _, obj in ipairs(Workspace:GetDescendants()) do
-        if count >= MAX_ITEMS_PER_TYPE then break end
-        local name = string.lower(obj.Name)
-        if string.find(name, "fruit") or string.find(name, "trái") or string.find(name, "devil") then
-            local handle = obj:FindFirstChild("Handle") or obj:FindFirstChildWhichIsA("BasePart")
-            result = result .. string.format(
-                "• %s | Loại: %s | Vị trí: (%.1f, %.1f, %.1f) | Kích thước: (%.1f, %.1f, %.1f)\n",
-                obj.Name,
-                obj.ClassName,
-                handle and handle.Position.X or 0,
-                handle and handle.Position.Y or 0,
-                handle and handle.Position.Z or 0,
-                handle and handle.Size.X or 0,
-                handle and handle.Size.Y or 0,
-                handle and handle.Size.Z or 0
-            )
-            count = count + 1
-        end
+    -- Theo log, trái nằm trong Workspace.Characters
+    local thuMucTrai = Workspace:FindFirstChild("Characters")
+    if not thuMucTrai then
+        return "❌ Không tìm thấy thư mục Characters"
     end
-    return result
-end
 
--- === Quét tất cả RemoteFunction/RemoteEvent ===
-local function ScanRemotes()
-    local result = "🔌 DANH SÁCH REMOTE FUNCTION/EVENT:\n"
-    local count = 0
+    for _, nhom in ipairs(thuMucTrai:GetChildren()) do
+        if dem >= 50 then break end
 
-    local function ScanRemotesIn(parent)
-        if not parent or count >= MAX_ITEMS_PER_TYPE then return end
-        for _, obj in ipairs(parent:GetChildren()) do
-            if obj:IsA("RemoteFunction") or obj:IsA("RemoteEvent") then
-                result = result .. string.format("• %s | Loại: %s | Đường dẫn: %s\n",
-                    obj.Name, obj.ClassName, obj:GetFullName())
-                count = count + 1
-            elseif obj:IsA("Folder") or obj:IsA("ReplicatedStorage") then
-                ScanRemotesIn(obj)
+        -- Tìm các đối tượng có chứa "Fruit" trong tên
+        for _, doiTuong in ipairs(nhom:GetDescendants()) do
+            if doiTuong:IsA("Model") and string.find(string.lower(doiTuong.Name), "fruit") then
+                local phanChinh = doiTuong:FindFirstChild("Fruit") or doiTuong:FindFirstChild("Handle") or doiTuong:FindFirstChildWhichIsA("BasePart")
+                if phanChinh then
+                    ketQua = ketQua .. string.format(
+                        "• %s\n  Đường dẫn: %s\n  Tọa độ: (%.1f, %.1f, %.1f)\n\n",
+                        doiTuong.Name,
+                        doiTuong:GetFullName(),
+                        phanChinh.Position.X, phanChinh.Position.Y, phanChinh.Position.Z
+                    )
+                    dem = dem + 1
+                end
             end
         end
     end
 
-    ScanRemotesIn(ReplicatedStorage)
-    return result
+    return ketQua ~= "" and ketQua or "Không tìm thấy trái nào trong lần quét này"
 end
 
--- === CHẠY QUÉT TẤT CẢ & GỬI ===
+-- === Quét RemoteFunction/Event ===
+local function QuetRemote()
+    local ketQua = "🔌 DANH SÁCH REMOTE:\n"
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local dem = 0
+
+    local function TimRemote(cha)
+        if not cha or dem >= 50 then return end
+        for _, con in ipairs(cha:GetChildren()) do
+            if con:IsA("RemoteFunction") or con:IsA("RemoteEvent") then
+                ketQua = ketQua .. string.format("• %s | Loại: %s\n", con.Name, con.ClassName)
+                dem = dem + 1
+            elseif con:IsA("Folder") then
+                TimRemote(con)
+            end
+        end
+    end
+
+    TimRemote(ReplicatedStorage)
+    return ketQua
+end
+
+-- === CHẠY QUÉT ===
 task.spawn(function()
-    print("🔍 Bắt đầu quét dữ liệu game...")
+    print("🔍 Bắt đầu quét dữ liệu...")
     task.wait(2)
 
-    -- 1. Quét cấu trúc thư mục chính
-    SendToDiscord("📂 CẤU TRÚC REPLICATED STORAGE", ScanInstance(ReplicatedStorage))
-    task.wait(1)
+    SendToDiscord("🔌 DANH SÁCH REMOTE", QuetRemote())
+    task.wait(1.5)
 
-    -- 2. Quét danh sách Remote
-    SendToDiscord("🔌 DANH SÁCH REMOTE", ScanRemotes())
-    task.wait(1)
+    SendToDiscord("🍎 THÔNG TIN TRÁI ÁC QUỶ", QuetDoiTuongTrai())
+    task.wait(1.5)
 
-    -- 3. Quét đối tượng liên quan trái
-    SendToDiscord("🍎 ĐỐI TƯỢNG LIÊN QUAN TRÁI", ScanFruits())
-    task.wait(1)
-
-    -- 4. Thông báo hoàn thành
-    SendToDiscord("✅ TRẠNG THÁI", "Đã quét & gửi toàn bộ dữ liệu thành công! Script tự kết thúc.")
-    print("✅ Hoàn tất quá trình quét & gửi dữ liệu.")
+    SendToDiscord("✅ TRẠNG THÁI", "Hoàn tất quét dữ liệu thành công!")
+    print("✅ Đã hoàn thành tất cả thao tác")
 end)
