@@ -6,7 +6,7 @@
 if not game:IsLoaded() then game.Loaded:Wait() end
 
 -- === CẤU HÌNH ===
-local DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1459736586089402501/ccna5k-2NzWgch0dUAqz3H8y-_AxUMQ7W0P3q5-X5s9sSXNB75EDclBX0kRonsLPDU2b" -- << THAY BẰNG LINK WEBHOOK CỦA BẠN
+local DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1525298599985020958/FBV9Cuc_Se2A0qvikp-hn7Sqmq2dMlUHy0QS9U0v7kQPjJOluFAzmPiTCEBylKmDjhqB" -- << THAY BẰNG LINK WEBHOOK CỦA BẠN
 local MAX_DEPTH = 3 -- Độ sâu quét thư mục (không quá sâu để tránh quá tải)
 local MAX_ITEMS_PER_TYPE = 50 -- Giới hạn số lượng đối tượng gửi để không quá dài
 
