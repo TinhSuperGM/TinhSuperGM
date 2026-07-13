@@ -1,103 +1,72 @@
--- HOOK LURAPH v14.5.2 | PHIÊN BẢN GHI LOG ĐA PHƯƠNG ÁN
--- Hỗ trợ mọi executor: ghi file, hiển thị GUI, chép bộ nhớ, gửi webhook
-
--- ================= CẤU HÌNH =================
-local FILE_NAME = "lph_log_result.txt"
-local WEBHOOK_URL = "" -- Dán link webhook Discord vào đây nếu muốn gửi qua mạng
-local SHOW_GUI = true -- Hiển thị cửa sổ xem log ngay trong game
-local AUTO_COPY = true -- Tự động chép toàn bộ log vào bộ nhớ đệm khi kết thúc
--- ==============================================
-
--- Lưu dữ liệu tạm trong bộ nhớ
+-- HOOK NÂNG CẤP: Bắt toàn bộ Upvalue & Dispatcher
 local full_log = {}
-local transitions = {}
 
--- === HÀM GHI LOG TỔNG HỢP ===
 local function add_log(text)
     local line = string.format("[%s] %s", os.date("%H:%M:%S"), text)
     table.insert(full_log, line)
-    print(line) -- Luôn in ra console để kiểm tra nhanh
-
-    -- 1. Ghi ra file nếu executor hỗ trợ
-    if pcall(writefile, FILE_NAME, table.concat(full_log, "\n")) then
-        -- Ghi thành công
-    end
-
-    -- 2. Gửi qua webhook nếu có cấu hình
-    if WEBHOOK_URL ~= "" and #full_log % 10 == 0 then -- Gửi mỗi 10 dòng để không bị chặn
-        task.spawn(function()
-            pcall(game.HttpService.PostAsync, game.HttpService, WEBHOOK_URL, game.HttpService:JSONEncode({
-                content = "```"..table.concat(full_log, "\n").."```"
-            }))
-        end)
-    end
-
-    -- 3. Cập nhật giao diện nếu đang bật
-    if SHOW_GUI and LogText then
-        LogText.Text = table.concat(full_log, "\n")
-    end
+    print(line)
 end
 
--- === TẠO GIAO DIỆN XEM LOG NGAY TRONG GAME ===
-if SHOW_GUI then
-    pcall(function()
-        local Gui = Instance.new("ScreenGui")
-        Gui.Name = "LuraphHookLog"
-        Gui.Parent = game.CoreGui
-        Gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+-- Tạo GUI xem log
+pcall(function()
+    local Gui = Instance.new("ScreenGui")
+    Gui.Name = "LuraphHookLog"
+    Gui.Parent = game.CoreGui
+    Gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-        local Frame = Instance.new("Frame")
-        Frame.Size = UDim2.new(0, 550, 0, 400)
-        Frame.Position = UDim2.new(0.02, 0, 0.02, 0)
-        Frame.BackgroundColor3 = Color3.fromRGB(20,20,20)
-        Frame.BorderSizePixel = 0
-        Frame.ClipsDescendants = true
-        Frame.Parent = Gui
+    local Frame = Instance.new("Frame")
+    Frame.Size = UDim2.new(0, 600, 0, 450)
+    Frame.Position = UDim2.new(0.01,0,0.01,0)
+    Frame.BackgroundColor3 = Color3.fromRGB(15,15,15)
+    Frame.ClipsDescendants = true
+    Frame.Parent = Gui
 
-        local Title = Instance.new("TextLabel")
-        Title.Size = UDim2.new(1,0,0,32)
-        Title.BackgroundColor3 = Color3.fromRGB(40,40,40)
-        Title.Text = "📋 NHẬT KÝ PHÂN TÍCH LURAPH"
-        Title.TextColor3 = Color3.new(1,1,1)
-        Title.Font = Enum.Font.GothamBold
-        Title.TextSize = 14
-        Title.Parent = Frame
+    local Title = Instance.new("TextLabel")
+    Title.Size = UDim2.new(1,0,0,35)
+    Title.BackgroundColor3 = Color3.fromRGB(35,35,35)
+    Title.Text = "📋 LOG CHI TIẾT LURAPH VM"
+    Title.TextColor3 = Color3.new(1,1,1)
+    Title.Font = Enum.Font.GothamBold
+    Title.TextSize = 15
+    Title.Parent = Frame
 
-        LogText = Instance.new("TextBox")
-        LogText.Size = UDim2.new(1,-10,1,-42)
-        LogText.Position = UDim2.new(0,5,0,37)
-        LogText.BackgroundTransparency = 1
-        LogText.TextColor3 = Color3.new(0.9,0.9,0.9)
-        LogText.Font = Enum.Font.Code
-        LogText.TextSize = 11
-        LogText.TextXAlignment = Enum.TextXAlignment.Left
-        LogText.TextYAlignment = Enum.TextYAlignment.Top
-        LogText.MultiLine = true
-        LogText.TextWrapped = true
-        LogText.Parent = Frame
-    end)
-end
+    LogText = Instance.new("TextBox")
+    LogText.Size = UDim2.new(1,-10,1,-45)
+    LogText.Position = UDim2.new(0,5,0,40)
+    LogText.BackgroundTransparency = 1
+    LogText.TextColor3 = Color3.new(0.95,0.95,0.95)
+    LogText.Font = Enum.Font.Code
+    LogText.TextSize = 10
+    LogText.TextXAlignment = Enum.TextXAlignment.Left
+    LogText.TextYAlignment = Enum.TextYAlignment.Top
+    LogText.MultiLine = true
+    LogText.TextWrapped = true
+    LogText.Parent = Frame
+end)
 
--- === BẮT ĐẦU HOOK ===
-add_log("=== BẮT ĐẦU PHÂN TÍCH LURAPH v14.5.2 ===")
+add_log("=== BẮT ĐẦU PHÂN TÍCH CHI TIẾT ===")
 
--- Hook setfenv bắt khởi tạo hàm ảo & Upvalues
+-- Hook setfenv + trích xuất đầy đủ Upvalue
 local original_setfenv = setfenv
 getgenv().setfenv = function(f, env)
     if type(f) == "function" then
-        add_log("\n[HOOK] Phát hiện khởi tạo hàm VM!")
-        
+        add_log("\n[HOOK] === KHỞI TẠO HÀM VM ===")
+        add_log(string.format("  Địa chỉ hàm: %s", tostring(f)))
+        add_log(string.format("  Môi trường áp dụng: %s", tostring(env)))
+
+        -- Quét toàn bộ Upvalue kể cả ẩn danh
         local i = 1
         while true do
             local name, val = debug.getupvalue(f, i)
             if not name then break end
+            add_log(string.format("\n  • Upvalue #%d: Tên = %s", i, name or "ẨN DANH"))
+            add_log(string.format("    Loại: %s | Giá trị: %s", type(val), tostring(val)))
             
-            add_log(string.format("  Upvalue #%d: %s = %s", i, name or "Ẩn danh", tostring(val)))
-            
+            -- Nếu là bảng (hằng số/opcode)
             if type(val) == "table" then
-                add_log("    -> Nội dung bảng:")
+                add_log("    --- NỘI DUNG BẢNG ---")
                 for k, v in pairs(val) do
-                    add_log(string.format("       [%s] = %s", tostring(k), tostring(v)))
+                    add_log(string.format("      [%s] = %s", tostring(k), tostring(v)))
                 end
             end
             i += 1
@@ -106,31 +75,30 @@ getgenv().setfenv = function(f, env)
     return original_setfenv(f, env)
 end
 
--- Hook bit32.bxor bắt chuyển trạng thái Dispatcher
-local original_bxor = bit32.bxor
-getgenv().bit32.bxor = function(a, b)
-    local res = original_bxor(a, b)
-    if type(a) == "number" and type(b) == "number" and (a > 0xFFFF or b > 0xFFFF) then
-        add_log(string.format("[TRẠNG THÁI] %#X ^ %#X => %#X", a, b, res))
-        table.insert(transitions, {from = a, to = res})
+-- Hook toàn bộ hàm bit32 để bắt mọi phép tính trạng thái
+local original_bit32 = table.clone(bit32)
+getgenv().bit32 = setmetatable({}, {
+    __index = function(t, k)
+        return function(...)
+            local res = original_bit32[k](...)
+            local args = {...}
+            -- Ghi log phép tính liên quan đến số lớn > 0xFFFF
+            if k == "bxor" and #args >=2 then
+                local a, b = args[1], args[2]
+                if type(a)=="number" and type(b)=="number" and (a>0xFFFF or b>0xFFFF) then
+                    add_log(string.format("[DISPATCHER] %s(%#X, %#X) = %#X", k, a, b, res))
+                end
+            end
+            return res
+        end
     end
-    return res
-end
+})
 
--- === KẾT THÚC & LƯU DỮ LIỆU ===
-task.wait(8) -- Chờ đủ thời gian chạy toàn bộ logic
+-- Chờ đủ 15 giây để chạy hết logic
+add_log("\n⏳ Đang chờ thực thi toàn bộ logic...")
+task.wait(15)
 
-add_log("\n=== TỔNG HỢP KẾT QUẢ ===")
-add_log(string.format("Tổng số dòng log: %d", #full_log))
-add_log(string.format("Số bước chuyển trạng thái: %d", #transitions))
-
--- Tự động chép vào bộ nhớ đệm
-if AUTO_COPY then
-    pcall(setclipboard, table.concat(full_log, "\n"))
-    add_log("✅ ĐÃ CHÉP TOÀN BỘ LOG VÀO BỘ NHỚ ĐỆM! Dán ra Notepad để xem nhé.")
-end
-
--- Lưu lần cuối để đảm bảo không mất dữ liệu
-pcall(writefile, FILE_NAME, table.concat(full_log, "\n"))
-add_log(string.format("✅ ĐÃ LƯU FILE: %s (nếu được hỗ trợ)", FILE_NAME))
-add_log("=== HOÀN THÀNH ===")
+-- Cập nhật GUI & kết thúc
+if LogText then LogText.Text = table.concat(full_log, "\n") end
+add_log("\n✅ HOÀN THÀNH! Bôi đen toàn bộ log → Ctrl+C → Lưu thành runtime_log.txt")
+add_log("Tổng số dòng log: "..#full_log)
