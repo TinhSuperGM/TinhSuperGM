@@ -1,9 +1,5 @@
 -- // CONFIG SYSTEM RESET
 local KeySystem = false -- Đã tắt Key System cho bạn
-
--- // MAIN SCRIPT (CONVERTED TO RAYFIELD UI FOR STABILITY)
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-
 local Window = Rayfield:CreateWindow({
    Name = "TinhSuper Hub | Aura Simulator",
    LoadingTitle = "TinhSuper Hub",
