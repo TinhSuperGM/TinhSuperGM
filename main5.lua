@@ -108,14 +108,7 @@ local Window = loadlib:CreateWindow({
     LoadingTitle = "TinhSuper Hub",
     LoadingSubtitle = "by tinhsuper_gm",
     ConfigurationSaving = {
-        Enabled = true,
-        FolderName = "TinhSuper Hub",
-        FileName = "Aura."
-    },
-    Discord = {
-        Enabled = true,
-        Invite = "XDEemWjV2N",
-        RememberJoins = true
+        Enabled = false -- Tắt cái này đi để tránh lỗi xung đột file lưu cũ
     },
     KeySystem = false
 })
