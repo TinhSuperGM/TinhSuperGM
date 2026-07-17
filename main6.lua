@@ -20,13 +20,20 @@ local Window = Rayfield:CreateWindow({
 -- // SERVICES & VARIABLES
 local Players = game:GetService("Players")
 local LP = Players.LocalPlayer
+-- // BÙ ĐẮP REMOTE NGẦM CỦA WRAITHH ĐỂ CHỐNG ĐƠ CODE
 local Replicated = game:GetService("ReplicatedStorage")
-
-local StartF = Replicated:WaitForChild("StartF")
-local StopF = Replicated:WaitForChild("StopF")
-local StartE = Replicated:WaitForChild("StartE")
-local StopE = Replicated:WaitForChild("StopE")
-local Reb = Replicated:WaitForChild("Reb")
+local function createRemote(name)
+    if not Replicated:FindFirstChild(name) then
+        local r = Instance.new("RemoteEvent")
+        r.Name = name
+        r.Parent = Replicated
+    end
+end
+createRemote("StartF")
+createRemote("StopF")
+createRemote("StartE")
+createRemote("StopE")
+createRemote("Reb")
 
 local Leaderstats = LP:WaitForChild("leaderstats")
 local AVal = Leaderstats:FindFirstChild("Aura")
