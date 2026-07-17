@@ -102,7 +102,7 @@ if KeySystem then
 end
 
 -- // MAIN SCRIPT STARTS HERE
-local loadlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/wraithh-scripts/Library/main/v3.0.lua"))()
+local loadlib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Luna-Interface-Suite/refs/heads/master/source.lua"))()
 local Window = loadlib:CreateWindow({
     Name = "TinhSuper Hub",
     LoadingTitle = "TinhSuper Hub",
